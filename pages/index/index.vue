@@ -35,20 +35,38 @@
         </view>
       </view>
     </view> -->
-    <grid :style="{ 'margin-top': statusBarHeight + 80 + 'px' }"></grid>
+    <view style="height:200rpx">  
+    </view>
+
+    <view class="wrap">
+      <u-swiper :list="list"></u-swiper>
+    </view>
+    <feature></feature>
+    <grid></grid>
   </scroll-view>
 </template>
 
 <script>
 import grid from './grid.vue';
-// import sdGenPic from './sdGenPic.vue';
+import feature from './feature.vue';
 // 在页面中定义插屏广告
 let interstitialAd = null;
 
 export default {
-  components: { grid },
+  components: { grid, feature },
   data() {
     return {
+      list: [
+        {
+          image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
+        },
+        {
+          image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
+        },
+        {
+          image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
+        },
+      ],
       dataList: [
         {
           name: 'refresh',
@@ -108,6 +126,7 @@ export default {
   },
   onShow() {
     this.statusBarHeight = getApp().globalData.statusBarHeight;
+    console.log(12);
     this.windowHeight = getApp().globalData.windowHeight;
     this.SHOW_TIP = getApp().globalData.SHOW_TIP;
     console.log(this.SHOW_TIP);
@@ -226,7 +245,7 @@ export default {
 }
 
 .container-index {
-  height: 2000rpx;
+  /* height: 2000rpx; */
 }
 
 .logo-area {

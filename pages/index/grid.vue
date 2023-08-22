@@ -1,6 +1,6 @@
 <template>
   <view>
-    <navigator url="/pages/index/sd-gen-pic">
+    <view style="height:50px"></view>
       <tui-card :title="card.title">
         <template v-slot:body>
           <view class="tui-default">
@@ -15,9 +15,9 @@
           </view>
         </template>
       </tui-card>
-    </navigator>
+    <view style="height:10rx"></view>
 
-    <tui-card :title="card2.title" style="margin-top: 10px">
+    <tui-card :title="card2.title" style="margin-top: 20px">
       <template v-slot:body>
         <view class="tui-default">
           <view class="image">
@@ -32,7 +32,7 @@
       </template>
     </tui-card>
 
-    <tui-card :title="card3.title" style="margin-top: 10px">
+    <tui-card :title="card3.title" style="margin-top: 20px">
       <template v-slot:body>
         <view class="tui-default">
           <view class="image">

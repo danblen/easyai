@@ -1,4 +1,7 @@
 {
+  "easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
   "condition": {
     //模式配置，仅开发期间生效
     "current": 2, //当前激活的模式(list 的索引项)
@@ -30,7 +33,23 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarBackgroundColor": "#C12928",
+        // "navigationBarBackgroundColor": "#C12928",
+        "disableScroll": false,
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/coolshow/index",
+      "style": {
+        // "navigationBarBackgroundColor": "#C12928",
+        "disableScroll": false,
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/vip/index",
+      "style": {
+        // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
         "navigationStyle": "custom"
       }
@@ -38,7 +57,7 @@
     {
       "path": "pages/index/sd-gen-pic",
       "style": {
-        "navigationBarBackgroundColor": "#C12928",
+        // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
         "navigationStyle": "custom"
       }
@@ -51,37 +70,37 @@
       }
     }
   ],
-  "subPackages": [
-    {
-      "root": "page-chat-bg",
-      "pages": [
-        {
-          "path": "pages/index/index",
-          "style": {
-            "navigationBarTitleText": ""
-          },
-          "name": "chat-bg"
-        },
-        {
-          "path": "pages/download/download",
-          "style": {
-            "navigationBarTitleText": "",
-            "disableScroll": true
-          }
-        }
-      ]
-    }
-  ],
-  "preloadRule": {
-    "page-chat-bg/pages/index/index": {
-      "network": "all",
-      "packages": ["__APP__"]
-    },
-    "pages/index/index": {
-      "network": "all",
-      "packages": ["page-chat-bg"]
-    }
-  },
+  // "subPackages": [
+  //   {
+  //     "root": "page-chat-bg",
+  //     "pages": [
+  //       {
+  //         "path": "pages/index/index",
+  //         "style": {
+  //           "navigationBarTitleText": ""
+  //         },
+  //         "name": "chat-bg"
+  //       },
+  //       {
+  //         "path": "pages/download/download",
+  //         "style": {
+  //           "navigationBarTitleText": "",
+  //           "disableScroll": true
+  //         }
+  //       }
+  //     ]
+  //   }
+  // ],
+  // "preloadRule": {
+  //   "page-chat-bg/pages/index/index": {
+  //     "network": "all",
+  //     "packages": ["__APP__"]
+  //   },
+  //   "pages/index/index": {
+  //     "network": "all",
+  //     "packages": ["page-chat-bg"]
+  //   }
+  // },
 
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -101,13 +120,13 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/coolshow",
+        "pagePath": "pages/coolshow/index",
         "iconPath": "static/images/tabbar/code_gray.png",
         "selectedIconPath": "static/image/tabbar/mask-on.png",
         "text": "潮拍"
       },
       {
-        "pagePath": "pages/vip",
+        "pagePath": "pages/vip/index",
         "iconPath": "static/image/tabbar/fight-off.png",
         "selectedIconPath": "static/image/tabbar/fight-on.png",
         "text": "会员"
