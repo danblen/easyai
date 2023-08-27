@@ -1,6 +1,7 @@
 
 // SD站点域名
-let http_api_sd = 'http://43.139.23.56:7860'
+let http_api_sd = 'http://43.139.23.56:8014'
+// let http_api_sd = 'http://43.139.23.56:7860'
 // MJ站点域名
 let http_api_mj = '参考README文档：2.3 配置midjourney'
 

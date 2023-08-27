@@ -1,88 +1,56 @@
 <template>
-  <view>
-    <view style="height:50px"></view>
-      <tui-card :title="card.title">
-        <template v-slot:body>
-          <view class="tui-default">
-            <view class="image">
-              <image
-                style="width: 180rpx; height: 140rpx"
-                src="/static/image/logo/nasa.jpeg"
-                mode="aspectFill"
-              ></image>
-            </view>
-            <view class="desc">专业模式</view>
-          </view>
-        </template>
-      </tui-card>
-    <view style="height:10rx"></view>
-
-    <tui-card :title="card2.title" style="margin-top: 20px">
-      <template v-slot:body>
-        <view class="tui-default">
-          <view class="image">
-            <image
-              style="width: 180rpx; height: 140rpx"
-              src="/static/image/logo/nasa.jpeg"
-              mode="aspectFill"
-            ></image>
-          </view>
-          <view class="desc">使用AI技术换脸</view>
-        </view>
-      </template>
-    </tui-card>
-
-    <tui-card :title="card3.title" style="margin-top: 20px">
-      <template v-slot:body>
-        <view class="tui-default">
-          <view class="image">
-            <image
-              style="width: 180rpx; height: 140rpx"
-              src="/static/image/logo/nasa.jpeg"
-              mode="aspectFill"
-            ></image>
-          </view>
-          <view class="desc">制作数字分身</view>
-        </view>
-      </template>
-    </tui-card>
+  <view class="wrap">
+    <view class="grid-container">
+      <view class="grid-item" @click="go('/pages/index/sd-gen-pic')">
+        <u-icon name="photo" :size="46"></u-icon>
+        <view class=" ">专业模式</view>
+      </view>
+      <view class="grid-item" @click="go('/pages/index/faceswap')">
+        <u-icon name="lock" :size="46"></u-icon>
+        <view class=" ">AI换脸</view>
+      </view>
+      <view class="grid-item"  @click="go('/pages/index/lazy')">
+        <u-icon name="hourglass" :size="46"></u-icon>
+        <view>制作数字分身</view>
+      </view>
+      <view class="grid-item"  @click="go('/pages/coolshow/waterfall')">
+        <u-icon name="hourglass" :size="46"></u-icon>
+        <view>制作数字分身</view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      card: {
-        title: {
-          text: '专业模式',
-        },
-      },
-      card2: {
-        title: {
-          text: 'AI换脸',
-        },
-      },
-      card3: {
-        title: {
-          text: '制作数字分身',
-        },
-      },
-    };
+  methods: {
+    go(url) {
+      uni.navigateTo({
+        url,
+        
+      });
+    },
   },
 };
 </script>
 
 <style>
-.tui-default {
-  padding: 20rpx 30rpx;
+.wrap {
+  display: flex;
+  justify-content: center;
 }
-.image {
-  display: inline-block;
+.grid-container {
+  width: 95%;
+  margin-top: 20rpx;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 30rpx; /* 添加项之间的边距 */
 }
-.desc {
-  display: inline-block;
-  position: absolute;
-  padding-left: 10px;
+
+.grid-item {
+  border-radius: 14px;
+  background-color: #b9cad8;
+  padding: 20px;
+  text-align: center;
 }
 </style>

@@ -1,18 +1,24 @@
 <template>
+<view>
+
+<u-navbar :is-back="false"   :border-bottom="false">热门 </u-navbar>
   <scroll-view class="container container-index" style="overflow-y: scroll">
     <view v-if="SHOW_TIP">
       <add-tips :statusBarHeight="statusBarHeight" />
     </view>
     <grid :style="{ 'margin-top': statusBarHeight + 80 + 'px' }"></grid>
+    <waterfall ref="fallRef"></waterfall>
   </scroll-view>
+</view>
 </template>
 
 <script>
+import waterfall from './waterfall.vue';
 // 在页面中定义插屏广告
 let interstitialAd = null;
 
 export default {
-  components: {},
+  components: { waterfall },
   data() {
     return {
       dataList: [
@@ -38,6 +44,9 @@ export default {
       SHOW_TIP: false,
       rewardedVideoAdLoaded: false,
     };
+  },
+  onReachBottom() {
+    this.$refs.fallRef.reachBottom();
   },
   onLoad() {
     uni.request({
@@ -96,129 +105,10 @@ export default {
     };
   },
   methods: {
-    realtimeInfo: function () {
-      wx.navigateToMiniProgram({
-        appId: 'wx1656b2e5df4e587c',
-        path: 'pages/index/index',
-        success(res) {
-          console.log(res);
-        },
-        fail(e) {
-          console.log(e);
-        },
-      });
-    },
-    addMask: function () {
-      uni.switchTab({
-        url: '/pages/mask/add-mask',
-      });
-    },
-    nasa: function () {
-      wx.navigateToMiniProgram({
-        appId: 'wxd44e78294c5c5401',
-        path: 'pages/board/borad',
-        success(res) {
-          console.log(res);
-        },
-        fail(e) {
-          console.log(e);
-        },
-      });
-    },
-    addSlogan: function () {
-      uni.switchTab({
-        url: '/pages/slogan/add-slogan',
-      });
-    },
-    addText: function () {
-      uni.navigateTo({
-        url: '/pages/text/add-text',
-      });
-    },
-    chatBackground: function () {
-      uni.navigateTo({
-        url: '/page-chat-bg/pages/index/index',
-      });
-    },
-
-    tucao: function () {
-      const Tucao = requirePlugin('tucao').default;
-      // 初始化并触发跳转，支持链式调用
-      this.wx = uni;
-      Tucao.init(this, {
-        productId: 120746,
-      }).go();
-    },
-    handleContact: function (e) {
-      console.log(e.detail.path);
-      console.log(e.detail.query);
-    },
   },
 };
 </script>
 
 <style scoped>
-.row {
-  /* margin: 10px; */
-  display: flex;
-  justify-content: space-around;
-  /* align-items: flex-start; */
-}
-.row-item {
-  border-radius: 10px;
-  height: 80%;
-  width: 160px;
-  background: #eebebe;
-}
-
-.tui-grid-icon {
-  width: 64rpx;
-  height: 64rpx;
-  margin: 0 auto;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.tui-grid-label {
-  display: block;
-  text-align: center;
-  font-weight: 400;
-  color: #333;
-  font-size: 28rpx;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 10rpx;
-}
-
-.container-index {
-  height: 2000rpx;
-}
-
-.logo-area {
-  position: absolute;
-  left: 20px;
-}
-.ad-container {
-  width: 690rpx;
-}
-
-.about-actions {
-  width: 690rpx;
-}
-
-.card-menu {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.free-btn-bordernone {
-  background: none !important;
-  color: #000 !important;
-  display: inline-block !important;
-}
-
-.free-btn-bordernone::after {
-  border: none;
-}
+/*  */
 </style>
