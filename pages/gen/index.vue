@@ -24,7 +24,7 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <hot ref="hotRef" />
+          <txt2img ref="hotRef" />
         </scroll-view>
       </swiper-item>
       <swiper-item class="swiper-item">
@@ -33,7 +33,6 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <waterfall ref="fallRef"></waterfall>
         </scroll-view>
       </swiper-item>
       <swiper-item class="swiper-item">
@@ -48,21 +47,18 @@
 </template>
 
 <script>
-import waterfall from './waterfall.vue';
-import hot from './hot.vue';
+import txt2img from './txt2img.vue';
+import txt from './txt.vue';
 export default {
-  components: { hot, waterfall },
+  components: {   txt2img,txt },
   data() {
     return {
       list: [
         {
-          name: '热门',
+          name: '文生图',
         },
         {
-          name: '精选',
-        },
-        {
-          name: '最新',
+          name: '图生图',
         },
       ],
       current: 0,
@@ -75,8 +71,6 @@ export default {
   computed: {},
   methods: {
     reachBottom() {
-      this.$refs.hotRef.getData();
-      this.$refs.fallRef.reachBottom();
     },
     // tab栏切换
     change(index) {
@@ -98,7 +92,7 @@ export default {
 /* #ifndef H5 */
 page {
   height: 100%;
-  /* background-color: #f2f2f2; */
+  background-color: #f2f2f2;
 }
 /* #endif */
 </style>

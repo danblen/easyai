@@ -1,7 +1,7 @@
 <template>
   <view class="wrap">
     <view class="grid-container">
-      <view class="grid-item" @click="go('/pages/index/sd-gen-pic')">
+      <view class="grid-item" @click="go('/pages/index/zsdGenPic')">
         <u-icon name="photo" :size="46"></u-icon>
         <view class=" ">专业模式</view>
       </view>
@@ -13,7 +13,7 @@
         <u-icon name="hourglass" :size="46"></u-icon>
         <view>制作数字分身</view>
       </view>
-      <view class="grid-item"  @click="go('/pages/coolshow/waterfall')">
+      <view class="grid-item"  @click="go( )">
         <u-icon name="hourglass" :size="46"></u-icon>
         <view>制作数字分身</view>
       </view>

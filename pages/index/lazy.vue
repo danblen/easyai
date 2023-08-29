@@ -6,7 +6,7 @@
         class="item"
         v-for="(item, index) in list"
         :key="index"
-        @click="go('/pages/index/faceswap',item.src)"
+        @click="go('/pages/index/faceswap', item.src)"
       >
         <u-lazy-load
           threshold="-450"
@@ -223,10 +223,9 @@ export default {
     this.getData();
   },
   methods: {
-    go(url,src) {
+    go(url, src) {
       uni.navigateTo({
-        url:url+"?src="+src,
-          
+        url: url + '?src=' + src,
       });
     },
 

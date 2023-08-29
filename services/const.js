@@ -17,6 +17,7 @@ let txt2img = {
   script_args: [0, true, true, 'LoRA', 'dingzhenlora_v1(fa7c1732cc95)', 1, 1], // 一般用于lora模型或其他插件参数，如示例，我放入了一个lora模型， 1，1为两个权重值，一般只用到前面的权重值1
   sampler_index: 'Euler', //采样方法
 };
+// dog Negative prompt: nsfw,nsfw Steps: 20, Sampler: Euler a, CFG scale: 7.0, Seed: 1745201343, Size: 1024x1024, Model hash: 31e35c80fc, Model: Stable Diffusion SDXL 正式版_sdxl_1.0.safetensors, Denoising strength: 0.75, Clip skip: 2, RNG: CPU, vae_name: automatic
 
 let img2img = {
   prompt:

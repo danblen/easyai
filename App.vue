@@ -18,7 +18,7 @@ export default {
     duration: 20,
     cropImageFilePath: '',
     rapaintAfterCrop: false,
-    PAGE_BG_COLOR: '#C12928',
+    // PAGE_BG_COLOR: '#C12928',
     enableSecurityCheck: true,
     userAvatarUrl: null,
     userAvatarFilePath: null,

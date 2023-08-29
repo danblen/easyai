@@ -1,20 +1,17 @@
 <template>
   <view>
-    <view class="area">
-      <u-upload
-        class="upload"
-        :action="action"
-        max-count="1"
-        :file-list="fileList2"
-        upload-text="选择人脸照"
-      ></u-upload>
-    </view>
-    <ux></ux>
-    <view v-if="!showImage" class="tip-exp">换脸示例</view>
-    <view   class="image-wrap">
-
-    <u-image class="image" v-if="showImage" width="95%" :src="src"></u-image>
-    <image v-else :src="src" class="image" />
+    <u-navbar :border-bottom="false" title="一键换脸"></u-navbar>
+    <u-alert-tips
+      class="tip"
+      type="warning"
+      :title="title"
+      :description="description"
+    ></u-alert-tips>
+    <view class="area"></view>
+    <view class="image-wrap">
+      <!-- <u-image class="image" :src="src"></u-image> -->
+      <img :src="src" class="image" />
+      <self class="avatar" ref="selfRef"></self>
     </view>
 
     <u-button class="swap" type="primary" @click="swap">一键换脸</u-button>
@@ -23,13 +20,15 @@
 
 <script>
 import { txt2img, test } from '@/services/api.js';
-import ux from './u.vue';
+import self from './self.vue';
 export default {
-  components: { ux },
+  components: { self },
   data() {
     return {
+      // title: '选择人脸照片替换原图中人脸',
+      description:
+        '请选择一张人脸清晰的照片，生成图片需要等待一段时间，可在作品页查看生成作品和进度，作品将在12小时后删除，请及时保存图片',
       // 演示地址，请勿直接使用
-      action: 'http://43.139.23.56:8014/upload_image',
       fileList: [],
       fileList2: [],
       images: [],
@@ -42,6 +41,14 @@ export default {
   },
   methods: {
     async swap() {
+      if (!this.$refs.selfRef.isSelfUpload) {
+        uni.showToast({
+          title: '请选择人脸图片',
+          icon: 'none',
+        });
+        return;
+      }
+
       //   let params = {
       //     denoising_strength: 0,
       //     prompt: 'puppy dogs', //提示词
@@ -79,31 +86,26 @@ export default {
 };
 </script>
 
-<style>
-.area {
-  display: flex;
-  margin-bottom: 40rpx;
-}
-.tip-exp {
-  text-align: center;
-  color: burlywood;
+<style lang="scss">
+.tip {
+  margin: 20rpx 20rpx 20rpx 20rpx;
+  /deep/ .u-alert-title {
+    font-size: 26rpx !important;
+  }
+  /deep/ .u-alert-desc {
+    font-size: 22rpx !important;
+  }
 }
 .image-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 500rpx;
-}
-.image {
-  /* width: 95%;
-  height: auto;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0); */
-  /* max-width: 95%;
-  height: auto; */
-}
-.exp {
+  position: relative;
+  .avatar {
+    position: absolute;
+    right: 20rpx;
+    bottom: 40rpx;
+  }
+  .image {
+    width: 100%;
+  }
 }
 .swap {
   position: absolute;
