@@ -3,7 +3,7 @@
     <u-navbar :is-back="false" :border-bottom="false" title="AI写真"></u-navbar>
     <view class="u-tabs-box">
       <u-tabs-swiper
-        activeColor="#1aabcf"
+        activeColor="#f588cb"
         ref="tabs"
         :list="list"
         :current="current"
@@ -98,13 +98,14 @@ export default {
 /* #ifndef H5 */
 page {
   height: 100%;
-  /* background-color: #f2f2f2; */
 }
 /* #endif */
 </style>
 
 <style lang="scss" scoped>
 .wrap {
+  background-color: #f588cb;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   height: calc(100vh - var(--window-top));

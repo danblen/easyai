@@ -3,7 +3,7 @@
     <u-navbar :is-back="false" :border-bottom="false" title="AI写真"></u-navbar>
     <view class="u-tabs-box">
       <u-tabs-swiper
-        activeColor="#1aabcf"
+        activeColor="#f588cb"
         ref="tabs"
         :list="list"
         :current="current"
@@ -24,6 +24,15 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
+          <txt2img2 ref="Ref" />
+        </scroll-view>
+      </swiper-item>
+      <swiper-item class="swiper-item">
+        <scroll-view
+          scroll-y
+          style="height: 100%; width: 100%"
+          @scrolltolower="reachBottom"
+        >
           <txt2img ref="hotRef" />
         </scroll-view>
       </swiper-item>
@@ -33,14 +42,8 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
+          <txt2img2 ref="Ref" />
         </scroll-view>
-      </swiper-item>
-      <swiper-item class="swiper-item">
-        <scroll-view
-          scroll-y
-          style="height: 100%; width: 100%"
-          @scrolltolower="reachBottom"
-        ></scroll-view>
       </swiper-item>
     </swiper>
   </view>
@@ -48,9 +51,10 @@
 
 <script>
 import txt2img from './txt2img.vue';
-import txt from './txt.vue';
+import txt2img2 from './txt2img/index.vue';
+import txt from './txt2img/txt.vue';
 export default {
-  components: {   txt2img,txt },
+  components: { txt2img2, txt2img, txt },
   data() {
     return {
       list: [
@@ -70,8 +74,7 @@ export default {
   onLoad() {},
   computed: {},
   methods: {
-    reachBottom() {
-    },
+    reachBottom() {},
     // tab栏切换
     change(index) {
       this.swiperCurrent = index;
@@ -88,21 +91,12 @@ export default {
 };
 </script>
 
-<style>
-/* #ifndef H5 */
-page {
-  height: 100%;
-  background-color: #f2f2f2;
-}
-/* #endif */
-</style>
-
 <style lang="scss" scoped>
 .wrap {
   display: flex;
   flex-direction: column;
   height: calc(100vh - var(--window-top));
-  width: 100%;
+  padding: 0 20rpx;
 }
 .swiper-box {
   flex: 1;

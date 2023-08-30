@@ -1,19 +1,6 @@
-<template>
-  <view>
-    <u-navbar :is-back="false" :border-bottom="false" title="作品"></u-navbar>
-    <scroll-view
-      class="container-index"
-      style="overflow-y: scroll"
-    >
-    <ztxt></ztxt>
-    </scroll-view>
-  </view>
-</template>
-
 <script>
-// import grid from './grid.vue';
+import C from './c.jsx';
 // 在页面中定义插屏广告
-let interstitialAd = null;
 
 export default {
   // components: { grid, lazy, zswiper },
@@ -23,6 +10,19 @@ export default {
     };
   },
   methods: {},
+  render() {
+    return (
+      <view>
+        <u-navbar
+          is-back={false}
+          border-bottom={false}
+          title="AI写真"
+        ></u-navbar>
+        <u-icon name="heart" size="36"></u-icon>
+        sfs
+      </view>
+    );
+  },
 };
 </script>
 

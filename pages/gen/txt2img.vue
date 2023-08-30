@@ -216,8 +216,6 @@
 </template>
 
 <script>
-import txt from './txt.vue';
-import model from './model.vue';
 import {
   getSdModels,
   getSdLoRA,
@@ -227,7 +225,6 @@ import {
 } from '@/services/api.js';
 import { HTTP_URL_SD } from '@/services/app.js';
 export default {
-  components: { txt,model },
   props: {
     scrollHeight: {
       typeof: Number,

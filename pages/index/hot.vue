@@ -10,13 +10,11 @@
 </template>
 
 <script>
-import grid from './grid.vue';
 import lazy from './lazy.vue';
 import zswiper from './zswiper.vue';
 import waterfall from './waterfall.vue';
-import tabswiper from './tabswiper.vue';
 export default {
-  components: { grid, lazy, zswiper, waterfall, tabswiper },
+  components: {   lazy, zswiper, waterfall  },
   data() {
     return {
       list: [
