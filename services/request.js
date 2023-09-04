@@ -1,6 +1,6 @@
 
 import {
-	HTTP_URL_SD,
+	HTTP_URL_SD,HTTP_URL_BACK,
 	HTTP_URL_MJ,
 	HEADER,
 	TOKENNAME
@@ -36,6 +36,7 @@ function baseRequest(url, method, data, {
 		Url = HTTP_URL_MJ + url;
 	}else{
 		Url = HTTP_URL_SD + url;
+		Url = HTTP_URL_BACK + url;
 	}
 	if (!noAuth) {
 		//登录过期自动登录

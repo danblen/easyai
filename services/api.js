@@ -9,7 +9,9 @@ export function txt2img(data) {
   return request.post('/sdapi/v1/txt2img', data);
 }
 export function test(data) {
-  return request.post('/upload_image', data);
+  return request.post('/test', data);
+}export function faceSwap(data) {
+  return request.post('/faceSwap', data);
 }
 export function getConfig(data) {
   return request.get('/config', data, {
