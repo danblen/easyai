@@ -10,8 +10,15 @@ export function txt2img(data) {
 }
 export function test(data) {
   return request.post('/test', data);
-}export function faceSwap(data) {
+}
+export function faceSwap(data) {
   return request.post('/faceSwap', data);
+}
+export function uploadImage(data) {
+  return request.post('/upload_image', data);
+}
+export function checkTaskStatus(taskId) {
+  return request.get('/check_task_status/'+taskId);
 }
 export function getConfig(data) {
   return request.get('/config', data, {
@@ -90,7 +97,7 @@ export function getSdModels(data) {
 export function getSdLoRA(data) {
   return request.get(
     '/file=extensions/a1111-sd-webui-tagcomplete/tags/temp/lora.txt',
-    data
+    data,
   );
 }
 /**

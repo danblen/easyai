@@ -14,7 +14,7 @@ import lazy from './lazy.vue';
 import zswiper from './zswiper.vue';
 import waterfall from './waterfall.vue';
 export default {
-  components: {   lazy, zswiper, waterfall  },
+  components: {  lazy, zswiper, waterfall  },
   data() {
     return {
       list: [

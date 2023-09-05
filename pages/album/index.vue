@@ -1,5 +1,12 @@
+<template>
+  <view class="container-index">
+    <view class="title">
+      <u-icon name="heart" :size="36"></u-icon>
+      <text class="text">推荐</text>
+    </view>
+  </view>
+</template>
 <script>
-import C from './c.jsx';
 // 在页面中定义插屏广告
 
 export default {
@@ -10,19 +17,6 @@ export default {
     };
   },
   methods: {},
-  render() {
-    return (
-      <view>
-        <u-navbar
-          is-back={false}
-          border-bottom={false}
-          title="AI写真"
-        ></u-navbar>
-        <u-icon name="heart" size="36"></u-icon>
-        sfs
-      </view>
-    );
-  },
 };
 </script>
 
