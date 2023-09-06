@@ -1,16 +1,15 @@
 
 // SD站点域名
 let http_api_sd = 'http://43.139.23.56:8014'
-// let HTTP_URL_BACK = 'http://172.0.0.1:7593'
-let HTTP_URL_BACK = 'http://111.230.12.105:7861'
+// let HTTP_URL_BACK = 'http://192.168.1.5:7592'
+let HTTP_URL_BACK = 'http://111.230.245.49:8001'
+// let HTTP_URL_BACK = 'http://43.138.255.54:8000'
 // let http_api_sd = 'http://43.139.23.56:7860'
 // MJ站点域名
-let http_api_mj = '参考README文档：2.3 配置midjourney'
 
 module.exports = {
 	HTTP_URL_SD: http_api_sd,
 	HTTP_URL_BACK: HTTP_URL_BACK,
-	HTTP_URL_MJ: http_api_mj,
 	HEADER: {
 		'content-type': 'application/json',
 		//#ifdef H5

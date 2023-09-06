@@ -1,26 +1,28 @@
 <template>
   <view>
     <u-navbar :border-bottom="false" title="一键换脸"></u-navbar>
-    <u-alert-tips
+    <view
       class="tip"
-      type="warning"
-      :title="title"
-      :description="description"
-    ></u-alert-tips>
-    <view class="area"></view>
+      :style="{
+        padding: '20rpx',
+        fontSize: '24rpx',
+      }"
+    >
+      {{ description }}
+    </view>
     <view class="image-wrap">
-      <img :src="src" class="image" />
+      <u-image
+        :src="src"
+        :style="{
+          width: '100%',
+          height: '100%',
+        }"
+        mode="widthFix"
+      />
       <self class="avatar" ref="selfRef"></self>
     </view>
-    <view class="image-cover">
-      <view class="image-cover-close">已制作图片</view>
-      <!-- <img
-        v-for="(image, index) in outputImages"
-        :key="index"
-        width="100"
-        :src="image.path"
-        class="image"
-      /> -->
+    <view class="image-cover" v-if="outputImages.length">
+      <view class="image-cover-close">已制作图集</view>
       <scroll-view
         scroll-x
         style="height: 100%; width: 100%"
@@ -50,13 +52,13 @@
             <u-loading
               :style="{
                 position: 'relative',
-                top: '20%',
+                top: '50rpx',
               }"
             ></u-loading>
             <view
               :style="{
                 position: 'relative',
-                top: '20%',
+                top: '55rpx',
               }"
             >
               制作中
@@ -79,13 +81,37 @@
       </scroll-view>
     </view>
 
-    <u-button class="swap" type="primary" @click="swap">一键换脸</u-button>
+    <u-button
+      class="swap"
+      type="primary"
+      :custom-style="customStyle"
+      :ripple="true"
+      shape="circle"
+      @click="swap"
+    >
+      一键换脸
+    </u-button>
+    <u-button type="primary" :ripple="true" shape="circle" @click="click">
+      aaa
+    </u-button>
   </view>
 </template>
 
 <script>
-import { txt2img, test, uploadImage, checkTaskStatus } from '@/services/api.js';
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
+import {
+  txt2img,
+  test,
+  uploadImage,
+  checkTaskStatus,
+  checkTaskStatusByTaskId,
+  get_completed_tasks_on_user,
+} from '@/services/api.js';
+import {
+  HTTP_URL_SD,
+  HTTP_URL_BACK,
+} from '@/services/app.js';
+// import { HTTP_URL_SD, HTTP_URL_BACK } from '@/utils/base64.js';
+import { pathToBase64, base64ToBlob } from '@/utils';
 import self from './self.vue';
 export default {
   components: { self },
@@ -103,12 +129,17 @@ export default {
       taskId: '',
       timers: {},
       outputImages: [],
+      userId: '',
+      customStyle: {
+        background: '#f083c6',
+      },
     };
   },
   onLoad(options) {
+    this.userId = uni.getStorageSync('userId') || 1222;
     this.src = options.src;
     this.outputImages = [
-      // { path: options.src, status: 'su' },
+      { path: options.src, status: 'su' },
       // { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
       // { path: options.src, status: 's' },
       // { path: options.src, status: 's' },
@@ -116,8 +147,13 @@ export default {
       // { path: 'asd', status: 'pending' },
     ];
   },
-  unmounted() {
+  unMounted() {
     clearInterval(this.timer);
+  },
+  onUnload() {
+    Object.values(this.timers).forEach((timer) => {
+      clearInterval(timer);
+    });
   },
   methods: {
     onPreviewImage(index) {
@@ -126,24 +162,34 @@ export default {
         urls: this.outputImages.map((image) => image.path), // 图片列表
       });
     },
-    uploadImg(imagePaths, successCallback, errorCallback) {
+    async uploadImg(imagePaths, successCallback, errorCallback) {
       let that = this;
-      let server_url = HTTP_URL_BACK + '/' + 'upload_image/';
+      let first_image = await pathToBase64(imagePaths[0]);
+      // first_image = base64ToBlob(first_image);
+      let second_image = await pathToBase64(imagePaths[1]);
+      // second_image = base64ToBlob(second_image);
+      // uploadImage({
+      //   user_id: this.userId,
+      //   first_image,
+      //   second_image,
+      //   src_face_index: 0,
+      //   dst_face_index: 0,
+      // });
       uni.uploadFile({
-        url: server_url,
+        url: HTTP_URL_BACK + '/' + 'upload_image/',
         files: [
-          { uri: this.src, name: 'first_image' },
-          { uri: imagePaths[1], name: 'second_image' },
+          { uri: imagePaths[1], name: 'first_image' },
+          { uri: imagePaths[0], name: 'second_image' },
         ],
         // filePath: this.images[0],
         // name: 'file',
-        // name: ['image1', 'image2'],
+        // fileType: 'image',
         formData: {
-          user_id: '123',
+          user_id: this.userId,
           // csrfmiddlewaretoken:
           //   'rbgtf3YupolnomLnB8MsIupKaMb82JdSRajYLMTZm5RVbhvGdDjyFA7mRpakbehb',
-          // image1: this.images[0],
-          // image2: this.images[1],
+          // first_image,
+          // second_image,
           src_face_index: 0,
           dst_face_index: 0,
         },
@@ -151,7 +197,6 @@ export default {
           accept: 'application/json',
           contentype: 'multipart/form-data',
         },
-        // fileType: 'image',
         success: function (res) {
           if (res.statusCode == 200) {
             let data = res.data ? JSON.parse(res.data) : {};
@@ -161,27 +206,53 @@ export default {
               status: 'pending',
               taskId: data.task_id,
             });
-            that.getImage(data.taskId);
+            that.getImage(data.task_id);
           }
         },
         fail: function (res) {
-          showToast('上传图片失败');
+          uni.showToast({
+            icon: 'none',
+            title: '上传图片失败',
+          });
         },
       });
     },
     async getImage(taskId) {
       this.timers[taskId] = setInterval(async () => {
-        let res = await checkTaskStatus(taskId);
+        let res = await checkTaskStatusByTaskId(taskId);
         if (res.status === 'SUCCESS') {
           let image =
             this.outputImages.find((image) => image.taskId === taskId) || {};
-          image.path = HTTP_URL_BACK + res.processed_image;
+          image.path = HTTP_URL_BACK + res.processed_image_url;
           image.status = 'SUCCESS';
           clearInterval(this.timers[taskId]);
         }
-      }, 2000);
+      }, 4000);
+    },
+
+    async click() {
+      let res = await get_completed_tasks_on_user(123);
+      // let res = await checkTaskStatus(123);
+      // const formData = new FormData();
+      // // 将两张图片添加到 FormData 中
+      // formData.append('image1', 'this.$refs.selfRef.imagePaths[0]');
+      // formData.append('image2', 'this.$refs.selfRef.imagePaths[0]');
+      // const formDataString = Object.keys(formData)
+      //   .reduce((str, key) => {
+      //     const value = formData[key];
+      //     return `${str}${key}=${encodeURIComponent(value)}&`;
+      //   }, '')
+      //   .slice(0, -1); // 删除最后的 & 符号
+      // uploadImage(formData);
     },
     async swap() {
+      // if (this.userId) {
+      //   uni.showToast({
+      //     title: '请先登录',
+      //     icon: 'none',
+      //   });
+      //   return;
+      // }
       if (!this.$refs.selfRef.isSelfUpload) {
         uni.showToast({
           title: '请选择人脸图片',
@@ -189,6 +260,7 @@ export default {
         });
         return;
       }
+
       this.uploadImg(this.$refs.selfRef.imagePaths);
     },
   },
@@ -197,20 +269,21 @@ export default {
 
 <style lang="scss">
 .tip {
-  margin: 20rpx 20rpx 20rpx 20rpx;
+  // margin: 20rpx 20rpx 20rpx 20rpx;
   /deep/ .u-alert-title {
     font-size: 26rpx !important;
   }
   /deep/ .u-alert-desc {
     font-size: 22rpx !important;
   }
+  background: #f5e6ef;
 }
 .image-wrap {
   position: relative;
   .avatar {
     position: absolute;
     right: 20rpx;
-    bottom: 40rpx;
+    bottom: 30rpx;
   }
   .image {
     width: 100%;
@@ -223,8 +296,8 @@ export default {
 }
 
 .swap {
-  position: absolute;
-  bottom: 20rpx;
+  position: fixed;
+  bottom: 60rpx;
   margin: 0 40rpx;
   width: 90%;
 }

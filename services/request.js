@@ -1,7 +1,6 @@
 
 import {
 	HTTP_URL_SD,HTTP_URL_BACK,
-	HTTP_URL_MJ,
 	HEADER,
 	TOKENNAME
 } from './app';
@@ -26,18 +25,13 @@ function baseRequest(url, method, data, {
 	noAuth = true,
 	noVerify = false,
 	noAlert = false,
-	isMj = false,
 }) {
 	let Url = '',
 		header = HEADER;
 	
 	// 请求地址处理
-	if(isMj){
-		Url = HTTP_URL_MJ + url;
-	}else{
 		Url = HTTP_URL_SD + url;
 		Url = HTTP_URL_BACK + url;
-	}
 	if (!noAuth) {
 		//登录过期自动登录
 		if (!store.state.app.token) {
@@ -69,7 +63,6 @@ function baseRequest(url, method, data, {
 			header: header,
 			data: data || {},
 			success: (res) => {
-				// console.log("rk===>[requst-suc-url]",Url,res);
 				let statusCode = res.statusCode;
 				if(statusCode == 200){
 					reslove(res.data);

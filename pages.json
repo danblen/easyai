@@ -28,14 +28,14 @@
         "navigationStyle": "custom"
       }
     },
-    {
-      "path": "pages/gen/index",
-      "style": {
-        // "navigationBarBackgroundColor": "#C12928",
-        "disableScroll": false,
-        "navigationStyle": "custom"
-      }
-    },
+    // {
+    //   "path": "pages/gen/index",
+    //   "style": {
+    //     // "navigationBarBackgroundColor": "#C12928",
+    //     "disableScroll": false,
+    //     "navigationStyle": "custom"
+    //   }
+    // },
     {
       "path": "pages/vip/index",
       "style": {
@@ -86,12 +86,12 @@
         "selectedIconPath": "./static/image/tabbar/home1.png",
         "text": "首页"
       },
-      {
-        "pagePath": "pages/gen/index",
-        "iconPath": "./static/image/tabbar/cube1.png",
-        "selectedIconPath": "./static/image/tabbar/cube.png",
-        "text": "生成"
-      },
+      // {
+      //   "pagePath": "pages/gen/index",
+      //   "iconPath": "./static/image/tabbar/cube1.png",
+      //   "selectedIconPath": "./static/image/tabbar/cube.png",
+      //   "text": "生成"
+      // },
       {
         "pagePath": "pages/album/index",
         "iconPath": "./static/image/tabbar/photo1.png",

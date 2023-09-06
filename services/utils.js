@@ -2,7 +2,6 @@ import {
   TOKENNAME,
   // HTTP_REQUEST_URL,
   HTTP_URL_SD,
-  HTTP_URL_MJ,
 } from './app.js';
 import store from '@/store/index.js';
 // import {
@@ -596,16 +595,6 @@ function uploadImgWithPath(
     accept: 'application/json',
     contentype: contentType,
   };
-  // MJ上传
-  if (uploadType != 'sd') {
-    server_url = HTTP_URL_MJ + '/' + uploadUrl;
-    let hostArray = HTTP_URL_MJ.split('//');
-    header_dic = {
-      // "host":hostArray[1],
-      accept: 'application/json',
-      contentype: contentType,
-    };
-  }
   let inputName = 'files';
   // let random = Math.random().toString().substr(2);
   // let contentType = "multipart/form-data;boundary="+random

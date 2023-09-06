@@ -95,11 +95,11 @@ export default {
                 // 一般情况下，服务器会返回一个用户标识，例如 openid
 
                 // 获取到 openid 后，可以保存到本地缓存，用于识别用户
-                uni.setStorageSync('openid', loginRes.code);
+                uni.setStorageSync('userId', loginRes.code);
                 that.isLogin = true;
                 that.userInfo = userInfo;
                 that.userInfo.code = loginRes.code;
-                console.log('userInfo', userInfo, loginRes);
+                console.log('userInfo', res.userInfo.openId,res);
 
                 // 进行其他操作，例如跳转到首页
                 // uni.switchTab({
