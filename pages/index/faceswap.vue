@@ -106,10 +106,7 @@ import {
   checkTaskStatusByTaskId,
   get_completed_tasks_on_user,
 } from '@/services/api.js';
-import {
-  HTTP_URL_SD,
-  HTTP_URL_BACK,
-} from '@/services/app.js';
+import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
 // import { HTTP_URL_SD, HTTP_URL_BACK } from '@/utils/base64.js';
 import { pathToBase64, base64ToBlob } from '@/utils';
 import self from './self.vue';
