@@ -1,6 +1,6 @@
 <template>
   <view class="wrap">
-    <view class="item-warp">
+    <view v-if="list.length" class="item-warp">
       <view class="item" v-for="(item, index) in list" :key="index">
         <u-image
           :src="item.src"
@@ -12,6 +12,7 @@
         />
       </view>
     </view>
+    <u-empty v-else text="没有进行中的任务" mode="list"></u-empty>
   </view>
 </template>
 

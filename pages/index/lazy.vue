@@ -238,7 +238,7 @@ export default {
     getData() {
       let index = 0;
       this.status = 'loading';
-      setTimeout(() => {
+      // setTimeout(() => {
         for (let i = 0; i < 10; i++) {
           index = this.$u.random(0, this.data.length - 1);
           this.list.push({
@@ -246,7 +246,7 @@ export default {
           });
         }
         this.status = 'loadmore';
-      }, 1500);
+      // }, 1500);
     },
   },
 };

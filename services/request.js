@@ -62,20 +62,18 @@ function baseRequest(
         if (statusCode == 200) {
           reslove(res.data);
         } else {
-          let showErr = '请求失败' + statusCode;
-          if (!noAlert) {
-            utils.showToast(showErr);
-          }
+          // let showErr = '请求失败' + statusCode;
+          // if (!noAlert) {
+          //   utils.showToast(showErr);
+          // }
           reject(showErr);
         }
       },
       fail: (message) => {
-        console.log('rk===>[requst-fail-url]', Url);
-        console.log('rk===>[requst-fail-msg]' + JSON.stringify(message));
-        let showErr = '请求失败';
-        if (!noAlert) {
-          utils.showToast(showErr);
-        }
+        // let showErr = '请求失败';
+        // if (!noAlert) {
+        //   utils.showToast(showErr);
+        // }
         reject(showErr);
       },
     });

@@ -36,13 +36,13 @@
           <waterfall ref="fallRef"></waterfall>
         </scroll-view>
       </swiper-item>
-      <swiper-item class="swiper-item">
+      <!-- <swiper-item class="swiper-item">
         <scroll-view
           scroll-y
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         ></scroll-view>
-      </swiper-item>
+      </swiper-item> -->
     </swiper>
   </view>
 </template>
@@ -61,9 +61,9 @@ export default {
         {
           name: '精选',
         },
-        {
-          name: '最新',
-        },
+        // {
+        //   name: '最新',
+        // },
       ],
       current: 0,
       swiperCurrent: 0,
