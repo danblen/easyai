@@ -1,6 +1,10 @@
 <template>
-  <view>
-    <u-navbar :border-bottom="false" title="一键换脸"></u-navbar>
+  <scroll-view
+    scroll-y
+    style="height: 100%; width: 100%"
+    @scrolltolower="reachBottom"
+  >
+    <u-navbar :border-bottom="false" title="AI写真"></u-navbar>
     <view
       class="tip"
       :style="{
@@ -91,10 +95,11 @@
     >
       一键换脸
     </u-button>
-    <u-button type="primary" :ripple="true" shape="circle" @click="click">
+    <!-- <u-button type="primary" :ripple="true" shape="circle" @click="click">
       aaa
-    </u-button>
-  </view>
+    </u-button> -->
+    <view style="height: 200rpx"></view>
+  </scroll-view>
 </template>
 
 <script>
@@ -123,10 +128,12 @@ export default {
       images: [],
       showImage: false,
       src: '',
+      srcTempFilePath: '',
       taskId: '',
       timers: {},
       outputImages: [],
       userId: '',
+      saved_id: '',
       customStyle: {
         background: '#f083c6',
       },
@@ -135,8 +142,9 @@ export default {
   onLoad(options) {
     this.userId = uni.getStorageSync('userId') || 1222;
     this.src = options.src;
+    this.downloadImages(this.src);
     this.outputImages = [
-      { path: options.src, status: 'su' },
+      // { path: options.src, status: 'su' },
       // { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
       // { path: options.src, status: 's' },
       // { path: options.src, status: 's' },
@@ -153,46 +161,131 @@ export default {
     });
   },
   methods: {
+    downloadImages(imageUrl) {
+      let that = this;
+      return new Promise((resolve, reject) => {
+        uni.downloadFile({
+          url: imageUrl,
+          success: (res) => {
+            if (res.statusCode === 200) {
+              that.srcTempFilePath = res.tempFilePath;
+              resolve();
+            } else {
+              reject();
+            }
+          },
+          fail: (error) => {
+            reject();
+          },
+        });
+      });
+    },
+    async change(event) {
+      const file = event.target.files[0]; // 获取选中的文件
+      if (file) {
+        const formData = new FormData();
+        formData.append('image', file); // 将文件添加到 FormData
+
+        try {
+          const response = await fetch('/upload_image/', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data); // 上传成功后的响应数据
+          } else {
+            console.error('上传失败');
+          }
+        } catch (error) {
+          console.error('上传出错：', error);
+        }
+      }
+    },
     onPreviewImage(index) {
       uni.previewImage({
         current: index, // 当前显示图片的索引
         urls: this.outputImages.map((image) => image.path), // 图片列表
       });
     },
+
     async uploadImg(imagePaths, successCallback, errorCallback) {
       let that = this;
-      let first_image = await pathToBase64(imagePaths[0]);
+      // let first_image = await pathToBase64(imagePaths[0]);
       // first_image = base64ToBlob(first_image);
-      let second_image = await pathToBase64(imagePaths[1]);
+      // let second_image = await pathToBase64(imagePaths[1]);
       // second_image = base64ToBlob(second_image);
-      // uploadImage({
-      //   user_id: this.userId,
-      //   first_image,
-      //   second_image,
-      //   src_face_index: 0,
-      //   dst_face_index: 0,
-      // });
+
       uni.uploadFile({
-        url: HTTP_URL_BACK + '/' + 'upload_image/',
-        files: [
-          { uri: imagePaths[1], name: 'first_image' },
-          { uri: imagePaths[0], name: 'second_image' },
-        ],
-        // filePath: this.images[0],
-        // name: 'file',
+        url: HTTP_URL_BACK + '/' + 'upload_first_image/',
+        // files: [
+        //   { uri: imagePaths[1], name: 'first_image' },
+        //   { uri: imagePaths[0], name: 'second_image' },
+        // ],
+        filePath: imagePaths[0],
+        name: 'first_image',
         // fileType: 'image',
         formData: {
           user_id: this.userId,
           // csrfmiddlewaretoken:
           //   'rbgtf3YupolnomLnB8MsIupKaMb82JdSRajYLMTZm5RVbhvGdDjyFA7mRpakbehb',
-          // first_image,
-          // second_image,
+          // first_image_base64: first_image,
+          // second_image_base64: second_image,
           src_face_index: 0,
           dst_face_index: 0,
         },
         header: {
           accept: 'application/json',
           contentype: 'multipart/form-data',
+          // enctype:	'multipart/form-data',
+        },
+        success: function (res) {
+          if (res.statusCode == 200) {
+            let data = res.data ? JSON.parse(res.data) : {};
+            // that.taskId = data.task_id;
+            that.saved_id = data.saved_id;
+            // that.outputImages.push({
+            //   path: '',
+            //   status: 'pending',
+            //   taskId: data.task_id,
+            // });
+            that.uploadSecond(imagePaths);
+          }
+        },
+        fail: function (res) {
+          uni.showToast({
+            icon: 'none',
+            title: '上传图片失败',
+          });
+        },
+      });
+    },
+    uploadSecond(imagePaths) {
+      let that = this;
+      uni.uploadFile({
+        url: HTTP_URL_BACK + '/' + 'upload_second_image/',
+        // files: [
+        //   { uri: imagePaths[1], name: 'first_image' },
+        //   { uri: imagePaths[0], name: 'second_image' },
+        // ],
+        filePath: this.srcTempFilePath,
+        name: 'second_image',
+        // fileType: 'image',
+        formData: {
+          user_id: this.userId,
+          saved_id: this.saved_id,
+          // csrfmiddlewaretoken:
+          //   'rbgtf3YupolnomLnB8MsIupKaMb82JdSRajYLMTZm5RVbhvGdDjyFA7mRpakbehb',
+          // first_image_base64: first_image,
+          // second_image_base64: second_image,
+          // src_face_index: 0,
+          // dst_face_index: 0,
+        },
+        header: {
+          accept: 'application/json',
+          contentype: 'multipart/form-data',
+          // enctype:	'multipart/form-data',
         },
         success: function (res) {
           if (res.statusCode == 200) {

@@ -1,11 +1,7 @@
 
-// SD站点域名
 let http_api_sd = 'http://43.139.23.56:8014'
 // let HTTP_URL_BACK = 'http://192.168.1.5:7592'
-let HTTP_URL_BACK = 'http://111.230.245.49:8001'
-// let HTTP_URL_BACK = 'http://43.138.255.54:8000'
-// let http_api_sd = 'http://43.139.23.56:7860'
-// MJ站点域名
+let HTTP_URL_BACK = 'http://159.75.159.149:8000'
 
 module.exports = {
 	HTTP_URL_SD: http_api_sd,

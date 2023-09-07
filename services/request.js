@@ -55,7 +55,11 @@ function baseRequest(
       url: Url,
       method: method || 'GET',
       timeout: 600000,
-      header: header,
+			header: header,
+			// header: {
+			// 	'content-type': 'multipart/form-data', // 使用表单数据格式
+      // 'enctype': 'multipart/form-data', // 使用表单数据格式
+			// },
       data: data || {},
       success: (res) => {
         let statusCode = res.statusCode;
@@ -66,7 +70,7 @@ function baseRequest(
           // if (!noAlert) {
           //   utils.showToast(showErr);
           // }
-          reject(showErr);
+          reject();
         }
       },
       fail: (message) => {
@@ -74,7 +78,7 @@ function baseRequest(
         // if (!noAlert) {
         //   utils.showToast(showErr);
         // }
-        reject(showErr);
+        reject();
       },
     });
   });

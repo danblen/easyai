@@ -8,24 +8,25 @@ import { HTTP_CONFIG_URL, HTTP_TRANSLATE_URL } from './app.js';
 export function txt2img(data) {
   return request.post('/sdapi/v1/txt2img', data);
 }
+// post data必须为对象，否则发不出请求
 export function test(data) {
-  uni.request({
-    url: 'http://192.168.1.5:7592/api/login', // 上传图片的服务器 URL
-    method: 'POST',
-    data: data,
-    header: {
-      'content-type': 'multipart/form-data', // 使用表单数据格式
-    },
-    success: function (uploadRes) {
-      // 上传成功，处理服务器响应
-      // console.log(uploadRes.data);
-    },
-    fail: function (error) {
-      // 上传失败，处理错误
-      console.error(error);
-    },
-  });
-  // return request.post('/test', data);
+  // uni.request({
+  //   url: 'http://192.168.1.5:7592/api/login', // 上传图片的服务器 URL
+  //   method: 'POST',
+  //   data: data,
+  //   header: {
+  //     'content-type': 'multipart/form-data', // 使用表单数据格式
+  //   },
+  //   success: function (uploadRes) {
+  //     // 上传成功，处理服务器响应
+  //     // console.log(uploadRes.data);
+  //   },
+  //   fail: function (error) {
+  //     // 上传失败，处理错误
+  //     console.error(error);
+  //   },
+  // });
+  return request.post('/test/', data);
 }
 export function faceSwap(data) {
   return request.post('/faceSwap', data);
@@ -37,6 +38,23 @@ export function get_pending_tasks_on_user(user_id) {
   return request.post('/get_pending_tasks_on_user/'+user_id+'/');
 }
 export function uploadImage(data) {
+  // uni.request({
+  //   url: 'http://106.52.66.226:8001/upload_image/', // 上传图片的服务器 URL
+  //   method: 'POST',
+  //   data: data,
+  //   header: {
+  //     'content-type': 'multipart/form-data', // 使用表单数据格式
+  //     'enctype': 'multipart/form-data', // 使用表单数据格式
+  //   },
+  //   success: function (uploadRes) {
+  //     // 上传成功，处理服务器响应
+  //     // console.log(uploadRes.data);
+  //   },
+  //   fail: function (error) {
+  //     // 上传失败，处理错误
+  //     console.error(error);
+  //   },
+  // });
   return request.post('/upload_image/', data);
 }
 export function checkTaskStatus(user_id) {

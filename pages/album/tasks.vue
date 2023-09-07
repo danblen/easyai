@@ -1,6 +1,6 @@
 <template>
   <view class="wrap">
-    <view class="item-warp">
+    <view v-if="list.length" class="item-warp">
       <view class="item" v-for="(item, index) in list" :key="index">
         <u-image
           :src="item.src"
@@ -12,6 +12,12 @@
         />
       </view>
     </view>
+    <u-empty
+      v-else
+      text="没有进行中的作品"
+      mode="list"
+      style="margin-top: 100rpx"
+    ></u-empty>
   </view>
 </template>
 
@@ -20,6 +26,7 @@ import {
   checkTaskStatusByTaskId,
   get_pending_tasks_on_user,
   get_completed_tasks_on_user,
+  test,
 } from '@/services/api.js';
 // import grid from './grid.vue';
 export default {
@@ -34,8 +41,16 @@ export default {
     this.userId = uni.getStorageSync('userId') || 1222;
     this.getPending();
   },
+  created() {
+    this.userId = uni.getStorageSync('userId') || 1222;
+    this.getPending();
+    // this.test();
+  },
 
   methods: {
+    async test() {
+      let res = await test({ user_id: this.userId });
+    },
     async getPending() {
       let res = await get_pending_tasks_on_user(this.userId);
       this.list = res.completed_tasks.map((item) => ({

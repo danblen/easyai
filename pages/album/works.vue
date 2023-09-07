@@ -12,7 +12,12 @@
         />
       </view>
     </view>
-    <u-empty v-else text="没有进行中的任务" mode="list"></u-empty>
+    <u-empty
+      v-else
+      text="没有已完成的作品"
+      mode="list"
+      style="margin-top: 100rpx"
+    ></u-empty>
   </view>
 </template>
 
@@ -37,7 +42,6 @@ export default {
     this.getPending();
   },
   onLoad() {
-    console.log(234);
     this.userId = uni.getStorageSync('userId') || 1222;
     this.getPending();
   },
