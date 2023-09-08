@@ -21,6 +21,7 @@
       <view>
         <button
           type="primary"
+          size="medium"
           :style="{ width: '50%' }"
           class="u-d-b w-100 mb-30"
           @click="getUserInfo"
@@ -40,30 +41,55 @@
       <u-cell-group>
         <u-cell-item icon="star" title="签到"></u-cell-item>
         <!-- <u-cell-item icon="photo" title="相册"></u-cell-item> -->
-        <u-cell-item icon="coupon" title="卡券"></u-cell-item>
-        <u-cell-item icon="heart" title="关注"></u-cell-item>
+        <!-- <u-cell-item icon="coupon" title="卡券"></u-cell-item>
+        <u-cell-item icon="heart" title="关注"></u-cell-item> -->
       </u-cell-group>
     </view>
 
-    <view class="u-m-t-20">
+    <!-- <view class="u-m-t-20">
       <u-cell-group>
         <u-cell-item icon="setting" title="设置"></u-cell-item>
       </u-cell-group>
+    </view> -->
+    <view class="u-m-t-20">
+      <u-cell-group>
+        <u-cell-item
+          icon="question-circle"
+          title="问题反馈"
+          @click="on"
+        ></u-cell-item>
+      </u-cell-group>
     </view>
     <view class="u-m-t-20">
       <u-cell-group>
-        <u-cell-item icon="question-circle" title="帮助与反馈"></u-cell-item>
+        <u-cell-item
+          icon="question-circle"
+          title="联系我们"
+          @click="onContact"
+        ></u-cell-item>
       </u-cell-group>
     </view>
-    <footer></footer>
+
+    <view
+      style="
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        margin-bottom: 120rpx;
+        width: 100%;
+        font-size: 18rpx;
+      "
+    >
+      <text class="version">版本号 v1.0.0</text>
+    </view>
   </view>
 </template>
 
 <script>
-import footer from './footer.vue';
+// import version from './version.vue';
 export default {
   components: {
-    footer,
+    // version,
   },
   data() {
     return {
@@ -73,7 +99,7 @@ export default {
       userInfo: {
         nickName: '',
         avatarUrl: '',
-				code:''
+        code: '',
       },
     };
   },
@@ -99,7 +125,7 @@ export default {
                 that.isLogin = true;
                 that.userInfo = userInfo;
                 that.userInfo.code = loginRes.code;
-                console.log('userInfo', res.userInfo.openId,res);
+                console.log('userInfo', res.userInfo.openId, res);
 
                 // 进行其他操作，例如跳转到首页
                 // uni.switchTab({
@@ -117,9 +143,19 @@ export default {
           });
         },
         fail: (error) => {
+          uni.setStorageSync('userId', loginRes.code);
+          that.isLogin = true;
+          that.userInfo = userInfo;
+          that.userInfo.code = loginRes.code;
           // 用户拒绝了授权
           console.log('用户拒绝了授权', error);
         },
+      });
+    },
+    onContact() {
+      uni.showModal({
+        title: '联系我们',
+        content: '请联系邮箱:1920669740@qq.com',
       });
     },
   },

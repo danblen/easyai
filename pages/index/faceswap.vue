@@ -99,6 +99,7 @@
       aaa
     </u-button> -->
     <view style="height: 200rpx"></view>
+    <login ref="loginRef"></login>
   </scroll-view>
 </template>
 
@@ -115,8 +116,9 @@ import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
 // import { HTTP_URL_SD, HTTP_URL_BACK } from '@/utils/base64.js';
 import { pathToBase64, base64ToBlob } from '@/utils';
 import self from './self.vue';
+import login from '../comps/login.vue';
 export default {
-  components: { self },
+  components: { self,login },
   data() {
     return {
       // title: '选择人脸照片替换原图中人脸',
@@ -140,7 +142,6 @@ export default {
     };
   },
   onLoad(options) {
-    this.userId = uni.getStorageSync('userId') || 1222;
     this.src = options.src;
     this.downloadImages(this.src);
     this.outputImages = [
@@ -227,7 +228,7 @@ export default {
         name: 'first_image',
         // fileType: 'image',
         formData: {
-          user_id: this.userId,
+          user_id: uni.getStorageSync('userId'),
           // csrfmiddlewaretoken:
           //   'rbgtf3YupolnomLnB8MsIupKaMb82JdSRajYLMTZm5RVbhvGdDjyFA7mRpakbehb',
           // first_image_base64: first_image,
@@ -273,7 +274,7 @@ export default {
         name: 'second_image',
         // fileType: 'image',
         formData: {
-          user_id: this.userId,
+          user_id: uni.getStorageSync('userId'),
           saved_id: this.saved_id,
           // csrfmiddlewaretoken:
           //   'rbgtf3YupolnomLnB8MsIupKaMb82JdSRajYLMTZm5RVbhvGdDjyFA7mRpakbehb',
@@ -320,29 +321,12 @@ export default {
       }, 4000);
     },
 
-    async click() {
-      let res = await get_completed_tasks_on_user(123);
-      // let res = await checkTaskStatus(123);
-      // const formData = new FormData();
-      // // 将两张图片添加到 FormData 中
-      // formData.append('image1', 'this.$refs.selfRef.imagePaths[0]');
-      // formData.append('image2', 'this.$refs.selfRef.imagePaths[0]');
-      // const formDataString = Object.keys(formData)
-      //   .reduce((str, key) => {
-      //     const value = formData[key];
-      //     return `${str}${key}=${encodeURIComponent(value)}&`;
-      //   }, '')
-      //   .slice(0, -1); // 删除最后的 & 符号
-      // uploadImage(formData);
-    },
     async swap() {
-      // if (this.userId) {
-      //   uni.showToast({
-      //     title: '请先登录',
-      //     icon: 'none',
-      //   });
-      //   return;
-      // }
+      if (!uni.getStorageSync('userId')) {
+				this.$refs.loginRef.show();
+        return;
+      }
+
       if (!this.$refs.selfRef.isSelfUpload) {
         uni.showToast({
           title: '请选择人脸图片',

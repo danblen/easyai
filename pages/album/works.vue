@@ -45,6 +45,7 @@ export default {
     this.userId = uni.getStorageSync('userId') || 1222;
     this.getPending();
   },
+  
   methods: {
     clickImg() {},
     async getPending() {

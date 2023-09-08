@@ -147,7 +147,7 @@ page {
 }
 
 .demo-tag-owner {
-  background-color: $u-type-warning;
+  background-color: #cd71f1;
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -158,8 +158,8 @@ page {
 }
 
 .demo-tag-text {
-  border: 1px solid $u-type-primary;
-  color: $u-type-primary;
+  border: 1px solid #ec71b9;
+  color: #ec71b9;
   margin-left: 10px;
   border-radius: 50rpx;
   line-height: 1;
