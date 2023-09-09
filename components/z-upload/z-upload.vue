@@ -43,6 +43,12 @@
       <image
         @tap.stop="doPreviewImage(item.url || item.path, index)"
         class="u-preview-image"
+        :style="
+          isTapSelect &&
+          selectedImage.url === item.url && {
+            border: '6rpx solid #f06666',
+          }
+        "
         v-if="!item.isImage"
         :src="item.url || item.path"
         :mode="imageMode"
@@ -181,6 +187,17 @@ export default {
     previewFullImage: {
       type: Boolean,
       default: true,
+    },
+    // 是否在点击预览图后选中
+    isTapSelect: {
+      type: Boolean,
+      default: false,
+    },
+    selectedImage: {
+      type: Object,
+      default() {
+        return {};
+      },
     },
     // 是否开启图片多选，部分安卓机型不支持
     multiple: {
@@ -567,8 +584,14 @@ export default {
         this.$emit('on-list-change', this.lists, this.index);
       }
     },
+    selectImage(url, index) {
+      this.selectedImage = { index, url };
+    },
     // 预览图片
     doPreviewImage(url, index) {
+      if (this.isTapSelect) {
+        this.selectImage(url, index);
+      }
       if (!this.previewFullImage) return;
       const images = this.lists.map((item) => item.url || item.path);
       uni.previewImage({
