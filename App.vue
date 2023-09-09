@@ -151,7 +151,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "uview-ui/index.scss";
+@import "./components/uview-ui/index.scss";
 /*每个页面公共css */
 @import 'ui/uni.css';
 @import 'ui/colorui/animation.css';

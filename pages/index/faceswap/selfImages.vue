@@ -1,56 +1,83 @@
 <template>
-  <view>
-    <scroll-view scroll-x style="height: 100%; width: 100%" class="xsms-scroll">
+  <view class="view" style="backgroud-color: #123">
+    点击上传照片，可上传多张进行选择
+    <z-upload
+      :class="{
+        upload1: fileList.length === 1,
+        upload2: fileList.length === 2,
+        upload3: fileList.length === 3,
+        upload4: fileList.length === 4,
+        upload5: fileList.length === 5,
+      }"
+      :max-count="5"
+      :width="150"
+      :height="150"
+      @on-choose-complete="onChooseComplete"
+      @on-remove.stop="onRemove"
+      @on-preview.stop="onPreview"
+      :auto-upload="false"
+    ></z-upload>
+    <scroll-view
+      scroll-x
+      style="height: 100%; width: 100%; backgroud: #123"
+      class="xsms-scroll wrap"
+    >
       <view
         v-for="(image, index) in images"
         :key="index"
         :style="{
-          width: '200rpx',
-          height: '200rpx',
+          width: '100rpx',
+          height: '100rpx',
           marginRight: '10rpx',
           display: 'inline-block',
         }"
       >
         <u-image
+          style="
+            width: 100rpx;
+            height: 100rpx;
+            display: inline-block;
+            textalign: center;
+            vertical-align: middle;
+          "
           :style="{
-            width: '200rpx',
-            height: '200rpx',
-            display: 'inline-block',
-            textAlign: 'center',
-            verticalAlign: 'middle',
-            border: chosedImage===image?'4rpx solid #f06666':'',
+            border: chosedImage === image ? '4rpx solid #f06666' : '',
           }"
           :src="image"
           mode="widthFix"
           @click="onChoose(index)"
         ></u-image>
+        <u-icon
+          name="close"
+          style="font: 20rpx bold; color: red; position: absolute; left: 80rpx"
+          inactive-color="white"
+        ></u-icon>
       </view>
       <view
         @click="uploadFile"
+        style="
+          width: 100rpx;
+          height: 100rpx;
+          display: inline-block;
+          textalign: center;
+          vertical-align: middle;
+        "
         :style="{
-          width: '200rpx',
-          height: '200rpx',
-          display: 'inline-block',
-          textAlign: 'center',
-          verticalAlign: 'middle',
           border: '1px solid #ccc',
         }"
       >
         <u-icon
           name="plus"
-          :style="{
-            position: 'relative',
-            top: '50rpx',
-          }"
+          style="position: relative; top: 25rpx; left: 35rpx"
         ></u-icon>
-        <view
+        <!-- <view
           :style="{
             position: 'relative',
-            top: '55rpx',
+            top: '30rpx',
           }"
         >
-          上传
-        </view>
+          上传照片
+        </view> -->
       </view>
     </scroll-view>
   </view>
@@ -61,11 +88,7 @@ import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
 import { checkTaskStatus } from '@/services/api.js';
 export default {
   data() {
-    return {
-      isSelfUpload: false,
-      images: [],
-      chosedImage: '',
-    };
+    return { fileList: [], isSelfUpload: false, images: [], chosedImage: '' };
   },
   created() {
     // 监听从裁剪页发布的事件，获得裁剪结果
@@ -83,6 +106,16 @@ export default {
     });
   },
   methods: {
+    onChooseComplete(list,name){
+      this.fileList = list;
+    },
+    onPreview(){
+      console.log('onPreview');
+    },
+    onRemove(){
+      console.log('onRemove');
+    },
+
     onChoose(index) {
       this.chosedImage = this.images[index];
     },
@@ -98,8 +131,8 @@ export default {
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function (res) {
           that.images.push(...res.tempFilePaths);
-          if(that.images.length===1){
-            this.chosedImage=that.images[1]
+          if (that.images.length === 1) {
+            this.chosedImage = that.images[1];
           }
           // that.src = res.tempFilePaths[0];
           that.isSelfUpload = true;
@@ -110,6 +143,22 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.view {
+  padding: 10rpx;
+}
+.wrap {
+  padding: 10rpx;
+  background: rgb(186, 173, 194);
+}
+.upload1 /deep/ .u-preview-wrap:nth-child(1) {
+  border: 2px solid red;
+}
+.upload2 /deep/ .u-preview-wrap:nth-child(2) {
+  border: 2px solid red;
+}
+.upload3 /deep/ .u-preview-wrap:nth-child(3) {
+  border: 2px solid red;
+}
 .xsms-scroll {
   width: 100%;
   overflow: hidden;

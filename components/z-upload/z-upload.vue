@@ -91,7 +91,7 @@
  * @example <u-upload :action="action" :file-list="fileList" ></u-upload>
  */
 export default {
-	name: 'u-upload',
+	name: 'z-upload',
 	props: {
 		//是否显示组件自带的图片预览功能
 		showUploadList: {
@@ -563,7 +563,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../libs/css/style.components.scss';
+@import '../uview-ui/libs/css/style.components.scss';
 
 .u-upload {
 	@include vue-flex;

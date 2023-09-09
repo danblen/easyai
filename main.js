@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import cuCustom from './ui/colorui/components/cu-custom.vue'
-import uView from "uview-ui";
+import uView from "./components/uview-ui";
 Vue.use(uView);
 Vue.config.productionTip = false
 Vue.component('cu-custom',cuCustom)
