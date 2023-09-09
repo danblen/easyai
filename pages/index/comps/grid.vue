@@ -5,7 +5,7 @@
         <u-icon name="photo" :size="46"></u-icon>
         <view class=" ">专业模式</view>
       </view>
-      <view class="grid-item" @click="go('/pages/index/faceswap')">
+      <view class="grid-item" @click="go('/pages/index/faceswap/index')">
         <u-icon name="lock" :size="46"></u-icon>
         <view class=" ">AI换脸</view>
       </view>

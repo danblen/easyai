@@ -15,8 +15,8 @@
         mode="widthFix"
       />
     </view>
+    <selfImages class="avatar" ref="selfRef"></selfImages>
     <view class="image-cover" v-if="outputImages.length">
-      <self class="avatar" ref="selfRef"></self>
       <view class="image-cover-close">已制作图集</view>
       <scroll-view
         scroll-x
@@ -106,10 +106,11 @@ import {
 import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
 // import { HTTP_URL_SD, HTTP_URL_BACK } from '@/utils/base64.js';
 import { pathToBase64, base64ToBlob } from '@/utils';
-import self from './faceswap/self.vue';
-import login from '../comps/login.vue';
+import self from './self.vue';
+import selfImages from './selfImages.vue';
+import login from '@/pages/comps/login.vue';
 export default {
-  components: { self,login },
+  components: { self, login, selfImages },
   data() {
     return {
       // title: '选择人脸照片替换原图中人脸',
@@ -134,7 +135,7 @@ export default {
   onLoad(options) {
     this.src = options.src;
     this.downloadImages(this.src);
-    this.selfImages = []
+    this.selfImages = [];
     this.outputImages = [
       // { path: options.src, status: 'su' },
       // { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
@@ -314,7 +315,7 @@ export default {
 
     async swap() {
       if (!uni.getStorageSync('userId')) {
-				this.$refs.loginRef.show();
+        this.$refs.loginRef.show();
         return;
       }
 

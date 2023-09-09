@@ -1,7 +1,7 @@
 {
   "easycom": {
-		"^u-(.*)": "@/components/uview-ui/components/u-$1/u-$1.vue"
-	},
+    "^u-(.*)": "@/components/uview-ui/components/u-$1/u-$1.vue"
+  },
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
@@ -13,7 +13,7 @@
       }
     },
     {
-      "path": "pages/index/faceswap",
+      "path": "pages/index/faceswap/index",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,

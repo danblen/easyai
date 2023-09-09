@@ -5,7 +5,7 @@
         class="item"
         v-for="(item, index) in list"
         :key="index"
-        @click="go('/pages/index/faceswap', item.src)"
+        @click="go('/pages/index/faceswap/index', item.src)"
       >
         <u-lazy-load
           threshold="-450"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { images } from './const.js';
+import { images } from '../const/url.js';
 export default {
   data() {
     return {

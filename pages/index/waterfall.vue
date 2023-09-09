@@ -6,7 +6,7 @@
           class="demo-warter"
           v-for="(item, index) in leftList"
           :key="index"
-          @click="go('/pages/index/faceswap', item.src)"
+          @click="go('/pages/index/faceswap/index', item.src)"
         >
           <!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
           <u-lazy-load
@@ -29,7 +29,7 @@
           class="demo-warter"
           v-for="(item, index) in rightList"
           :key="index"
-          @click="go('/pages/index/faceswap', item.src)"
+          @click="go('/pages/index/faceswap/index', item.src)"
         >
           <u-lazy-load
             threshold="-450"
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { images2 } from './const.js';
+import { images2 } from '../const/url.js';
 export default {
   data() {
     return {
@@ -69,7 +69,7 @@ export default {
             'http://pic.sc.chinaz.com/Files/pic/pic9/202002/zzpic23327_s.jpg',
         },
         {
-          title: '写真',
+          title: '梦幻',
           image:
             'http://pic.sc.chinaz.com/Files/pic/pic9/202002/zzpic23325_s.jpg',
         },

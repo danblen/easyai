@@ -31,8 +31,12 @@ export default {
     hide() {
       this.isShow = false;
     },
-    login() {
-      getUserInfo();
+   async login() {
+      const res = await getUserInfo();
+      if (res) {
+        this.isShow = false;
+        this.$emit('login', res);
+      }
     },
   },
 };
