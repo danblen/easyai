@@ -193,6 +193,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    needConfirmDelete: {
+      type: Boolean,
+      default: false,
+    },
     // 是否开启图片多选，部分安卓机型不支持
     multiple: {
       type: Boolean,
@@ -518,46 +522,51 @@ export default {
     },
     // 删除一个图片
     deleteItem(index) {
+      if (!this.needConfirmDelete) {
+        this.handlerDelete(index);
+        return;
+      }
       uni.showModal({
         title: '提示',
         content: '您确定要删除此项吗？',
         success: async (res) => {
           if (res.confirm) {
-            // 先检查是否有定义before-remove移除前钩子
-            // 执行before-remove钩子
-            if (this.beforeRemove && typeof this.beforeRemove === 'function') {
-              // 此处钩子执行 原理同before-remove参数，见上方注释
-              let beforeResponse = this.beforeRemove.bind(
-                this.$u.$parent.call(this),
-              )(index, this.lists);
-              // 判断是否返回了promise
-              if (
-                !!beforeResponse &&
-                typeof beforeResponse.then === 'function'
-              ) {
-                await beforeResponse
-                  .then((res) => {
-                    // promise返回成功，不进行动作，继续上传
-                    this.handlerDeleteItem(index);
-                  })
-                  .catch((err) => {
-                    // 如果进入promise的reject，终止删除操作
-                    this.showToast('已终止移除');
-                  });
-              } else if (beforeResponse === false) {
-                // 返回false，终止删除
-                this.showToast('已终止移除');
-              } else {
-                // 如果返回true，执行删除操作
-                this.handlerDeleteItem(index);
-              }
-            } else {
-              // 如果不存在before-remove钩子，
-              this.handlerDeleteItem(index);
-            }
+            this.handlerDelete(index);
           }
         },
       });
+    },
+    async handlerDelete(index) {
+      // 先检查是否有定义before-remove移除前钩子
+      // 执行before-remove钩子
+      if (this.beforeRemove && typeof this.beforeRemove === 'function') {
+        // 此处钩子执行 原理同before-remove参数，见上方注释
+        let beforeResponse = this.beforeRemove.bind(this.$u.$parent.call(this))(
+          index,
+          this.lists,
+        );
+        // 判断是否返回了promise
+        if (!!beforeResponse && typeof beforeResponse.then === 'function') {
+          await beforeResponse
+            .then((res) => {
+              // promise返回成功，不进行动作，继续上传
+              this.handlerDeleteItem(index);
+            })
+            .catch((err) => {
+              // 如果进入promise的reject，终止删除操作
+              this.showToast('已终止移除');
+            });
+        } else if (beforeResponse === false) {
+          // 返回false，终止删除
+          this.showToast('已终止移除');
+        } else {
+          // 如果返回true，执行删除操作
+          this.handlerDeleteItem(index);
+        }
+      } else {
+        // 如果不存在before-remove钩子，
+        this.handlerDeleteItem(index);
+      }
     },
     // 执行移除图片的动作，上方代码只是判断是否可以移除
     handlerDeleteItem(index) {
