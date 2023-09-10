@@ -1,13 +1,12 @@
 import request from './request.js';
 import { HTTP_CONFIG_URL, HTTP_TRANSLATE_URL } from './app.js';
 
-/// MJ
-/**
- * 公共配置
- */
-export function txt2img(data) {
-  return request.post('/sdapi/v1/txt2img', data);
-}
+// /images/
+// /images/?tag=标签名称
+// /images/?order_by=time
+// /images/?order_by=views
+// /images/?search=text
+
 // post data必须为对象，否则发不出请求
 export function test(data) {
   // uni.request({
@@ -31,11 +30,14 @@ export function test(data) {
 export function faceSwap(data) {
   return request.post('/faceSwap', data);
 }
+export function image_list(params) {
+  return request.get('/image_list/' ,params);
+}
 export function get_completed_tasks_on_user(user_id) {
-  return request.post('/get_completed_tasks_on_user/'+user_id+'/');
+  return request.post('/get_completed_tasks_on_user/' + user_id + '/');
 }
 export function get_pending_tasks_on_user(user_id) {
-  return request.post('/get_pending_tasks_on_user/'+user_id+'/');
+  return request.post('/get_pending_tasks_on_user/' + user_id + '/');
 }
 export function uploadImage(data) {
   // uni.request({
@@ -63,64 +65,16 @@ export function checkTaskStatus(user_id) {
 export function checkTaskStatusByTaskId(taskId) {
   return request.get('/check_task_status_on_taskid/' + taskId + '/');
 }
+
+/// SD
 export function getConfig(data) {
   return request.get('/config', data, {
     isMj: true,
   });
 }
-
-/**
- * 翻译
- */
-export function getTranslate(data) {
-  return request.get('/translate', data, {
-    isMj: true,
-    noAlert: true,
-  });
+export function txt2img(data) {
+  return request.post('/sdapi/v1/txt2img', data);
 }
-/**
- * MJ生成图片
- */
-export function postMjAdd(data) {
-  return request.post('/mj_add', data, {
-    isMj: true,
-  });
-}
-/**
- * MJ生成图片【通用】
- */
-export function postMjAddAll(data) {
-  return request.post('/mj_add_all', data, {
-    isMj: true,
-  });
-}
-/**
- * MJ图片解析
- */
-export function postMjDescribe(data) {
-  return request.post('/mj_describe', data, {
-    isMj: true,
-  });
-}
-/**
- * MJ任务查询
- */
-export function getMjFetch(data) {
-  return request.get('/mj_fetch', data, {
-    isMj: true,
-    noAlert: true,
-  });
-}
-/**
- * MJ图片处理
- */
-export function postMjChange(data) {
-  return request.post('/mj_change', data, {
-    isMj: true,
-  });
-}
-
-/// SD
 /**
  * 全局信息
  */

@@ -25,6 +25,8 @@
 
 <script>
 import { images } from '../const/url.js';
+import { HTTP_URL_BACK } from '@/services/app.js';
+import { image_list } from '@/services/api.js';
 export default {
   data() {
     return {
@@ -51,16 +53,24 @@ export default {
     clickImg(img) {
       //console.log(img);
     },
-    getData() {
-      let index = 0;
-      this.status = 'loading';
-      for (let i = 0; i < 10; i++) {
-        index = this.$u.random(0, images.length - 1);
-        this.list.push({
-          src: images[index].src,
-        });
-      }
-      this.status = 'loadmore';
+    async getData() {
+      let res = await image_list({
+        tag: 'guofeng',
+      });
+      this.list = res.image_urls.map((url) => {
+        return {
+          src: HTTP_URL_BACK + url,
+        };
+      });
+      // let index = 0;
+      // this.status = 'loading';
+      // for (let i = 0; i < 10; i++) {
+      //   index = this.$u.random(0, images.length - 1);
+      //   this.list.push({
+      //     src: images[index].src,
+      //   });
+      // }
+      // this.status = 'loadmore';
     },
   },
 };
