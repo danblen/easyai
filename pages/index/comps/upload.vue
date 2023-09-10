@@ -1,22 +1,6 @@
 <template>
   <view class="view" style="backgroud-color: #123">
     点击上传照片，可上传多张进行选择
-    <z-upload
-      :class="{
-        upload1: fileList.length === 1,
-        upload2: fileList.length === 2,
-        upload3: fileList.length === 3,
-        upload4: fileList.length === 4,
-        upload5: fileList.length === 5,
-      }"
-      :max-count="5"
-      :width="150"
-      :height="150"
-      @on-choose-complete="onChooseComplete"
-      @on-remove.stop="onRemove"
-      @on-preview.stop="onPreview"
-      :auto-upload="false"
-    ></z-upload>
     <scroll-view
       scroll-x
       style="height: 100%; width: 100%; backgroud: #123"
@@ -70,25 +54,23 @@
           name="plus"
           style="position: relative; top: 25rpx; left: 35rpx"
         ></u-icon>
-        <!-- <view
+        <view
           :style="{
             position: 'relative',
             top: '30rpx',
           }"
         >
           上传照片
-        </view> -->
+        </view>
       </view>
     </scroll-view>
   </view>
 </template>
 
 <script>
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
-import { checkTaskStatus } from '@/services/api.js';
 export default {
   data() {
-    return { fileList: [], isSelfUpload: false, images: [], chosedImage: '' };
+    return {   isSelfUpload: false, images: [], chosedImage: '' };
   },
   created() {
     // 监听从裁剪页发布的事件，获得裁剪结果
@@ -106,22 +88,9 @@ export default {
     });
   },
   methods: {
-    onChooseComplete(list,name){
-      this.fileList = list;
-    },
-    onPreview(){
-      console.log('onPreview');
-    },
-    onRemove(){
-      console.log('onRemove');
-    },
 
     onChoose(index) {
       this.chosedImage = this.images[index];
-    },
-    clearImage() {
-      this.formData.have_img = false;
-      this.formData.image_path = '';
     },
     uploadFile() {
       let that = this;
@@ -149,15 +118,6 @@ export default {
 .wrap {
   padding: 10rpx;
   background: rgb(186, 173, 194);
-}
-.upload1 /deep/ .u-preview-wrap:nth-child(1) {
-  border: 2px solid red;
-}
-.upload2 /deep/ .u-preview-wrap:nth-child(2) {
-  border: 2px solid red;
-}
-.upload3 /deep/ .u-preview-wrap:nth-child(3) {
-  border: 2px solid red;
 }
 .xsms-scroll {
   width: 100%;

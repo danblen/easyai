@@ -1,7 +1,7 @@
 
 let http_api_sd = 'http://43.139.23.56:8014'
 // let HTTP_URL_BACK = 'http://192.168.1.5:7592'
-let HTTP_URL_BACK = 'http://159.75.159.149:8000'
+let HTTP_URL_BACK = 'http://43.136.95.94:8000'
 
 module.exports = {
 	HTTP_URL_SD: http_api_sd,

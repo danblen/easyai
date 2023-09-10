@@ -15,7 +15,11 @@
         mode="widthFix"
       />
     </view>
-    <selfImages class="avatar" ref="selfRef"></selfImages>
+    <imageUpload
+      class="avatar"
+      ref="uploadRef"
+      @on-choose-complete="onChooseComplete"
+    ></imageUpload>
     <view class="image-cover" v-if="outputImages.length">
       <view class="image-cover-close">已制作图集</view>
       <scroll-view
@@ -75,6 +79,7 @@
         </view>
       </scroll-view>
     </view>
+    <imageRow />
 
     <u-button
       class="swap"
@@ -86,9 +91,6 @@
     >
       一键换脸
     </u-button>
-    <!-- <u-button type="primary" :ripple="true" shape="circle" @click="click">
-      aaa
-    </u-button> -->
     <view style="height: 200rpx"></view>
     <login ref="loginRef"></login>
   </scroll-view>
@@ -104,13 +106,12 @@ import {
   get_completed_tasks_on_user,
 } from '@/services/api.js';
 import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
-// import { HTTP_URL_SD, HTTP_URL_BACK } from '@/utils/base64.js';
-import { pathToBase64, base64ToBlob } from '@/utils';
-import self from './self.vue';
-import selfImages from './selfImages.vue';
+import { upload } from '@/pages/common/upload.js';
+import imageRow from './imageRow.vue';
+import imageUpload from './imageUpload.vue';
 import login from '@/pages/comps/login.vue';
 export default {
-  components: { self, login, selfImages },
+  components: { login, imageUpload, imageRow },
   data() {
     return {
       // title: '选择人脸照片替换原图中人脸',
@@ -124,7 +125,6 @@ export default {
       taskId: '',
       timers: {},
       outputImages: [],
-      selfImages: [],
       userId: '',
       saved_id: '',
       customStyle: {
@@ -135,7 +135,6 @@ export default {
   onLoad(options) {
     this.src = options.src;
     this.downloadImages(this.src);
-    this.selfImages = [];
     this.outputImages = [
       // { path: options.src, status: 'su' },
       // { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
@@ -154,6 +153,9 @@ export default {
     });
   },
   methods: {
+    onChooseComplete(list, name) {
+      list;
+    },
     downloadImages(imageUrl) {
       let that = this;
       return new Promise((resolve, reject) => {
@@ -173,29 +175,6 @@ export default {
         });
       });
     },
-    async change(event) {
-      const file = event.target.files[0]; // 获取选中的文件
-      if (file) {
-        const formData = new FormData();
-        formData.append('image', file); // 将文件添加到 FormData
-
-        try {
-          const response = await fetch('/upload_image/', {
-            method: 'POST',
-            body: formData,
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            console.log(data); // 上传成功后的响应数据
-          } else {
-            console.error('上传失败');
-          }
-        } catch (error) {
-          console.error('上传出错：', error);
-        }
-      }
-    },
     onPreviewImage(index) {
       uni.previewImage({
         current: index, // 当前显示图片的索引
@@ -205,44 +184,24 @@ export default {
 
     async uploadImg(imagePaths, successCallback, errorCallback) {
       let that = this;
-      // let first_image = await pathToBase64(imagePaths[0]);
-      // first_image = base64ToBlob(first_image);
-      // let second_image = await pathToBase64(imagePaths[1]);
-      // second_image = base64ToBlob(second_image);
 
       uni.uploadFile({
         url: HTTP_URL_BACK + '/' + 'upload_first_image/',
-        // files: [
-        //   { uri: imagePaths[1], name: 'first_image' },
-        //   { uri: imagePaths[0], name: 'second_image' },
-        // ],
         filePath: imagePaths[0],
         name: 'first_image',
-        // fileType: 'image',
         formData: {
           user_id: uni.getStorageSync('userId'),
-          // csrfmiddlewaretoken:
-          //   'rbgtf3YupolnomLnB8MsIupKaMb82JdSRajYLMTZm5RVbhvGdDjyFA7mRpakbehb',
-          // first_image_base64: first_image,
-          // second_image_base64: second_image,
           src_face_index: 0,
           dst_face_index: 0,
         },
         header: {
           accept: 'application/json',
           contentype: 'multipart/form-data',
-          // enctype:	'multipart/form-data',
         },
         success: function (res) {
           if (res.statusCode == 200) {
             let data = res.data ? JSON.parse(res.data) : {};
-            // that.taskId = data.task_id;
             that.saved_id = data.saved_id;
-            // that.outputImages.push({
-            //   path: '',
-            //   status: 'pending',
-            //   taskId: data.task_id,
-            // });
             that.uploadSecond(imagePaths);
           }
         },
@@ -314,12 +273,13 @@ export default {
     },
 
     async swap() {
-      if (!uni.getStorageSync('userId')) {
-        this.$refs.loginRef.show();
-        return;
-      }
-
-      if (!this.$refs.selfRef.isSelfUpload) {
+      // if (!uni.getStorageSync('userId')) {
+      //   this.$refs.loginRef.show();
+      //   return;
+      // }
+      // this.uploadImg(this.$refs.uploadRef.selectedImageUrl)
+      // return
+      if (!this.$refs.uploadRef.selectedImageUrl) {
         uni.showToast({
           title: '请选择人脸图片',
           icon: 'none',
@@ -327,7 +287,38 @@ export default {
         return;
       }
 
-      this.uploadImg(this.$refs.selfRef.imagePaths);
+      let res = await upload(
+        'upload_first_image/',
+        this.$refs.uploadRef.selectedImageUrl,
+        'first_image',
+        {
+          user_id: uni.getStorageSync('userId') || 123,
+          src_face_index: 0,
+          dst_face_index: 0,
+        },
+      );
+      if (res) {
+        this.saved_id = res.saved_id;
+      }
+      // 有些图片下载后调接口会报400 invalid image
+      let res2 = await upload(
+        'upload_second_image/',
+        this.srcTempFilePath,
+        'second_image',
+        {
+          user_id: uni.getStorageSync('userId') || 123,
+          saved_id: this.saved_id,
+        },
+      );
+      if (res2) {
+        this.taskId = res2.task_id;
+        this.outputImages.push({
+          path: '',
+          status: 'pending',
+          taskId: res2.task_id,
+        });
+        this.getImage(res2.task_id);
+      }
     },
   },
 };
