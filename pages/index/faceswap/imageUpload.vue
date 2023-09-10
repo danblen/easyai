@@ -38,12 +38,12 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.view {
-  padding: 10rpx;
-  background: rgb(186, 173, 194);
-}
-.desc {
-}
+// .view {
+//   padding: 10rpx;
+//   background: rgb(186, 173, 194);
+// }
+// .desc {
+// }
 .xsms-scroll {
   width: 100%;
   overflow: hidden;
