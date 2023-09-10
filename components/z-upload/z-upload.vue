@@ -193,12 +193,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    selectedImage: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
     // 是否开启图片多选，部分安卓机型不支持
     multiple: {
       type: Boolean,
@@ -299,6 +293,7 @@ export default {
   mounted() {},
   data() {
     return {
+      selectedImage: {},
       lists: [],
       isInCount: true,
       uploading: false,
