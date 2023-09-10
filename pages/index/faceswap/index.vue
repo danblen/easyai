@@ -30,7 +30,16 @@
         <view
           class="goAlbum"
           @click="goAlbum"
-          style="postion: absolute; right: 0; color: #f083c6"
+          style="
+            postion: absolute;
+            right: 0;
+            font-weight: bold;
+            font-size: 30rpx;
+            padding: 10rpx;
+            opacity: 0.8;
+            animation: swap 1s infinite;
+            color: #f083c6;
+          "
         >
           去作品查看
           <u-icon name="arrow-right-double"></u-icon>
@@ -114,7 +123,7 @@ export default {
   },
   methods: {
     goAlbum() {
-      uni.navigateTo({
+      uni.reLaunch({
         url: '/pages/album/index',
       });
     },
@@ -139,10 +148,10 @@ export default {
     },
 
     async swap() {
-      // if (!uni.getStorageSync('userId')) {
-      //   this.$refs.loginRef.show();
-      //   return;
-      // }
+      if (!uni.getStorageSync('userId')) {
+        this.$refs.loginRef.show();
+        return;
+      }
       if (!this.$refs.uploadRef.selectedImageUrl) {
         uni.showToast({
           title: '请选择人脸图片',
@@ -156,7 +165,7 @@ export default {
         this.$refs.uploadRef.selectedImageUrl,
         'first_image',
         {
-          user_id: uni.getStorageSync('userId') || 123,
+          user_id: uni.getStorageSync('userId'),
           src_face_index: 0,
           dst_face_index: 0,
         },
@@ -170,7 +179,7 @@ export default {
         this.srcTempFilePath,
         'second_image',
         {
-          user_id: uni.getStorageSync('userId') || 123,
+          user_id: uni.getStorageSync('userId'),
           saved_id: this.saved_id,
         },
       );
@@ -204,7 +213,14 @@ export default {
 .swap {
   position: fixed;
   bottom: 60rpx;
-  margin: 0 40rpx;
-  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  // 炫酷效果
+  animation: swap 1s infinite;
+  // 美化按钮
+  opacity: 0.8;
+  box-shadow: 0 0 10rpx #f083c6;
+  font-weight: bold;
 }
 </style>

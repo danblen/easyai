@@ -50,6 +50,7 @@
 <script>
 import waterfall from './waterfall.vue';
 import hot from './hot.vue';
+import {init} from '../common/init.js';
 export default {
   components: { hot, waterfall },
   data() {
@@ -71,7 +72,9 @@ export default {
       dx: 0,
     };
   },
-  onLoad() {},
+  onLoad() {
+    init()
+  },
   computed: {},
   methods: {
     reachBottom() {

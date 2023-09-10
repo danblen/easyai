@@ -6,6 +6,7 @@
       :max-count="4"
       :previewFullImage="false"
       :isTapSelect="true"
+      :needConfirmDelete="false"
       :width="150"
       :height="150"
       :auto-upload="false"
