@@ -40,7 +40,8 @@
 
     <view class="u-m-t-20">
       <u-cell-group>
-        <u-cell-item icon="star" title="签到"></u-cell-item>
+        <getPoint />
+        <buyPoint />
         <!-- <u-cell-item icon="photo" title="相册"></u-cell-item> -->
         <!-- <u-cell-item icon="coupon" title="卡券"></u-cell-item>
         <u-cell-item icon="heart" title="关注"></u-cell-item> -->
@@ -53,19 +54,12 @@
       </u-cell-group>
     </view> -->
     <view class="u-m-t-20">
-      <getPoint />
-    </view>
-    <view class="u-m-t-20">
       <u-cell-group>
         <u-cell-item
           icon="question-circle"
           title="问题反馈"
           @click="on"
         ></u-cell-item>
-      </u-cell-group>
-    </view>
-    <view class="u-m-t-20">
-      <u-cell-group>
         <u-cell-item
           icon="question-circle"
           title="联系我们"
@@ -91,10 +85,12 @@
 
 <script>
 import getPoint from './getPoint.vue';
+import buyPoint from './buyPoint.vue';
 import { getUserInfo } from '../common/user.js';
 export default {
   components: {
     getPoint,
+    buyPoint,
   },
   data() {
     return {
