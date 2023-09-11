@@ -5,6 +5,7 @@
       <u-icon name="heart" :size="36"></u-icon>
       <text class="text">推荐</text>
     </view>
+    <u-tabs :list="list" :current="current" @change="change"></u-tabs>
     <lazy ref="lazyRef"></lazy>
   </view>
 </template>
@@ -12,27 +13,33 @@
 <script>
 import lazy from './lazy.vue';
 import zswiper from './zswiper.vue';
-import waterfall from './waterfall.vue';
+import { tags } from '../const/app.js';
 export default {
-  components: {  lazy, zswiper, waterfall  },
+  components: { lazy, zswiper },
   data() {
     return {
-      list: [
-        {
-          image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
-        },
-        {
-          image: 'https://cdn.uviewui.com/uview/swiper/2.jpg',
-        },
-        {
-          image: 'https://cdn.uviewui.com/uview/swiper/3.jpg',
-        },
-      ],
+      current: 0,
+      list: tags.map((item) => {
+        return {
+          name: item,
+        };
+      }),
     };
   },
+  mounted() {
+    this.getData();
+  },
+
   methods: {
+    change(index) {
+      this.current = index;
+      console.log(tags[this.current]);
+      this.getData();
+    },
     getData() {
-      this.$refs.lazyRef.getData();
+      this.$refs.lazyRef.getData({
+        tag: tags[this.current],
+      });
     },
   },
 };

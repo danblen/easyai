@@ -97,6 +97,7 @@
         "pagePath": "pages/album/index",
         "iconPath": "./static/image/tabbar/photo1.png",
         "selectedIconPath": "./static/image/tabbar/photo2.png",
+        "needRefresh": true,
         "text": "作品"
       },
       {

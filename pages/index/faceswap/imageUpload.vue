@@ -1,6 +1,6 @@
 <template>
   <view class="view">
-    <view class="desc">点击上传照片，可上传多张进行选择</view>
+    <view class="desc"></view>
     <z-upload
       ref="uploadRef"
       :max-count="4"

@@ -62,9 +62,9 @@ export default {
         {
           name: '精选',
         },
-        // {
-        //   name: '最新',
-        // },
+        {
+          name: '最新',
+        },
       ],
       current: 0,
       swiperCurrent: 0,

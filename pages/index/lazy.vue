@@ -53,10 +53,8 @@ export default {
     clickImg(img) {
       //console.log(img);
     },
-    async getData() {
-      let res = await image_list({
-        tag: 'guofeng',
-      });
+    async getData(params) {
+      let res = await image_list(params);
       this.list = res.image_urls.map((url) => {
         return {
           src: HTTP_URL_BACK + url,

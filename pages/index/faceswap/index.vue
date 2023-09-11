@@ -7,17 +7,21 @@
     <u-navbar :border-bottom="false" title="AI写真"></u-navbar>
 
     <view class="image-wrap">
-      <u-image
-        :src="src"
-        :style="{
-          width: '100%',
-          height: '100%',
-        }"
-        mode="widthFix"
-      />
+      <u-image class="image" :src="src" mode="widthFix" />
     </view>
-
+    <u-section
+      color="#f083c6"
+      title="点击上传照片，可上传多张进行选择"
+      :right="false"
+    ></u-section>
     <imageUpload class="image-upload" ref="uploadRef"></imageUpload>
+    <u-section
+      title="已制作图集"
+      sub-title="去作品查看"
+      color="#f083c6"
+      sub-color="#f083c6"
+      @click="goAlbum"
+    ></u-section>
     <view class="image-output">
       <view
         style="
@@ -25,26 +29,7 @@
           justify-content: space-between;
           align-items: center;
         "
-      >
-        <view>已制作图集</view>
-        <view
-          class="goAlbum"
-          @click="goAlbum"
-          style="
-            postion: absolute;
-            right: 0;
-            font-weight: bold;
-            font-size: 30rpx;
-            padding: 10rpx;
-            opacity: 0.8;
-            animation: swap 1s infinite;
-            color: #f083c6;
-          "
-        >
-          去作品查看
-          <u-icon name="arrow-right-double"></u-icon>
-        </view>
-      </view>
+      ></view>
       <imageRow ref="imageRowRef" />
     </view>
 
@@ -195,18 +180,23 @@ export default {
 
 <style lang="scss">
 .image-wrap {
-  position: relative;
+  height: 1000rpx;
+  overflow: hidden;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
   .image {
-    width: 100%;
+    // width: 100%;
+    // vertical-align: middle;
   }
 }
 .image-upload {
   padding: 10rpx;
   background: rgb(186, 173, 194);
+  margin-bottom: 10rpx;
 }
 .image-output {
   padding: 10rpx;
-  margin-top: 10rpx;
   background: rgb(186, 173, 194);
 }
 

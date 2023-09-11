@@ -1,13 +1,14 @@
 <template>
   <view class="wrap">
-    <view v-if="list.length" class="item-warp">
-      <view class="item" v-for="(item, index) in list" :key="index">
+    <view v-if="images.length" class="item-warp">
+      <view class="item" v-for="(item, index) in images" :key="index">
         <u-image
-          :src="item.src"
+          :src="item.url"
           :style="{
             width: '100%',
             height: '100%',
           }"
+          @click="onPreviewImage(index)"
           mode="widthFix"
         />
       </view>
@@ -28,34 +29,29 @@ import {
   get_completed_tasks_on_user,
   test,
 } from '@/services/api.js';
+import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
 // import grid from './grid.vue';
 export default {
   // components: { grid },
-  data() {
-    return {
-      list: [],
-      userId: '',
-    };
+  props: {
+    images: {
+      type: Array,
+      default: () => [],
+    },
   },
   onLoad() {
-    this.userId = uni.getStorageSync('userId') || 1222;
-    this.getPending();
+    this.getData();
   },
   created() {
-    this.userId = uni.getStorageSync('userId') || 1222;
-    this.getPending();
-    // this.test();
+    this.getData();
   },
 
   methods: {
-    async test() {
-      let res = await test({ user_id: this.userId });
-    },
-    async getPending() {
-      let res = await get_pending_tasks_on_user(this.userId);
-      this.list = res.completed_tasks.map((item) => ({
-        src: HTTP_URL_BACK + item.processed_image_url,
-      }));
+    onPreviewImage(index) {
+      uni.previewImage({
+        current: index, // 当前显示图片的索引
+        urls: this.images.map((image) => image.url), // 图片列表
+      });
     },
   },
 };
@@ -64,6 +60,8 @@ export default {
 <style lang="scss" scoped>
 .wrap {
   padding: 20rpx;
+  height: 1200rpx;
+  // height: 100%;
   display: block;
 }
 

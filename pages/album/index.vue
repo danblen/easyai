@@ -24,7 +24,7 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <tasks ref="Ref" />
+          <imageList :images="pendingImages" />
         </scroll-view>
       </swiper-item>
       <swiper-item class="swiper-item">
@@ -33,7 +33,7 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <works ref="hotRef" />
+          <imageList :images="completeImages" />
         </scroll-view>
       </swiper-item>
     </swiper>
@@ -41,13 +41,20 @@
 </template>
 <script>
 // 在页面中定义插屏广告
-
-import works from './works.vue';
-import tasks from './tasks.vue';
+import {
+  checkTaskStatusByTaskId,
+  get_pending_tasks_on_user,
+  get_completed_tasks_on_user,
+  test,
+} from '@/services/api.js';
+import imageList from './imageList.vue';
+import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
 export default {
-  components: { works, tasks },
+  components: { imageList },
   data() {
     return {
+      pendingImages: [],
+      completeImages: [],
       list: [
         {
           name: '进行中',
@@ -62,7 +69,23 @@ export default {
       dx: 0,
     };
   },
+  onShow() {
+    this.get_pending_tasks();
+    this.get_completed_tasks();
+  },
   methods: {
+    async get_pending_tasks() {
+      let res = await get_pending_tasks_on_user(uni.getStorageSync('userId'));
+      this.pendingImages = res.pending_tasks.map((item) => ({
+        url: HTTP_URL_BACK + item.processed_image_url,
+      }));
+    },
+    async get_completed_tasks() {
+      let res = await get_completed_tasks_on_user(uni.getStorageSync('userId'));
+      this.completeImages = res.completed_tasks.map((item) => ({
+        url: HTTP_URL_BACK + item.processed_image_url,
+      }));
+    },
     reachBottom() {},
     // tab栏切换
     change(index) {
@@ -83,6 +106,9 @@ export default {
 <style scoped>
 .container-index {
   /* height: 2000rpx; */
+}
+.swiper-box {
+  height: 1200rpx;
 }
 .title {
   font-size: 40rpx;
