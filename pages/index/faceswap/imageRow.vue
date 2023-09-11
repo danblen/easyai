@@ -69,16 +69,7 @@ export default {
   // components: { grid },
   data() {
     return {
-      images: [
-        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-      ],
+      images: [],
       taskId: '',
       timers: {},
       customStyle: {

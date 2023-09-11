@@ -71,7 +71,7 @@
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "ai作图",
+    "navigationBarTitleText": "AI写真",
     "navigationBarBackgroundColor": "#FFF"
     // "backgroundColor": "#C12928"
   },

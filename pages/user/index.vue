@@ -53,6 +53,9 @@
       </u-cell-group>
     </view> -->
     <view class="u-m-t-20">
+      <getPoint />
+    </view>
+    <view class="u-m-t-20">
       <u-cell-group>
         <u-cell-item
           icon="question-circle"
@@ -87,11 +90,11 @@
 </template>
 
 <script>
-// import version from './version.vue';
+import getPoint from './getPoint.vue';
 import { getUserInfo } from '../common/user.js';
 export default {
   components: {
-    // version,
+    getPoint,
   },
   data() {
     return {
@@ -112,7 +115,7 @@ export default {
   },
   methods: {
     login() {
-       getUserInfo();
+      getUserInfo();
     },
     onContact() {
       uni.showModal({

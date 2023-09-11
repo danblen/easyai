@@ -89,14 +89,7 @@ export default {
   onLoad(options) {
     this.src = options.src;
     this.downloadImages(this.src);
-    this.outputImages = [
-      // { path: options.src, status: 'su' },
-      // { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
-      // { path: options.src, status: 's' },
-      // { path: options.src, status: 's' },
-      // { path: options.src, status: 's' },
-      // { path: 'asd', status: 'pending' },
-    ];
+    this.outputImages = [];
   },
   unMounted() {
     clearInterval(this.timer);
