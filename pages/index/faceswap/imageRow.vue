@@ -1,63 +1,61 @@
 <template>
-  <view>
-    <scroll-view style="height: 100%; width: 100%" class="xsms-scroll">
-      <view v-if="images.length">
+  <scroll-view scroll-x style="height: 100%; width: 100%" class="xsms-scroll">
+    <view v-if="images.length">
+      <view
+        v-for="(image, index) in images"
+        :key="index"
+        :style="{
+          width: '200rpx',
+          height: '200rpx',
+          marginRight: '10rpx',
+          display: 'inline-block',
+        }"
+      >
         <view
-          v-for="(image, index) in images"
-          :key="index"
+          v-if="image.status === 'pending'"
           :style="{
             width: '200rpx',
             height: '200rpx',
-            marginRight: '10rpx',
             display: 'inline-block',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+            border: '1px solid #ccc',
           }"
         >
-          <view
-            v-if="image.status === 'pending'"
+          <u-loading
             :style="{
-              width: '200rpx',
-              height: '200rpx',
-              display: 'inline-block',
-              textAlign: 'center',
-              verticalAlign: 'middle',
-              border: '1px solid #ccc',
+              position: 'relative',
+              top: '50rpx',
+            }"
+          ></u-loading>
+          <view
+            :style="{
+              position: 'relative',
+              top: '55rpx',
             }"
           >
-            <u-loading
-              :style="{
-                position: 'relative',
-                top: '50rpx',
-              }"
-            ></u-loading>
-            <view
-              :style="{
-                position: 'relative',
-                top: '55rpx',
-              }"
-            >
-              制作中
-            </view>
+            制作中
           </view>
-          <u-image
-            v-else
-            :style="{
-              width: '200rpx',
-              height: '200rpx',
-              display: 'inline-block',
-              textAlign: 'center',
-              verticalAlign: 'middle',
-            }"
-            :src="image.path"
-            mode="widthFix"
-            @click="onPreviewImage(index)"
-          ></u-image>
         </view>
+        <u-image
+          v-else
+          :style="{
+            width: '200rpx',
+            height: '200rpx',
+            display: 'inline-block',
+            textAlign: 'center',
+            verticalAlign: 'middle',
+          }"
+          :src="image.path"
+          mode="widthFix"
+          @click="onPreviewImage(index)"
+        ></u-image>
       </view>
-      <view v-else>
-        <u-empty></u-empty>
-      </view>
-    </scroll-view>
-  </view>
+    </view>
+    <view v-else>
+      <u-empty></u-empty>
+    </view>
+  </scroll-view>
 </template>
 
 <script>
@@ -71,13 +69,27 @@ export default {
   // components: { grid },
   data() {
     return {
-      images: [],
+      images: [
+        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
+        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
+        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
+        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
+        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
+        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
+        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
+        { path: 'https://cdn.uviewui.com/uview/swiper/2.jpg', status: 's' },
+      ],
       taskId: '',
       timers: {},
       customStyle: {
         background: '#f083c6',
       },
     };
+  },
+  onUnload() {
+    for (let key in this.timers) {
+      clearInterval(this.timers[key]);
+    }
   },
   methods: {
     onPreviewImage(index) {
@@ -94,7 +106,9 @@ export default {
         taskId,
       });
       this.timers[taskId] = setInterval(async () => {
-        let res = await checkTaskStatusByTaskId(taskId);
+        let res = await checkTaskStatusByTaskId(taskId).catch(() => {
+          clearInterval(this.timers[taskId]);
+        });
         if (res.status === 'SUCCESS') {
           let image = this.images.find((image) => image.taskId === taskId);
           if (image) {
@@ -114,4 +128,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.xsms-scroll {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  // background: #f06666;
+}
+</style>
