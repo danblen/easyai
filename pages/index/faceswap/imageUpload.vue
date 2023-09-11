@@ -45,10 +45,5 @@ export default {
 // }
 // .desc {
 // }
-.xsms-scroll {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  // background: #f06666;
-}
+
 </style>
