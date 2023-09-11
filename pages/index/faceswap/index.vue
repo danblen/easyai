@@ -17,7 +17,7 @@
     <imageUpload class="image-upload" ref="uploadRef"></imageUpload>
     <u-section
       title="已制作图集"
-      sub-title="去作品查看"
+      sub-title="作品集"
       color="#f083c6"
       sub-color="#f083c6"
       @click="goAlbum"

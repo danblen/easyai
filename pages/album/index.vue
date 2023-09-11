@@ -24,7 +24,13 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <imageList :images="pendingImages" />
+          <view
+            v-if="pendingLoading"
+            style="display: flex; justify-content: center; margin-top: 500rpx"
+          >
+            <u-loading mode="circle" :show="pendingLoading"></u-loading>
+          </view>
+          <imageList v-else :images="pendingImages" />
         </scroll-view>
       </swiper-item>
       <swiper-item class="swiper-item">
@@ -33,14 +39,19 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <imageList :images="completeImages" />
+          <view
+            v-if="completeLoading"
+            style="display: flex; justify-content: center; margin-top: 500rpx"
+          >
+            <u-loading mode="circle" :show="completeLoading"></u-loading>
+          </view>
+          <imageList v-else :images="completeImages" />
         </scroll-view>
       </swiper-item>
     </swiper>
   </view>
 </template>
 <script>
-// 在页面中定义插屏广告
 import {
   checkTaskStatusByTaskId,
   get_pending_tasks_on_user,
@@ -63,6 +74,8 @@ export default {
           name: '已完成',
         },
       ],
+      pendingLoading: false,
+      completeLoading: false,
       current: 0,
       swiperCurrent: 0,
       tabsHeight: 0,
@@ -73,18 +86,26 @@ export default {
     this.get_pending_tasks();
     this.get_completed_tasks();
   },
+  
   methods: {
     async get_pending_tasks() {
-      let res = await get_pending_tasks_on_user(uni.getStorageSync('userId'));
+      this.pendingLoading = true;
+      let res = await get_pending_tasks_on_user(
+        uni.getStorageSync('userId'),
+      ).finally(() => {
+        this.pendingLoading = false;
+      });
       this.pendingImages = res.pending_tasks.map((item) => ({
         url: HTTP_URL_BACK + item.processed_image_url,
       }));
     },
     async get_completed_tasks() {
+      this.completeLoading = true;
       let res = await get_completed_tasks_on_user(uni.getStorageSync('userId'));
       this.completeImages = res.completed_tasks.map((item) => ({
         url: HTTP_URL_BACK + item.processed_image_url,
       }));
+      this.completeLoading = false;
     },
     reachBottom() {},
     // tab栏切换

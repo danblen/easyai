@@ -1,1 +1,1 @@
-基于stable diffusion的ai作图工具
+基于stable diffusion的AI写真小程序

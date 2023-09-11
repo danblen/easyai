@@ -19,7 +19,6 @@
         ></u-lazy-load>
       </view>
     </view>
-    <u-loadmore :status="status" @loadmore="getData"></u-loadmore>
   </view>
 </template>
 

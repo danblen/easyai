@@ -15,21 +15,12 @@
     </view>
     <u-empty
       v-else
-      text="没有进行中的作品"
       mode="list"
-      style="margin-top: 100rpx"
     ></u-empty>
   </view>
 </template>
 
 <script>
-import {
-  checkTaskStatusByTaskId,
-  get_pending_tasks_on_user,
-  get_completed_tasks_on_user,
-  test,
-} from '@/services/api.js';
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
 // import grid from './grid.vue';
 export default {
   // components: { grid },

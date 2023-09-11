@@ -72,7 +72,7 @@ export default {
       dx: 0,
     };
   },
-  onLaunch() {
+  onLoad() {
     init();
   },
   computed: {},

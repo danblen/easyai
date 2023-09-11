@@ -1,3 +1,3 @@
 export const init=()=>{
-  uni.setStorageSync('userId', 123);
+  uni.setStorageSync('userId', 111122);
 }
