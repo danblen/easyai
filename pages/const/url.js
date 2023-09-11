@@ -1,4 +1,4 @@
-import { HTTP_URL_BACK } from '@/services/app.js';
+import { URL_BACK } from '@/services/app.js';
 
 let imageUrl = [
   '/media/processed_images/user_images/download_HLbJcll_processed.jpg',
@@ -16,7 +16,7 @@ let imageUrl = [
   'https://gtd.alicdn.com/sns_logo/i1/TB11yxeNVXXXXbwXFXXSutbFXXX.jpg_240x240xz.jpg',
 ];
 export const images = imageUrl.map((item, index) => ({
-  src: HTTP_URL_BACK + item,
+  src: URL_BACK + item,
   id: index,
 }));
 export const images2 = [

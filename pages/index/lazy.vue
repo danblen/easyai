@@ -24,7 +24,7 @@
 
 <script>
 import { images } from '../const/url.js';
-import { HTTP_URL_BACK } from '@/services/app.js';
+import { URL_BACK } from '@/services/app.js';
 import { image_list } from '@/services/api.js';
 export default {
   data() {
@@ -56,7 +56,7 @@ export default {
       let res = await image_list(params);
       this.list = res.image_urls.map((url) => {
         return {
-          src: HTTP_URL_BACK + url,
+          src: URL_BACK + url,
         };
       });
       // let index = 0;

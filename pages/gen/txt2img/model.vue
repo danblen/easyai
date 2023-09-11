@@ -92,7 +92,7 @@ export default {
             let new_item = {
               name: item,
               // path: this.lora_dir + "\\" + item + '.png',
-              path: HTTP_URL_SD + '/file=models/Lora/' + item + '.png',
+              path: URL_SD + '/file=models/Lora/' + item + '.png',
               iconfont: '',
               isnone: false,
               selected: false,

@@ -1,4 +1,4 @@
-import { HTTP_URL_SD, HTTP_URL_BACK, HEADER, TOKENNAME } from './app';
+import { URL_SD, URL_BACK, HEADER, TOKENNAME } from './app';
 import utils from './utils';
 import store from '../store';
 // import { urlToHttpOptions } from 'url';
@@ -25,8 +25,8 @@ function baseRequest(
     header = HEADER;
 
   // 请求地址处理
-  Url = HTTP_URL_SD + url;
-  Url = HTTP_URL_BACK + url;
+  Url = URL_SD + url;
+  Url = URL_BACK + url;
   if (!noAuth) {
     //登录过期自动登录
     if (!store.state.app.token) {
@@ -55,11 +55,11 @@ function baseRequest(
       url: Url,
       method: method || 'GET',
       timeout: 600000,
-			header: header,
-			// header: {
-			// 	'content-type': 'multipart/form-data', // 使用表单数据格式
+      header: header,
+      // header: {
+      // 	'content-type': 'multipart/form-data', // 使用表单数据格式
       // 'enctype': 'multipart/form-data', // 使用表单数据格式
-			// },
+      // },
       data: data || {},
       success: (res) => {
         let statusCode = res.statusCode;

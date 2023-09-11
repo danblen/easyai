@@ -1,8 +1,8 @@
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
+import { URL_SD, URL_BACK } from '@/services/app.js';
 export const upload = async (url, filePath, name, formData) => {
   return new Promise((resolve, reject) => {
     uni.uploadFile({
-      url: HTTP_URL_BACK + '/' + url,
+      url: URL_BACK + '/' + url,
       // files: [
       //   { uri: imagePaths[1], name: 'first_image' },
       //   { uri: imagePaths[0], name: 'second_image' },

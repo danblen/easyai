@@ -269,7 +269,7 @@ import {
   getTranslate,
   postTxt2img,
 } from '@/services/api.js';
-import { HTTP_URL_SD } from '@/services/app.js';
+import { URL_SD } from '@/services/app.js';
 // import {
 // 	type
 // } from 'os';
@@ -618,7 +618,7 @@ export default {
             let new_item = {
               name: item,
               // path: this.lora_dir + "\\" + item + '.png',
-              path: HTTP_URL_SD + '/file=models/Lora/' + item + '.png',
+              path: URL_SD + '/file=models/Lora/' + item + '.png',
               iconfont: '',
               isnone: false,
               selected: false,

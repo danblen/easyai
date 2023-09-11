@@ -26,7 +26,7 @@
         >
           <view
             v-if="pendingLoading"
-            style="display: flex; justify-content: center; margin-top: 500rpx"
+            style="display: flex; justify-content: center; margin-top: 400rpx"
           >
             <u-loading mode="circle" :show="pendingLoading"></u-loading>
           </view>
@@ -41,7 +41,7 @@
         >
           <view
             v-if="completeLoading"
-            style="display: flex; justify-content: center; margin-top: 500rpx"
+            style="display: flex; justify-content: center; margin-top: 400rpx"
           >
             <u-loading mode="circle" :show="completeLoading"></u-loading>
           </view>
@@ -59,7 +59,7 @@ import {
   test,
 } from '@/services/api.js';
 import imageList from './imageList.vue';
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
+import { URL_SD, URL_BACK } from '@/services/app.js';
 export default {
   components: { imageList },
   data() {
@@ -86,7 +86,7 @@ export default {
     this.get_pending_tasks();
     this.get_completed_tasks();
   },
-  
+
   methods: {
     async get_pending_tasks() {
       this.pendingLoading = true;
@@ -96,14 +96,18 @@ export default {
         this.pendingLoading = false;
       });
       this.pendingImages = res.pending_tasks.map((item) => ({
-        url: HTTP_URL_BACK + item.processed_image_url,
+        url: URL_BACK + item.processed_image_url,
       }));
     },
     async get_completed_tasks() {
       this.completeLoading = true;
-      let res = await get_completed_tasks_on_user(uni.getStorageSync('userId'));
+      let res = await get_completed_tasks_on_user(
+        uni.getStorageSync('userId'),
+      ).finally(() => {
+        this.completeLoading = false;
+      });
       this.completeImages = res.completed_tasks.map((item) => ({
-        url: HTTP_URL_BACK + item.processed_image_url,
+        url: URL_BACK + item.processed_image_url,
       }));
       this.completeLoading = false;
     },

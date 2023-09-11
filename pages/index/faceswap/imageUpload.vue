@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
+import { URL_SD, URL_BACK } from '@/services/app.js';
 export default {
   data() {
     return {
@@ -45,5 +45,4 @@ export default {
 // }
 // .desc {
 // }
-
 </style>

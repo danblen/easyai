@@ -1,8 +1,7 @@
-
 import {
   TOKENNAME,
   // HTTP_REQUEST_URL,
-  HTTP_URL_SD,
+  URL_SD,
 } from '@/services/app.js';
 import store from '@/store/index.js';
 // import {
@@ -92,7 +91,7 @@ function showModal(
     showCancel: true,
     cancelText: '取消',
     confirmText: '确定',
-  }
+  },
 ) {
   // #ifdef APP-PLUS
   // obj.cancelText = '确定';
@@ -257,14 +256,16 @@ Date.prototype.format = function (fmt) {
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(
       RegExp.$1,
-      String(this.getFullYear()).substr(4 - RegExp.$1.length)
+      String(this.getFullYear()).substr(4 - RegExp.$1.length),
     );
   }
   for (let k in o) {
     if (new RegExp('(' + k + ')').test(fmt)) {
       fmt = fmt.replace(
         RegExp.$1,
-        RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(String(o[k]).length)
+        RegExp.$1.length == 1
+          ? o[k]
+          : ('00' + o[k]).substr(String(o[k]).length),
       );
     }
   }
@@ -334,12 +335,12 @@ function pathToBase64(path) {
             },
             function (error) {
               reject(error);
-            }
+            },
           );
         },
         function (error) {
           reject(error);
-        }
+        },
       );
       return;
     }
@@ -391,8 +392,8 @@ function base64ToPath(base64) {
         (window.URL || window.webkitURL).createObjectURL(
           new Blob([array], {
             type: type,
-          })
-        )
+          }),
+        ),
       );
     }
     var extName = base64.match(/data\:\S+\/(\S+);/);
@@ -418,13 +419,13 @@ function base64ToPath(base64) {
             function (error) {
               bitmap.clear();
               reject(error);
-            }
+            },
           );
         },
         function (error) {
           bitmap.clear();
           reject(error);
-        }
+        },
       );
       return;
     }
@@ -575,7 +576,7 @@ function uploadImageOne(opt, successCallback, errorCallback) {
         uploadUrl,
         imgPath,
         successCallback,
-        errorCallback
+        errorCallback,
       );
     },
   });
@@ -586,12 +587,12 @@ function uploadImgWithPath(
   uploadUrl,
   imgPath,
   successCallback,
-  errorCallback
+  errorCallback,
 ) {
   let that = this;
   let contentType = 'multipart/form-data';
   // 默认sd上传
-  let server_url = HTTP_URL_SD + '/' + uploadUrl;
+  let server_url = URL_SD + '/' + uploadUrl;
   let header_dic = {
     accept: 'application/json',
     contentype: contentType,

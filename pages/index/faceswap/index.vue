@@ -58,7 +58,7 @@ import {
   checkTaskStatusByTaskId,
   get_completed_tasks_on_user,
 } from '@/services/api.js';
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
+import { URL_SD, URL_BACK } from '@/services/app.js';
 import { upload } from '@/pages/common/upload.js';
 import imageRow from './imageRow.vue';
 import imageUpload from './imageUpload.vue';

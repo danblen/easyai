@@ -63,7 +63,7 @@ import {
   checkTaskStatusByTaskId,
   get_completed_tasks_on_user,
 } from '@/services/api.js';
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
+import { URL_SD, URL_BACK } from '@/services/app.js';
 // import grid from './grid.vue';
 export default {
   // components: { grid },
@@ -112,11 +112,11 @@ export default {
         if (res.status === 'SUCCESS') {
           let image = this.images.find((image) => image.taskId === taskId);
           if (image) {
-            image.path = HTTP_URL_BACK + res.processed_image_url;
+            image.path = URL_BACK + res.processed_image_url;
             image.status = 'SUCCESS';
           } else {
             this.images.push({
-              path: HTTP_URL_BACK + res.processed_image_url,
+              path: URL_BACK + res.processed_image_url,
               status: 'SUCCESS',
             });
           }

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { HTTP_URL_SD, HTTP_URL_BACK } from '@/services/app.js';
+import { URL_SD, URL_BACK } from '@/services/app.js';
 import { checkTaskStatus } from '@/services/api.js';
 export default {
   data() {

@@ -1,5 +1,5 @@
 <template>
-  <view class="wrap">
+  <view class="view">
     <view v-if="images.length" class="item-warp">
       <view class="item" v-for="(item, index) in images" :key="index">
         <u-image
@@ -13,10 +13,7 @@
         />
       </view>
     </view>
-    <u-empty
-      v-else
-      mode="list"
-    ></u-empty>
+    <u-empty v-else mode="list" style="margin-top: 400rpx"></u-empty>
   </view>
 </template>
 
@@ -49,24 +46,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrap {
+.view {
   padding: 20rpx;
-  height: 1200rpx;
+  // height: 1200rpx;
   // height: 100%;
-  display: block;
+  // display: block;
 }
 
 .item-warp {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-}
-
-.item-warp .item {
-  flex: 0 0 350rpx;
-  height: 400rpx;
-  margin-bottom: 10rpx;
-  border-radius: 10rpx;
-  overflow: hidden;
+  .item {
+    flex: 0 0 350rpx;
+    height: 400rpx;
+    margin-bottom: 10rpx;
+    border-radius: 10rpx;
+    overflow: hidden;
+  }
 }
 </style>
