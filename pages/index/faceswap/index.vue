@@ -1,13 +1,21 @@
 <template>
   <scroll-view
     scroll-y
-    style="height: 100%; width: 100%"
+    style="padding:10rpx;height: 100%; width: 100%"
     @scrolltolower="reachBottom"
   >
     <u-navbar :border-bottom="false" title="AI写真"></u-navbar>
 
     <view class="image-wrap">
-      <u-image class="image" :src="src" mode="widthFix" />
+      <u-image
+        class="image"
+        :src="src"
+        :style="{
+          width: '100%',
+          height: '100%',
+        }"
+        mode="widthFix"
+      />
     </view>
     <u-section
       color="#f083c6"
@@ -23,13 +31,13 @@
       @click="goAlbum"
     ></u-section>
     <view class="image-output">
-      <view
+      <!-- <view
         style="
           display: flex;
           justify-content: space-between;
           align-items: center;
         "
-      ></view>
+      ></view> -->
       <imageRow ref="imageRowRef" />
     </view>
 
@@ -82,7 +90,7 @@ export default {
       userId: '',
       saved_id: '',
       customStyle: {
-        background: '#f083c6',
+        // background: '#f083c6',
       },
     };
   },
@@ -184,13 +192,13 @@ export default {
   }
 }
 .image-upload {
-  padding: 10rpx;
-  background: rgb(186, 173, 194);
+  // padding: 10rpx;
+  // background: rgb(207, 205, 208);
   margin-bottom: 10rpx;
 }
 .image-output {
-  padding: 10rpx;
-  background: rgb(186, 173, 194);
+  margin: 10rpx;
+  background: rgb(226, 223, 226);
 }
 
 .swap {
@@ -199,11 +207,10 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   width: 70%;
-  // 炫酷效果
   animation: swap 1s infinite;
-  // 美化按钮
   opacity: 0.8;
   box-shadow: 0 0 10rpx #f083c6;
   font-weight: bold;
+        background: '#f083c6',
 }
 </style>
