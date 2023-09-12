@@ -2,14 +2,17 @@
   <view>
     <u-navbar :is-back="false" :border-bottom="false"></u-navbar>
 
-    <view v-if="isLogin" class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
+    <view
+      v-if="userInfo.userId"
+      class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30"
+    >
       <view class="u-m-r-10">
         <u-avatar :src="userInfo.avatarUrl" size="140"></u-avatar>
       </view>
 
       <view class="u-flex-1">
-        <view class="u-font-18 u-p-b-20">{{ userInfo.nickName }}</view>
-        <view class="u-font-14 u-tips-color">ID:{{ userInfo.code }}</view>
+        <view class="u-font-18 u-p-b-20">微信用户</view>
+        <view class="u-font-14 u-tips-color">ID:{{ userInfo.userId }}</view>
       </view>
       <view class="u-m-l-10 u-p-10">
         <u-icon name="arrow-right" color="#969799" size="28"></u-icon>
@@ -32,17 +35,15 @@
       </view>
     </view>
 
-    <!-- <view class="u-m-t-20">
-      <u-cell-group>
-        <u-cell-item icon="rmb-circle" title="支付"></u-cell-item>
-      </u-cell-group>
-    </view> -->
-
     <view class="u-m-t-20">
       <u-cell-group>
-        <getPoint />
+        <u-cell-item
+          icon="photo"
+          title="剩余次数"
+          :value="userInfo.points"
+        ></u-cell-item>
+        <getPoint :isCheck="userInfo.isCheck" @getCheckUserInfo="getCheckUserInfo" />
         <buyPoint />
-        <!-- <u-cell-item icon="photo" title="相册"></u-cell-item> -->
         <!-- <u-cell-item icon="coupon" title="卡券"></u-cell-item>
         <u-cell-item icon="heart" title="关注"></u-cell-item> -->
       </u-cell-group>
@@ -86,7 +87,8 @@
 <script>
 import getPoint from './getPoint.vue';
 import buyPoint from './buyPoint.vue';
-import { getUserInfo } from '../common/user.js';
+import { wechatLogin } from '../common/user.js';
+import { get_user } from '@/services/api.js';
 export default {
   components: {
     getPoint,
@@ -95,23 +97,45 @@ export default {
   data() {
     return {
       pic: 'https://uviewui.com/common/logo.png',
-      show: true,
-      isLogin: false,
       userInfo: {
-        nickName: '',
+        points: 0,
+        userId: '',
+        isCheck: false,
         avatarUrl: '',
-        code: '',
       },
     };
   },
-  onLoad() {
-    uni.getStorageSync('userId')
-      ? (this.isLogin = true)
-      : (this.isLogin = false);
+  async onShow() {
+    if (uni.getStorageSync('userInfo').userId) {
+      this.getUser();
+    } else {
+    }
   },
   methods: {
-    login() {
-      getUserInfo();
+    getCheckUserInfo(user) {
+      this.userInfo.isCheck = user.isCheck;
+      this.userInfo.points = user.points;
+    },
+    async getUser() {
+      let res = await get_user({
+        user_id: uni.getStorageSync('userInfo').userId,
+      });
+      if (res) {
+        this.userInfo.userId = res.user.user_id;
+        this.userInfo.points = res.user.points;
+        this.userInfo.isCheck = res.user.is_check;
+      }
+    },
+    async login() {
+      let res = await wechatLogin();
+      if (res) {
+        console.log(1212, res);
+        this.userInfo.points = res.user.points;
+        this.userInfo.isCheck = res.user.is_check;
+        this.userInfo.userId = res.user.user_id;
+        uni.setStorageSync('userInfo', this.userInfo);
+        // this.isLogin = true;
+      }
     },
     onContact() {
       uni.showModal({

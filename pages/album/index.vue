@@ -91,7 +91,7 @@ export default {
     async get_pending_tasks() {
       this.pendingLoading = true;
       let res = await get_pending_tasks_on_user(
-        uni.getStorageSync('userId'),
+        uni.getStorageSync('userInfo').userId,
       ).finally(() => {
         this.pendingLoading = false;
       });
@@ -102,7 +102,7 @@ export default {
     async get_completed_tasks() {
       this.completeLoading = true;
       let res = await get_completed_tasks_on_user(
-        uni.getStorageSync('userId'),
+        uni.getStorageSync('userInfo').userId,
       ).finally(() => {
         this.completeLoading = false;
       });

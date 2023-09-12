@@ -3,7 +3,7 @@
     <u-cell-item
       title="点击签到"
       icon="star"
-      :value="isGetPoint ? '已签到' : ''"
+      :value="isCheck ? '已签到' : ''"
       @click="onGetPoint"
     ></u-cell-item>
     <u-modal
@@ -23,30 +23,43 @@
 </template>
 
 <script>
-// import grid from './grid.vue';
+import { get_points_by_check } from '@/services/api.js';
 export default {
   // components: { grid },
+  props: {
+    isCheck: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       show: false,
       isGetPoint: false,
-      value: '已签到',
       content: `
 					成功分享给群好友也可以获得1次自定义机会哦
 				`,
     };
   },
   methods: {
-    onGetPoint() {
-      if (!this.isGetPoint) {
-        this.isGetPoint = true;
-        this.show = true;
-      } else {
+    async onGetPoint() {
+      if (this.isCheck) {
         uni.showToast({
           title: '今日已签到啦~',
           icon: 'none',
           duration: 2000,
         });
+        return;
+      }
+      let res = await get_points_by_check({
+        user_id: uni.getStorageSync('userInfo').userId,
+      });
+      if (!res) {
+        this.$emit('getCheckUserInfo', {
+          isCheck: true,
+          points: res.user.points,
+        });
+        this.show = true;
       }
     },
   },

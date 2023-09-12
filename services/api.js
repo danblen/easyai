@@ -27,8 +27,14 @@ export function test(data) {
   // });
   return request.post('/test/', data);
 }
-export function faceSwap(data) {
-  return request.post('/faceSwap', data);
+export function get_points_by_check(data) {
+  return request.post('/get_points_by_check', data);
+}
+export function wechat_login(data) {
+  return request.post('/wechat_login', data);
+}
+export function get_user(data) {
+  return request.post('/get_user', data);
 }
 export function image_list(params) {
   return request.get('/image_list/' ,params);

@@ -126,7 +126,7 @@ export default {
     },
 
     async swap() {
-      if (!uni.getStorageSync('userId')) {
+      if (!uni.getStorageSync('userInfo').userId) {
         this.$refs.loginRef.show();
         return;
       }
@@ -143,7 +143,7 @@ export default {
         this.$refs.uploadRef.selectedImageUrl,
         'first_image',
         {
-          user_id: uni.getStorageSync('userId'),
+          user_id: uni.getStorageSync('userInfo').userId,
           src_face_index: 0,
           dst_face_index: 0,
         },
@@ -157,7 +157,7 @@ export default {
         this.srcTempFilePath,
         'second_image',
         {
-          user_id: uni.getStorageSync('userId'),
+          user_id: uni.getStorageSync('userInfo').userId,
           saved_id: this.saved_id,
         },
       );
