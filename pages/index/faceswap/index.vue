@@ -1,7 +1,8 @@
 <template>
   <scroll-view
     scroll-y
-    style="padding:10rpx;height: 100%; width: 100%"
+    style="padding: 10rpx; height: 100%; width: 100%"
+    :show-scrollbar="false"
     @scrolltolower="reachBottom"
   >
     <u-navbar :border-bottom="false" title="AI写真"></u-navbar>
@@ -90,7 +91,8 @@ export default {
       userId: '',
       saved_id: '',
       customStyle: {
-        // background: '#f083c6',
+        background: '#f083c6',
+        boxShadow: '0 0 10rpx #f083c6',
       },
     };
   },
@@ -200,6 +202,16 @@ export default {
   margin: 10rpx;
   background: rgb(226, 223, 226);
 }
+::-webkit-scrollbar {
+}
+scroll-view {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+  color: transparent;
+  scrollbar-width: none;
+  -webkit-scrollbar: none;
+}
 
 .swap {
   position: fixed;
@@ -209,8 +221,9 @@ export default {
   width: 70%;
   animation: swap 1s infinite;
   opacity: 0.8;
-  box-shadow: 0 0 10rpx #f083c6;
+  // border-radius: 50%;
+  // box-shadow: 0 0 10rpx #f083c6;
   font-weight: bold;
-        background: '#f083c6',
+  // background: #f083c6;
 }
 </style>
