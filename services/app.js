@@ -1,6 +1,6 @@
 let http_api_sd = 'http://43.139.23.56:8014';
 // let URL_BACK = 'http://192.168.1.5:7592'
-let URL_BACK = 'http://43.136.95.94:8000';
+let URL_BACK = 'http://:8000';
 
 module.exports = {
   URL_SD: http_api_sd,
