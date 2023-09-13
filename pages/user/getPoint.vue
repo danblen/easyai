@@ -54,7 +54,7 @@ export default {
       let res = await get_points_by_check({
         user_id: uni.getStorageSync('userInfo').userId,
       });
-      if (!res) {
+      if (res) {
         this.$emit('getCheckUserInfo', {
           isCheck: true,
           points: res.user.points,

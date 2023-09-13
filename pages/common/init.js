@@ -1,3 +1,3 @@
 export const init=()=>{
-  // uni.setStorageSync('userInfo', {userId:123});
+  uni.setStorageSync('userInfo', {userId:123});
 }

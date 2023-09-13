@@ -38,8 +38,7 @@
       <u-button
         class="swap"
         type="primary"
-        style="
-        "
+        style=""
         :custom-style="customStyle"
         :ripple="true"
         shape="circle"
@@ -153,9 +152,18 @@ export default {
           src_face_index: 0,
           dst_face_index: 0,
         },
-      );
-      if (res) {
+      ).catch(() => {
+        this.swapLoading = false;
+      });
+      if (res.status === 'SUCCESS') {
         this.saved_id = res.saved_id;
+      } else {
+        uni.showToast({
+          title: res.error_message,
+          icon: 'none',
+        });
+        this.swapLoading = false;
+        return;
       }
       // 有些图片下载后调接口会报400 invalid image
       let res2 = await upload(
@@ -166,12 +174,18 @@ export default {
           user_id: uni.getStorageSync('userInfo').userId,
           saved_id: this.saved_id,
         },
-      );
-      if (res2) {
+      ).finally(() => {
+        this.swapLoading = false;
+      });
+      if (res2.status === 'SUCCESS') {
         this.taskId = res2.task_id;
         this.$refs.imageRowRef.getImage(res2.task_id);
+      } else {
+        uni.showToast({
+          title: res2.error_message,
+          icon: 'none',
+        });
       }
-      this.swapLoading = false;
     },
   },
 };

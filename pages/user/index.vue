@@ -42,8 +42,18 @@
           title="剩余次数"
           :value="userInfo.points"
         ></u-cell-item>
-        <getPoint :isCheck="userInfo.isCheck" @getCheckUserInfo="getCheckUserInfo" />
-        <buyPoint />
+        <getPoint
+          :isCheck="userInfo.isCheck"
+          @getCheckUserInfo="getCheckUserInfo"
+        />
+        <u-cell-item
+          title="购买次卡"
+          icon="star"
+          @click="onBuyPoint"
+        ></u-cell-item>
+        <u-popup v-model="showBuyPointPopup" mode="bottom">
+          <buyPoint />
+        </u-popup>
         <!-- <u-cell-item icon="coupon" title="卡券"></u-cell-item>
         <u-cell-item icon="heart" title="关注"></u-cell-item> -->
       </u-cell-group>
@@ -86,17 +96,18 @@
 
 <script>
 import getPoint from './getPoint.vue';
-import buyPoint from './buyPoint.vue';
+import buyPoint  from './buyPoint.vue';
 import { wechatLogin } from '../common/user.js';
 import { get_user } from '@/services/api.js';
 export default {
   components: {
     getPoint,
-    buyPoint,
+    buyPoint ,
   },
   data() {
     return {
       pic: 'https://uviewui.com/common/logo.png',
+      showBuyPointPopup: false,
       userInfo: {
         points: 0,
         userId: '',
@@ -112,6 +123,9 @@ export default {
     }
   },
   methods: {
+    onBuyPoint() {
+      this.showBuyPointPopup = true;
+    },
     getCheckUserInfo(user) {
       this.userInfo.isCheck = user.isCheck;
       this.userInfo.points = user.points;

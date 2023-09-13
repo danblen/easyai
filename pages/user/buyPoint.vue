@@ -1,10 +1,32 @@
 <template>
   <view>
-    <u-cell-item
-      title="购买次卡"
-      icon="star"
-      @click="onGetPoint"
-    ></u-cell-item>
+    <u-cell-group>
+      <u-cell-item
+        icon="integral-fill"
+        title="1次卡"
+        value="￥0.5（￥0.5/次）"
+      ></u-cell-item>
+      <u-cell-item
+        icon="integral-fill"
+        title="5次卡"
+        value="￥1.99 （￥0.4/次）"
+      ></u-cell-item>
+      <u-cell-item
+        icon="integral-fill"
+        title="10次卡"
+        value="￥2.99（￥0.3/次）"
+      ></u-cell-item>
+      <u-cell-item
+        icon="integral-fill"
+        title="20次卡"
+        value="￥3.99（￥0.2/次）"
+      ></u-cell-item>
+      <u-cell-item
+        icon="integral-fill"
+        title="50次卡"
+        value="￥8.99（￥0.1/次）"
+      ></u-cell-item>
+    </u-cell-group>
   </view>
 </template>
 
@@ -12,23 +34,12 @@
 // import grid from './grid.vue';
 export default {
   // components: { grid },
+  props: {},
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
-    onBuyPoint() {
-      if (!this.isGetPoint) {
-        this.isGetPoint = true;
-        this.show = true;
-      } else {
-        uni.showToast({
-          title: '今日已签到啦~',
-          icon: 'none',
-          duration: 2000,
-        });
-      }
-    },
+    onBuyPoint() {},
   },
 };
 </script>
