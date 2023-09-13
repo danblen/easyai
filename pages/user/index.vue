@@ -129,12 +129,10 @@ export default {
     async login() {
       let res = await wechatLogin();
       if (res) {
-        console.log(1212, res);
         this.userInfo.points = res.user.points;
         this.userInfo.isCheck = res.user.is_check;
         this.userInfo.userId = res.user.user_id;
         uni.setStorageSync('userInfo', this.userInfo);
-        // this.isLogin = true;
       }
     },
     onContact() {

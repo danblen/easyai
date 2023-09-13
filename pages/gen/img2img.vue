@@ -1,13 +1,20 @@
+<template>
+  <view>asd</view>
+</template>
+
 <script>
-// import grid from './grid.vue';
+import { img2img } from '@/services/api.js';
 export default {
   // components: { grid },
   data() {
     return {};
   },
+  created() {
+    this.gen();
+  },
   methods: {
-    render() {
-      return <view>sdfs</view>;
+    gen() {
+      img2img();
     },
   },
 };

@@ -25,8 +25,11 @@ function baseRequest(
     header = HEADER;
 
   // 请求地址处理
-  Url = URL_SD + url;
-  Url = URL_BACK + url;
+  if (url.startsWith('/sdapi') > 0) {
+    Url = URL_SD + url;
+  } else {
+    Url = URL_BACK + url;
+  }
   if (!noAuth) {
     //登录过期自动登录
     if (!store.state.app.token) {

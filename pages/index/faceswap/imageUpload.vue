@@ -33,6 +33,7 @@ export default {
       }
     },
     onPreview(url) {
+      console.log(url);
       this.selectedImageUrl = url;
     },
   },

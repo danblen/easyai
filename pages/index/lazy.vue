@@ -31,13 +31,15 @@ export default {
     return {
       list: [],
       status: 'loadmore',
+      loadingImg: '/static/uView/loading.png',
+      errorImg: '/static/uView/load_error.png',
     };
   },
   created() {
-    this.getData();
+    // this.getData();
   },
   onReachBottom() {
-    this.getData();
+    // this.getData();
   },
   methods: {
     go(url, src) {
@@ -59,15 +61,15 @@ export default {
           src: URL_BACK + url,
         };
       });
-      // let index = 0;
-      // this.status = 'loading';
-      // for (let i = 0; i < 10; i++) {
-      //   index = this.$u.random(0, images.length - 1);
-      //   this.list.push({
-      //     src: images[index].src,
-      //   });
-      // }
-      // this.status = 'loadmore';
+      let index = 0;
+      this.status = 'loading';
+      for (let i = 0; i < 10; i++) {
+        index = this.$u.random(0, images.length - 1);
+        this.list.push({
+          src: images[index].src,
+        });
+      }
+      this.status = 'loadmore';
     },
   },
 };

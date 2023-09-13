@@ -24,7 +24,7 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <txt2img2 ref="Ref" />
+          <txt2img ref="Ref" />
         </scroll-view>
       </swiper-item>
       <swiper-item class="swiper-item">
@@ -33,7 +33,7 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <txt2img ref="hotRef" />
+          <img2img ref="hotRef" />
         </scroll-view>
       </swiper-item>
       <swiper-item class="swiper-item">
@@ -51,10 +51,11 @@
 
 <script>
 import txt2img from './txt2img.vue';
+import img2img from './img2img.vue';
 import txt2img2 from './txt2img/index.vue';
 import txt from './txt2img/txt.vue';
 export default {
-  components: { txt2img2, txt2img, txt },
+  components: { img2img, txt2img, txt },
   data() {
     return {
       list: [
@@ -63,6 +64,9 @@ export default {
         },
         {
           name: '图生图',
+        },
+        {
+          name: '图片去背景',
         },
       ],
       current: 0,

@@ -1,128 +1,23 @@
 <template>
-  <view class="view">
-    <txt />
-    <model />
-
-    <view class="box-content model-box">
-      <view class="item-section">大模型选择</view>
-      <view class="model-content">
-        <view
-          class="model-item-list"
-          v-for="(item, index) in models"
-          :key="index"
-        >
-          <view
-            class="model-item"
-            :class="item.selected ? 'model-sel' : ''"
-            @click="clickModel(item, index)"
-          >
-            <view class="model-item-txt easyai-line">
-              {{ item.model_name }}
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="box-content template-box">
-      <view class="item-section">LoRA模型选择</view>
-      <view class="template-content">
-        <view
-          class="template-item-list"
-          v-for="(item, index) in loras"
-          :key="index"
-        >
-          <view
-            class="template-item"
-            :class="item.selected ? 'template-sel' : ''"
-            @click="clickLora(item, index)"
-          >
-            <view class="template-normal" v-if="!item.isnone">
-              <view class="img-box">
-                <image :src="item.path" mode="aspectFill"></image>
-              </view>
-              <view class="template-item-txt easyai-line">
-                {{ item.name }}
-              </view>
-            </view>
-            <view class="template-no" v-else>
-              <text class="iconfont icon-no-full"></text>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="box-content cueword-box" v-if="selLora && !selLora.isnone">
-      <view class="item-section">
-        LoRA权重
-        <text class="item-section-subs">(当前值：{{ lora_weight }})</text>
-      </view>
-      <view class="slier">
-        <slider
-          :value="lora_weight"
-          :step="0.05"
-          min="0.1"
-          max="1"
-          @change="loraWeightSliderChange"
-          :show-value="false"
-          active-color="#F8D849"
-          block-color="#F8D849"
-          block-size="20"
-        ></slider>
-      </view>
-    </view>
-    <view class="box-content cueword-box">
-      <view class="item-section">提示词相关性</view>
-      <view class="slier">
-        <slider
-          :value="formData.cfg_scale"
-          min="1"
-          max="30"
-          @change="cuewordSliderChange"
-          :show-value="true"
-          active-color="#F8D849"
-          block-color="#F8D849"
-          block-size="20"
-        ></slider>
-      </view>
-    </view>
-    <view class="box-content cueword-box">
-      <view class="item-section">采样迭代步数</view>
-      <view class="slier">
-        <slider
-          :value="formData.steps"
-          min="1"
-          max="150"
-          @change="sampleSliderChange"
-          :show-value="true"
-          active-color="#F8D849"
-          block-color="#F8D849"
-          block-size="20"
-        ></slider>
-      </view>
-    </view>
-    <view class="box-content samplers-box">
-      <view class="item-section">采样方法</view>
-      <uni-data-select
-        v-model="samplerVal"
-        :localdata="samplers"
-      ></uni-data-select>
-    </view>
-
-    <view class="box-content seed-box">
-      <view class="item-section">
-        随机种子
-        <text class="item-section-subs">(选填)</text>
-      </view>
-      <input
-        class="seed-input"
-        v-model="seed_num"
-        type="number"
-        placeholder="请输入随机种子"
-      />
-    </view>
-
+  <scroll-view scroll-y="true" style="height: 100%; width: 100%">
+    <view class="label">绘画描述词</view>
+    <u-input
+      v-model="cueword"
+      type="textarea"
+      :border="true"
+      :height="100"
+      :auto-height="true"
+    />
+    <view class="label">反向描述词</view>
+    <u-input
+      v-model="reverse"
+      type="textarea"
+      :border="true"
+      :height="100"
+      :auto-height="true"
+    />
+    <view class="item-section">尺寸比例</view>
     <view class="box-content ratio-box">
-      <view class="item-section">尺寸比例</view>
       <view class="ratio-content">
         <view
           class="ratio-list"
@@ -148,8 +43,8 @@
       </view>
     </view>
 
+    <view class="item-section">生成数量</view>
     <view class="box-content generate-box">
-      <view class="item-section">生成数量</view>
       <view class="generate-content">
         <view
           class="generate-list"
@@ -167,8 +62,8 @@
       </view>
     </view>
 
+    <view class="item-section">图片质量</view>
     <view class="box-content quality-box">
-      <view class="item-section">图片质量</view>
       <view class="quality-content">
         <view
           class="quality-list"
@@ -185,12 +80,128 @@
         </view>
       </view>
     </view>
+    <u-collapse-item
+      title="更多选项"
+      :head-style="{
+        background: '#f083c6',
+      }"
+    >
+      <view class="item-section">大模型选择</view>
+      <view class="box-content" style="display: flex">
+        <view
+          class="model-item-list"
+          style="border: 1px solid #aaa; border-radius: 5rpx"
+          v-for="(item, index) in models"
+          :key="index"
+        >
+          <view
+            class="model-item"
+            :class="item.selected ? 'model-sel' : ''"
+            @click="clickModel(item, index)"
+          >
+            <view class="model-item-txt yuanyue-line">
+              {{ item.model_name }}
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="item-section">LoRA模型选择</view>
+      <view class="box-content template-box">
+        <view class="template-content">
+          <view
+            class="template-item-list"
+            v-for="(item, index) in loras"
+            :key="index"
+          >
+            <view
+              class="template-item"
+              :class="item.selected ? 'template-sel' : ''"
+              @click="clickLora(item, index)"
+            >
+              <view class="template-normal" v-if="!item.isnone">
+                <view class="img-box">
+                  <image :src="item.path" mode="aspectFill"></image>
+                </view>
+                <view class="template-item-txt yuanyue-line">
+                  {{ item.name }}
+                </view>
+              </view>
+              <view class="template-no" v-else>
+                <text class="iconfont icon-no-full"></text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="item-section">
+        LoRA权重
+        <text class="item-section-subs">(当前值：{{ lora_weight }})</text>
+      </view>
+      <view class="box-content cueword-box" v-if="selLora && !selLora.isnone">
+        <view class="slier">
+          <slider
+            :value="lora_weight"
+            :step="0.05"
+            min="0.1"
+            max="1"
+            @change="loraWeightSliderChange"
+            :show-value="false"
+            active-color="#f099eb"
+            block-size="20"
+          ></slider>
+        </view>
+      </view>
+      <view class="item-section">提示词相关性</view>
+      <view class="box-content cueword-box">
+        <view class="slier">
+          <slider
+            :value="formData.cfg_scale"
+            min="1"
+            max="30"
+            @change="cuewordSliderChange"
+            :show-value="true"
+            active-color="#f099eb"
+            block-size="20"
+          ></slider>
+        </view>
+      </view>
+      <!-- <view class="box-content cueword-box">
+      <view class="item-section">采样迭代步数</view>
+      <view class="slier">
+        <slider
+          :value="formData.steps"
+          min="1"
+          max="150"
+          @change="sampleSliderChange"
+          :show-value="true"
+          active-color="#f099eb"
+          block-size="20"
+        ></slider>
+      </view>
+    </view> -->
+      <!-- 采样方法 -->
+      <!-- <view class="box-content samplers-box">
+      <view class="item-section">采样方法</view>
+      <uni-data-select
+        v-model="samplerVal"
+        :localdata="samplers"
+      ></uni-data-select>
+    </view> -->
 
+      <view class="item-section">随机种子</view>
+      <u-input
+        v-model="seed_num"
+        type="number"
+        :border="true"
+        :auto-height="true"
+      />
+    </u-collapse-item>
+
+    <view class="item-section">生成结果</view>
     <view
       class="box-content result-box"
       v-if="generatesImages && generatesImages.length > 0"
     >
-      <view class="item-section">生成结果(点击图片长按保存)</view>
       <view class="result-content">
         <view
           class="res-img-box"
@@ -199,23 +210,54 @@
           @click="clickImg(generatesImages, index)"
         >
           <image :src="item" mode="aspectFit"></image>
+          <!-- <view class="download" @click.stop="clickDown(item,index)">
+							<text class="iconfont icon-xiazai"></text>
+						</view> -->
         </view>
       </view>
     </view>
+    <!-- <imageRow/> -->
 
-    <view class="submit-box" @click="clickSubmit">
+    <!-- 提交 -->
+    <!-- <view class="submit-box" @click="clickSubmit">
       <view class="submit-btn" v-if="generatesImages.length <= 0">
         立即生成
       </view>
       <view class="submit-btn" v-else>再画一次</view>
-    </view>
-
-    <view class="easyai-safe20"></view>
-    <!-- </scroll-view> -->
-  </view>
+    </view> -->
+    <u-button
+      class="swap"
+      type="primary"
+      style="
+        position: fixed;
+        bottom: 60rpx;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        animation: swap 1s infinite;
+        opacity: 0.8;
+        font-weight: bold;
+      "
+      :custom-style="{
+        background: 'linear-gradient(to right, #f64f59, #c471ed, #12c2e9)',
+        boxShadow: '0 0 10rpx #f083c6',
+      }"
+      :ripple="true"
+      shape="circle"
+      :loading="isGenerating"
+      @click="clickSubmit"
+    >
+      立即生成
+    </u-button>
+    <view style="height: 200rpx"></view>
+  </scroll-view>
 </template>
 
 <script>
+// import model from './model.vue';
+// import txt from './txt.vue';
+import imageRow from './imageRow.vue';
+import { mapGetters } from 'vuex';
 import {
   getSdModels,
   getSdLoRA,
@@ -225,6 +267,8 @@ import {
 } from '@/services/api.js';
 import { URL_SD } from '@/services/app.js';
 export default {
+  components: { imageRow },
+  name: 'pic-draw',
   props: {
     scrollHeight: {
       typeof: Number,
@@ -232,11 +276,15 @@ export default {
     },
   },
   computed: {
-    // ...mapGetters(['lora_dir']),
+    ...mapGetters(['lora_dir']),
   },
   data() {
     return {
-      isBusying: false,
+      customStyle: {
+        background: 'linear-gradient(to right, #f64f59, #c471ed, #12c2e9)',
+        boxShadow: '0 0 10rpx #f083c6',
+      },
+      isGenerating: false,
       samplerVal: 0,
       selLora: null,
       cueword: '',
@@ -448,6 +496,7 @@ export default {
     this.getSdModels();
     this.getSdLoRA();
     this.getSdSamplers();
+
     this.resetQulitys(this.qualitys[0].param);
   },
   methods: {
@@ -462,6 +511,57 @@ export default {
         let n_h = (n_w * item.height) / item.width;
         item.width = n_w;
         item.height = n_h;
+      });
+    },
+    /**
+     * 翻译
+     */
+    clickTranslate(flag) {
+      if (flag == 1 && !this.cueword) {
+        return this.$utils.showToast('内容不能为空');
+      }
+      if (flag == 2 && !this.reverse) {
+        return this.$utils.showToast('内容不能为空');
+      }
+      let postDic = {
+        doctype: 'json',
+        type: 'ZH_CN2EN',
+        i: flag == 1 ? this.cueword : this.reverse,
+      };
+      uni.showLoading({
+        title: '请稍后',
+        mask: true,
+      });
+
+      return new Promise((reslove, reject) => {
+        getTranslate(postDic)
+          .then((res) => {
+            uni.hideLoading();
+            if (res.errorCode == 0) {
+              let result = res.translateResult;
+              let tgt = result
+                .map((item) => {
+                  return item.map((subitem) => subitem.tgt).join(',');
+                })
+                .join(',');
+              if (flag == 1) {
+                this.cueword = tgt;
+              } else {
+                this.reverse = tgt;
+              }
+              reslove(true);
+            } else {
+              this.$utils.showToast('翻译失败,请重试');
+              //注意这里不要reject
+              reslove(false);
+            }
+          })
+          .catch((err) => {
+            uni.hideLoading();
+            this.$utils.showToast('翻译失败,请重试');
+            //注意这里不要reject
+            reslove(false);
+          });
       });
     },
     /**
@@ -518,7 +618,7 @@ export default {
             let new_item = {
               name: item,
               // path: this.lora_dir + "\\" + item + '.png',
-              path: URL_SD + '/file=models/Lora/' + item + '.png',
+              path: HTTP_URL_SD + '/file=models/Lora/' + item + '.png',
               iconfont: '',
               isnone: false,
               selected: false,
@@ -627,7 +727,7 @@ export default {
         return this.$utils.showToast('请输入提示词或反向提示词');
       }
 
-      if (this.isBusying) {
+      if (this.isGenerating) {
         return this.$utils.showToast('请稍后...');
       }
 
@@ -640,24 +740,25 @@ export default {
       // }
 
       // 模型处理
-      // if (!this.selLora.isnone) {
-      // 	this.formData.prompt = this.cueword + ",<lora:" + this.selLora.name + ":" + this.lora_weight + ">";
-      // } else {
-      // 	this.formData.prompt = this.cueword;
-      // }
+      if (!this.selLora?.isnone) {
+        this.formData.prompt =
+          this.cueword +
+          ',<lora:' +
+          this.selLora?.name +
+          ':' +
+          this.lora_weight +
+          '>';
+      } else {
+        this.formData.prompt = this.cueword;
+      }
       // 反向提示语处理
       this.formData.negative_prompt =
         this.reverse + ',nsfw,jinpingxi,xijinping';
 
-      this.isBusying = true;
-      uni.showLoading({
-        title: '正在生成...',
-        mask: true,
-      });
+      this.isGenerating = true;
       postTxt2img(this.formData)
         .then((res) => {
-          uni.hideLoading();
-          this.isBusying = false;
+          this.isGenerating = false;
           this.$utils.showToast('生成成功');
 
           this.generatesImages = [];
@@ -667,8 +768,7 @@ export default {
           });
         })
         .catch((err) => {
-          uni.hideLoading();
-          this.isBusying = false;
+          this.isGenerating = false;
           this.$utils.showToast('生成失败');
         });
     },
@@ -688,10 +788,10 @@ export default {
      * 下载
      */
     async clickDown(item, index) {
-      if (this.isBusying) {
+      if (this.isGenerating) {
         return this.$utils.showToast('请稍后...');
       }
-      this.isBusying = true;
+      this.isGenerating = true;
       uni.showLoading({
         title: '图片解析中...',
         mask: true,
@@ -699,7 +799,7 @@ export default {
       let img_path = await this.$utils.base64ToPath(item);
 
       uni.hideLoading();
-      this.isBusying = false;
+      this.isGenerating = false;
 
       // #ifdef H5
       let aLink = document.createElement('a');
@@ -732,14 +832,9 @@ export default {
 </script>
 
 <style lang="scss">
-.view {
-  padding: 0rpx 10rpx;
-}
-
 .input-item {
   margin-top: 30rpx;
-  // background-color: #323232;
-
+  background-color: #323232;
   padding: 20rpx;
   border-radius: 10rpx;
 
@@ -747,7 +842,7 @@ export default {
     display: flex;
     align-items: baseline;
     font-size: 15px;
-    // color: $easyai-color-main;
+    color: $easyai-color-main;
 
     .title {
       font-weight: bold;
@@ -765,8 +860,6 @@ export default {
       height: 120px;
       font-size: 15px;
       padding: 10rpx 0;
-      border-radius: 10rpx;
-      border: 1px solid #969696;
     }
   }
 
@@ -788,7 +881,7 @@ export default {
     border: 1rpx solid $easyai-color-main;
     padding: 6rpx 12rpx;
     border-radius: 10rpx;
-    // color: $easyai-color-main;
+    color: $easyai-color-main;
 
     text {
       margin-right: 5rpx;
@@ -841,7 +934,7 @@ export default {
       .model-sel {
         background-color: transparent;
         border: 1px solid $easyai-color-main;
-        // color: $easyai-color-main;
+        color: $easyai-color-main;
         box-sizing: border-box;
       }
     }
@@ -866,7 +959,7 @@ export default {
       .template-item {
         font-size: 14px;
         border-radius: 10rpx;
-        background-color: #323232;
+        background-color: #554f4f;
         box-sizing: border-box;
         width: 100%;
         height: 140rpx;
@@ -907,7 +1000,7 @@ export default {
 
       .template-sel {
         border: 1px solid $easyai-color-main;
-        // color: $easyai-color-main;
+        color: $easyai-color-main;
         box-sizing: border-box;
       }
     }
@@ -960,7 +1053,7 @@ export default {
           align-items: center;
 
           .item-shape {
-            background-color: #969696;
+            background-color: #e0dfdf;
             border-radius: 5rpx;
           }
         }
@@ -994,7 +1087,7 @@ export default {
         display: flex;
         justify-content: center;
         padding: 10rpx 0;
-        background-color: #969696;
+        background-color: #e0dfdf;
         border-radius: 10rpx;
         font-size: 14px;
       }
@@ -1023,7 +1116,7 @@ export default {
         display: flex;
         justify-content: center;
         padding: 10rpx 0;
-        background-color: #969696;
+        background-color: #e0dfdf;
         border-radius: 10rpx;
         font-size: 14px;
       }

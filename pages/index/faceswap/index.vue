@@ -1,7 +1,7 @@
 <template>
   <scroll-view
     scroll-y
-    style="padding: 10rpx; height: 100%; width: 100%"
+    style="height: 100%; width: 100%"
     :show-scrollbar="false"
     @scrolltolower="reachBottom"
   >
@@ -18,43 +18,39 @@
         mode="widthFix"
       />
     </view>
-    <u-section
-      color="#f083c6"
-      title="点击上传照片，可上传多张进行选择"
-      :right="false"
-    ></u-section>
-    <imageUpload class="image-upload" ref="uploadRef"></imageUpload>
-    <u-section
-      title="已制作图集"
-      sub-title="作品集"
-      color="#f083c6"
-      sub-color="#f083c6"
-      @click="goAlbum"
-    ></u-section>
-    <view class="image-output">
-      <!-- <view
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        "
-      ></view> -->
-      <imageRow ref="imageRowRef" />
-    </view>
+    <view style="padding: 20rpx">
+      <u-section
+        color="#f083c6"
+        title="点击上传照片，可上传多张进行选择"
+        :right="false"
+      ></u-section>
+      <imageUpload class="image-row" ref="uploadRef"></imageUpload>
 
-    <u-button
-      class="swap"
-      type="primary"
-      :custom-style="customStyle"
-      :ripple="true"
-      shape="circle"
-      :loading="swapLoading"
-      @click="swap"
-    >
-      一键换脸
-    </u-button>
-    <view style="height: 200rpx"></view>
-    <login ref="loginRef"></login>
+      <u-section
+        title="已制作图集"
+        sub-title="作品集"
+        color="#f083c6"
+        sub-color="#f083c6"
+        @click="goAlbum"
+      ></u-section>
+      <imageRow ref="imageRowRef" class="image-row" />
+
+      <u-button
+        class="swap"
+        type="primary"
+        style="
+        "
+        :custom-style="customStyle"
+        :ripple="true"
+        shape="circle"
+        :loading="swapLoading"
+        @click="swap"
+      >
+        一键换脸
+      </u-button>
+      <view style="height: 200rpx"></view>
+      <login ref="loginRef"></login>
+    </view>
   </scroll-view>
 </template>
 
@@ -87,13 +83,13 @@ export default {
       taskId: '',
       timers: {},
       outputImages: [],
+      customStyle: {
+        background: 'linear-gradient(to right, #f64f59, #c471ed, #12c2e9)',
+        boxShadow: '0 0 10rpx #f083c6',
+      },
       swapLoading: false,
       userId: '',
       saved_id: '',
-      customStyle: {
-        background: '#f083c6',
-        boxShadow: '0 0 10rpx #f083c6',
-      },
     };
   },
   onLoad(options) {
@@ -183,35 +179,31 @@ export default {
 
 <style lang="scss">
 .image-wrap {
-  height: 1000rpx;
+  // height: 1000rpx;
   overflow: hidden;
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
   .image {
-    // width: 100%;
-    // vertical-align: middle;
+    width: 100%;
+    vertical-align: middle;
   }
 }
-.image-upload {
-  // padding: 10rpx;
-  // background: rgb(207, 205, 208);
-  margin-bottom: 10rpx;
-}
-.image-output {
-  margin: 10rpx;
+.image-row {
+  margin: 10rpx 0;
+  border-radius: 10rpx;
   background: rgb(226, 223, 226);
 }
-::-webkit-scrollbar {
-}
-scroll-view {
-  width: 0;
-  height: 0;
-  background-color: transparent;
-  color: transparent;
-  scrollbar-width: none;
-  -webkit-scrollbar: none;
-}
+// ::-webkit-scrollbar {
+// }
+// scroll-view {
+//   width: 0;
+//   height: 0;
+//   background-color: transparent;
+//   color: transparent;
+//   scrollbar-width: none;
+//   -webkit-scrollbar: none;
+// }
 
 .swap {
   position: fixed;
@@ -221,9 +213,6 @@ scroll-view {
   width: 70%;
   animation: swap 1s infinite;
   opacity: 0.8;
-  // border-radius: 50%;
-  // box-shadow: 0 0 10rpx #f083c6;
   font-weight: bold;
-  // background: #f083c6;
 }
 </style>
