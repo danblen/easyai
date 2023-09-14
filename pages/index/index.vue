@@ -1,7 +1,7 @@
 <template>
   <view class="wrap">
     <u-navbar :is-back="false" :border-bottom="false" title="AI写真"></u-navbar>
-    <view class="u-tabs-box">
+    <!-- <view class="u-tabs-box">
       <u-tabs-swiper
         activeColor="#f588cb"
         ref="tabs"
@@ -36,14 +36,8 @@
           <waterfall ref="fallRef"></waterfall>
         </scroll-view>
       </swiper-item>
-      <!-- <swiper-item class="swiper-item">
-        <scroll-view
-          scroll-y
-          style="height: 100%; width: 100%"
-          @scrolltolower="reachBottom"
-        ></scroll-view>
-      </swiper-item> -->
-    </swiper>
+    </swiper> -->
+    <hot ref="hotRef" />
   </view>
 </template>
 
@@ -61,9 +55,6 @@ export default {
         },
         {
           name: '精选',
-        },
-        {
-          name: '最新',
         },
       ],
       current: 0,

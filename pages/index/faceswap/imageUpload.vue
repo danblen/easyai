@@ -3,7 +3,6 @@
     <view class="desc"></view>
     <z-upload
       ref="uploadRef"
-      :max-count="4"
       :previewFullImage="false"
       :isTapSelect="true"
       :needConfirmDelete="false"

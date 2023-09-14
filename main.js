@@ -11,7 +11,7 @@ Vue.prototype.$utils = utils;
 import store from './store'
 //把vuex定义成全局组件
 Vue.prototype.$store = store
-
+Vue.prototype.$baseURL = '/static/'
 App.mpType = 'app'
 
 const app = new Vue({

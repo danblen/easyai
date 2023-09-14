@@ -57,7 +57,10 @@
         class="swap"
         type="primary"
         style=""
-        :custom-style="customStyle"
+        :custom-style="{
+          background: 'linear-gradient(to right, #f64f59, #c471ed, #12c2e9)',
+          boxShadow: '0 0 10rpx #f083c6',
+        }"
         :ripple="true"
         shape="circle"
         :loading="swapLoading"
@@ -100,10 +103,6 @@ export default {
       taskId: '',
       timers: {},
       outputImages: [],
-      customStyle: {
-        background: 'linear-gradient(to right, #f64f59, #c471ed, #12c2e9)',
-        boxShadow: '0 0 10rpx #f083c6',
-      },
       swapLoading: false,
       userId: '',
       saved_id: '',
