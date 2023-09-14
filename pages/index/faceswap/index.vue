@@ -24,7 +24,16 @@
         title="点击上传照片，可上传多张进行选择"
         :right="false"
       ></u-section>
-      <imageUpload class="image-row" ref="uploadRef"></imageUpload>
+      <view
+        style="
+          margin: 10rpx 0;
+          border-radius: 10rpx;
+          background: rgb(226, 223, 226);
+        "
+      >
+        <!-- 样式写在外面才生效 -->
+        <imageUpload ref="uploadRef"></imageUpload>
+      </view>
 
       <u-section
         title="已制作图集"
@@ -33,7 +42,16 @@
         sub-color="#f083c6"
         @click="goAlbum"
       ></u-section>
-      <imageRow ref="imageRowRef" class="image-row" />
+      <view
+        style="
+          margin: 10rpx 0;
+          border-radius: 10rpx;
+          background: rgb(226, 223, 226);
+        "
+      >
+        <!-- 样式写在外面才生效 -->
+        <imageRow ref="imageRowRef" class="image-row" />
+      </view>
 
       <u-button
         class="swap"
@@ -202,11 +220,6 @@ export default {
     width: 100%;
     vertical-align: middle;
   }
-}
-.image-row {
-  margin: 10rpx 0;
-  border-radius: 10rpx;
-  background: rgb(226, 223, 226);
 }
 // ::-webkit-scrollbar {
 // }

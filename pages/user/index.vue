@@ -76,6 +76,11 @@
           title="联系我们"
           @click="onContact"
         ></u-cell-item>
+        <u-cell-item
+          icon="question-circle"
+          title="退出登录"
+          @click="onLogout"
+        ></u-cell-item>
       </u-cell-group>
     </view>
 
@@ -96,13 +101,13 @@
 
 <script>
 import getPoint from './getPoint.vue';
-import buyPoint  from './buyPoint.vue';
+import buyPoint from './buyPoint.vue';
 import { wechatLogin } from '../common/user.js';
 import { get_user } from '@/services/api.js';
 export default {
   components: {
     getPoint,
-    buyPoint ,
+    buyPoint,
   },
   data() {
     return {
@@ -148,6 +153,15 @@ export default {
         this.userInfo.userId = res.user.user_id;
         uni.setStorageSync('userInfo', this.userInfo);
       }
+    },
+    onLogout() {
+      this.userInfo = {
+        points: 0,
+        userId: '',
+        isCheck: false,
+        avatarUrl: '',
+      };
+      uni.setStorageSync('userInfo', this.userInfo);
     },
     onContact() {
       uni.showModal({
