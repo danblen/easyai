@@ -56,7 +56,16 @@
       <u-button
         class="swap"
         type="primary"
-        style=""
+        style="
+          position: fixed;
+          bottom: 60rpx;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 70%;
+          animation: swap 1s infinite;
+          opacity: 0.8;
+          font-weight: bold;
+        "
         :custom-style="{
           background: 'linear-gradient(to right, #f64f59, #c471ed, #12c2e9)',
           boxShadow: '0 0 10rpx #f083c6',
@@ -232,13 +241,5 @@ export default {
 // }
 
 .swap {
-  position: fixed;
-  bottom: 60rpx;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70%;
-  animation: swap 1s infinite;
-  opacity: 0.8;
-  font-weight: bold;
 }
 </style>

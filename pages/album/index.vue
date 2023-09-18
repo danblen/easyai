@@ -1,12 +1,18 @@
 <template>
   <view class="container-index">
-    <u-navbar :is-back="false" :border-bottom="false" title="作品"></u-navbar>
+    <u-navbar
+      :is-back="false"
+      :border-bottom="false"
+      style="background: transparent"
+      title="作品"
+    ></u-navbar>
     <view class="u-tabs-box">
       <u-tabs-swiper
         activeColor="#f588cb"
         ref="tabs"
         :list="list"
         :current="current"
+        style="background: transparent"
         @change="change"
         :is-scroll="true"
         swiperWidth="750"
@@ -131,6 +137,11 @@ export default {
 <style scoped>
 .container-index {
   /* height: 2000rpx; */
+}
+page {
+  background-color: #ededed;
+  background: linear-gradient(to right, #def1f8, #eaf8f8);
+  background: linear-gradient(to bottom, #def1f8, #f8fafa);
 }
 .swiper-box {
   height: 1200rpx;

@@ -97,6 +97,9 @@ page {
 </style>
 
 <style lang="scss" scoped>
+.view {
+  background-color: #e21414;
+}
 .wrap {
   background-color: #f588cb;
   background-color: #fff;

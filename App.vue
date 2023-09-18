@@ -129,10 +129,8 @@ export default {
     ];
   },
   onShow: function () {
-    console.log('App Show');
     // 判断是否已经显示过
     let cache = uni.getStorageSync(STORAGE_KEY);
-    console.log('cache', cache);
     if (!cache) {
       // 没显示过，则进行展示
       this.globalData.SHOW_TIP = true;
@@ -145,13 +143,12 @@ export default {
     }
   },
   onHide: function () {
-    console.log('App Hide');
   },
 };
 </script>
 
 <style lang="scss">
-@import "./components/uview-ui/index.scss";
+@import './components/uview-ui/index.scss';
 /*每个页面公共css */
 @import 'ui/uni.css';
 @import 'ui/colorui/animation.css';

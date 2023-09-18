@@ -842,7 +842,7 @@ export default {
     display: flex;
     align-items: baseline;
     font-size: 15px;
-    color: $easyai-color-main;
+    color: $color-main;
 
     .title {
       font-weight: bold;
@@ -878,10 +878,10 @@ export default {
     display: flex;
     align-items: center;
     font-size: 13px;
-    border: 1rpx solid $easyai-color-main;
+    border: 1rpx solid $color-main;
     padding: 6rpx 12rpx;
     border-radius: 10rpx;
-    color: $easyai-color-main;
+    color: $color-main;
 
     text {
       margin-right: 5rpx;
@@ -933,8 +933,8 @@ export default {
 
       .model-sel {
         background-color: transparent;
-        border: 1px solid $easyai-color-main;
-        color: $easyai-color-main;
+        border: 1px solid $color-main;
+        color: $color-main;
         box-sizing: border-box;
       }
     }
@@ -999,8 +999,8 @@ export default {
       }
 
       .template-sel {
-        border: 1px solid $easyai-color-main;
-        color: $easyai-color-main;
+        border: 1px solid $color-main;
+        color: $color-main;
         box-sizing: border-box;
       }
     }
@@ -1064,7 +1064,7 @@ export default {
       }
 
       .ratio-sel {
-        border: 1px solid $easyai-color-main;
+        border: 1px solid $color-main;
       }
     }
   }
@@ -1093,7 +1093,7 @@ export default {
       }
 
       .generate-sel {
-        background-color: $easyai-color-main;
+        background-color: $color-main;
       }
     }
   }
@@ -1122,7 +1122,7 @@ export default {
       }
 
       .quality-sel {
-        background-color: $easyai-color-main;
+        background-color: $color-main;
       }
     }
   }
@@ -1136,7 +1136,7 @@ export default {
   .submit-btn {
     width: 80%;
     padding: 20rpx 0;
-    background-color: $easyai-color-main;
+    background-color: $color-main;
     color: #323232;
     border-radius: 10rpx;
     display: flex;
