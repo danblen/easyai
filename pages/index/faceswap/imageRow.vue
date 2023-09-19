@@ -4,23 +4,23 @@
       <view
         v-for="(image, index) in images"
         :key="index"
-        :style="{
-          width: '200rpx',
-          height: '200rpx',
-          marginRight: '10rpx',
-          display: 'inline-block',
-        }"
+        style="
+          width: 200rpx;
+          height: 200rpx;
+          marginright: 10rpx;
+          display: inline-block;
+        "
       >
         <view
           v-if="image.status === 'pending'"
-          :style="{
-            width: '200rpx',
-            height: '200rpx',
-            display: 'inline-block',
-            textAlign: 'center',
-            verticalAlign: 'middle',
-            border: '1px solid #ccc',
-          }"
+          style="
+            width: 200rpx;
+            height: 200rpx;
+            display: inline-block;
+            textalign: center;
+            verticalalign: middle;
+            border: 1px solid #ccc;
+          "
         >
           <u-loading
             :style="{
@@ -39,13 +39,14 @@
         </view>
         <u-image
           v-else
-          :style="{
-            width: '200rpx',
-            height: '200rpx',
-            display: 'inline-block',
-            textAlign: 'center',
-            verticalAlign: 'middle',
-          }"
+          style="
+            width: 200rpx;
+            height: 200rpx;
+            display: inline-block;
+            textalign: center;
+            verticalalign: middle;
+            border: 1px solid #ccc;
+          "
           :src="image.path"
           mode="widthFix"
           @click="onPreviewImage(index)"
