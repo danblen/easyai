@@ -595,6 +595,7 @@ export default {
     doPreviewImage(url, index) {
       if (this.isTapSelect) {
         this.selectImage(url, index);
+        this.$emit('select', url, this.lists, this.index);
       }
       if (!this.previewFullImage) return;
       const images = this.lists.map((item) => item.url || item.path);

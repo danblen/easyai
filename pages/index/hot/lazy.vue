@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { images } from '../const/url.js';
+import { images } from '../../const/url.js';
 import { URL_BACK } from '@/services/app.js';
 import { image_list } from '@/services/api.js';
 export default {

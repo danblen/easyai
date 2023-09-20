@@ -1,36 +1,37 @@
 <template>
   <view>
-    <!-- <zswiper></zswiper> -->
-    <u-swiper :list="swipers"></u-swiper>
+    <!-- <u-swiper :list="swipers"></u-swiper> -->
 
-    <view class="title">
-      <u-icon name="heart" :size="36"></u-icon>
-      <text class="text">推荐</text>
+    <view style="background: linear-gradient(to bottom, #ebf4f8, #f8fafa)">
+      <banner />
+      <u-sticky>
+        <u-tabs
+          activeColor="#555"
+          :active-item-style="{
+            color: '#444',
+            fontSize: '32rpx',
+          }"
+          height="60"
+          style="background: linear-gradient(to bottom, #ebf4f8, #f8fafa)"
+          class="tabs"
+          :list="list"
+          :current="current"
+          @change="change"
+        ></u-tabs>
+      </u-sticky>
+      <lazy ref="lazyRef" />
     </view>
-    <u-tabs
-      :list="list"
-      :current="current"
-      :active-item-style="{
-        color: '#b20a2c',
-      }"
-      :bar-style="{
-        backgroundColor: '#0170ff',
-      }"
-      height="50"
-      @change="change"
-    ></u-tabs>
-    <lazy ref="lazyRef"></lazy>
   </view>
 </template>
 
 <script>
 import lazy from './lazy.vue';
-import zswiper from './zswiper.vue';
+import banner from './banner.vue';
 import { image_list } from '@/services/api.js';
 import { URL_BACK } from '@/services/app.js';
-import { tags } from '../const/app.js';
+import { tags } from '../../const/app.js';
 export default {
-  components: { lazy, zswiper },
+  components: { lazy, banner },
   data() {
     return {
       current: 0,
@@ -71,6 +72,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .title {
   font-size: 36rpx;
   font-weight: bold;
@@ -79,5 +81,10 @@ export default {
     margin-left: 10rpx;
     margin-bottom: 2rpx;
   }
+}
+</style>
+<style lang="scss">
+.tabs {
+  background: $color-linear2;
 }
 </style>

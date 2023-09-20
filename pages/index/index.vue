@@ -1,6 +1,11 @@
 <template>
-  <view class="wrap">
-    <u-navbar :is-back="false" :border-bottom="false" title="AI写真"></u-navbar>
+  <view class="view">
+    <u-navbar
+      style="background-color: rgba(0, 0, 0, 0)"
+      :is-back="false"
+      :border-bottom="false"
+      title="AI写真"
+    ></u-navbar>
     <!-- <view class="u-tabs-box">
       <u-tabs-swiper
         activeColor="#f588cb"
@@ -43,7 +48,7 @@
 
 <script>
 import waterfall from './waterfall.vue';
-import hot from './hot.vue';
+import hot from './hot/index.vue';
 import { init } from '../common/init.js';
 export default {
   components: { hot, waterfall },
@@ -88,21 +93,8 @@ export default {
 };
 </script>
 
-<style>
-/* #ifndef H5 */
-page {
-  height: 100%;
-}
-/* #endif */
-</style>
-
 <style lang="scss" scoped>
 .view {
-  background-color: #e21414;
-}
-.wrap {
-  background-color: #f588cb;
-  background-color: #fff;
   display: flex;
   flex-direction: column;
   height: calc(100vh - var(--window-top));
@@ -113,5 +105,16 @@ page {
 }
 .swiper-item {
   height: 100%;
+}
+.uni-nav-bar {
+  background-color: rgba(0, 0, 0, 0);
+  border-bottom: none;
+}
+</style>
+<style lang="scss">
+// weixin
+page {
+  background: $color-linear2;
+  height: 100vh;
 }
 </style>

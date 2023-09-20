@@ -6,18 +6,19 @@
       style="background: transparent"
       title="作品"
     ></u-navbar>
-    <view class="u-tabs-box">
-      <u-tabs-swiper
-        activeColor="#f588cb"
-        ref="tabs"
-        :list="list"
-        :current="current"
-        style="background: transparent"
-        @change="change"
-        :is-scroll="true"
-        swiperWidth="750"
-      ></u-tabs-swiper>
-    </view>
+    <u-tabs-swiper
+      activeColor="#555"
+      inactive-color="#777"
+      :active-item-style="{ color: '#555', fontSize: '32rpx' }"
+      style="background: transparent"
+      height="70"
+      swiperWidth="750"
+      :list="list"
+      :current="current"
+      ref="tabs"
+      @change="change"
+      :is-scroll="true"
+    ></u-tabs-swiper>
     <swiper
       class="swiper-box"
       :current="swiperCurrent"
@@ -134,14 +135,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container-index {
   /* height: 2000rpx; */
-}
-page {
-  background-color: #ededed;
-  background: linear-gradient(to right, #def1f8, #eaf8f8);
-  background: linear-gradient(to bottom, #def1f8, #f8fafa);
 }
 .swiper-box {
   height: 1200rpx;
@@ -154,5 +150,11 @@ page {
 .text {
   margin-left: 10rpx;
   margin-bottom: 2rpx;
+}
+</style>
+<style lang="scss">
+// weixin
+page {
+  background: $color-linear2;
 }
 </style>

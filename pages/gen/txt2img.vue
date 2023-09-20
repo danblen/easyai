@@ -226,7 +226,6 @@
       <view class="submit-btn" v-else>再画一次</view>
     </view> -->
     <u-button
-      class="swap"
       type="primary"
       style="
         position: fixed;
@@ -239,11 +238,12 @@
         font-weight: bold;
       "
       :custom-style="{
-        background: 'linear-gradient(to right, #f64f59, #c471ed, #12c2e9)',
-        boxShadow: '0 0 10rpx #f083c6',
+        background: 'linear-gradient(to right, #00467f, #a5cc82)',
+        boxShadow: '0 0 10rpx #a5cc82',
       }"
       :ripple="true"
       shape="circle"
+      class="swap"
       :loading="isGenerating"
       @click="clickSubmit"
     >
@@ -743,10 +743,11 @@ export default {
       if (!this.selLora?.isnone) {
         this.formData.prompt =
           this.cueword +
-          ',<lora:' +
-          this.selLora?.name +
-          ':' +
-          this.lora_weight +
+          // ',<lora:' +
+          // this.selLora?.name +
+          // ':' +
+          // this.lora_weight +
+          '<lora:edgMamaLuba_DollLikeness:1>' +
           '>';
       } else {
         this.formData.prompt = this.cueword;

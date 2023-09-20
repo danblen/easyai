@@ -4,15 +4,12 @@
       <view class="item" v-for="(item, index) in images" :key="index">
         <u-image
           :src="item.url"
-          :style="{
-            width: '100%',
-            height: '100%',
-          }"
-          @click="onPreviewImage(index)"
+          @click="onPreviewImage(item.url)"
           mode="widthFix"
         />
       </view>
     </view>
+
     <u-empty v-else mode="list" style="margin-top: 400rpx"></u-empty>
   </view>
 </template>
@@ -27,18 +24,21 @@ export default {
       default: () => [],
     },
   },
-  onLoad() {
-    this.getData();
-  },
-  created() {
-    this.getData();
-  },
+  // onLoad() {
+  //   this.getData();
+  // },
+  // created() {
+  //   this.getData();
+  // },
 
   methods: {
-    onPreviewImage(index) {
-      uni.previewImage({
-        current: index, // 当前显示图片的索引
-        urls: this.images.map((image) => image.url), // 图片列表
+    onPreviewImage(url) {
+      // uni.previewImage({
+      //   current: index, // 当前显示图片的索引
+      //   urls: this.images.map((image) => image.url), // 图片列表
+      // });
+      uni.navigateTo({
+        url: `/pages/album/imageEdit?url=${url}`,
       });
     },
   },
@@ -59,7 +59,7 @@ export default {
   flex-wrap: wrap;
   .item {
     flex: 0 0 350rpx;
-    height: 400rpx;
+    // height: 400rpx;
     margin-bottom: 10rpx;
     border-radius: 10rpx;
     overflow: hidden;

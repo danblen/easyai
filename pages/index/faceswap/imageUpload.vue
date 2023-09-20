@@ -6,12 +6,22 @@
       :previewFullImage="false"
       :isTapSelect="true"
       :needConfirmDelete="false"
-      :width="150"
-      :height="150"
+      :width="120"
+      :height="120"
       :auto-upload="false"
       @on-choose-complete="onChooseComplete"
-      @onPreview="onPreview"
-    ></z-upload>
+      @select="select"
+    >
+      <!-- <view
+        slot="addBtn"
+        class="slot-btn"
+        hover-class="slot-btn__hover"
+        style="border-radius: 50%"
+        hover-stay-time="150"
+      >
+        <u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
+      </view> -->
+    </z-upload>
   </view>
 </template>
 
@@ -31,8 +41,7 @@ export default {
         this.selectedImageUrl = list[0].url;
       }
     },
-    onPreview(url) {
-      console.log(url);
+    select(url) {
       this.selectedImageUrl = url;
     },
   },

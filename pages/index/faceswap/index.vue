@@ -20,7 +20,7 @@
     </view>
     <view style="padding: 20rpx">
       <u-section
-        color="#f083c6"
+        color="#a9e4e4"
         title="点击上传照片，可上传多张进行选择"
         :right="false"
       ></u-section>
@@ -38,7 +38,7 @@
       <u-section
         title="已制作图集"
         sub-title="作品集"
-        color="#f083c6"
+        color="#a9e4e4"
         sub-color="#f083c6"
         @click="goAlbum"
       ></u-section>

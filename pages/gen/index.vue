@@ -1,17 +1,21 @@
 <template>
   <view class="wrap">
     <u-navbar :is-back="false" :border-bottom="false" title="AI写真"></u-navbar>
-    <view class="u-tabs-box">
-      <u-tabs-swiper
-        activeColor="#f588cb"
-        ref="tabs"
-        :list="list"
-        :current="current"
-        @change="change"
-        :is-scroll="true"
-        swiperWidth="750"
-      ></u-tabs-swiper>
-    </view>
+    <u-tabs-swiper
+      activeColor="#555"
+      inactive-color="#777"
+      :active-item-style="{ color: '#555', fontSize: '32rpx' }"
+      height="70"
+      swiperWidth="750"
+      ref="tabs"
+      class="aaa"
+      style="background: transparent"
+      :list="list"
+      :current="current"
+      @change="change"
+      :is-scroll="true"
+    ></u-tabs-swiper>
+
     <swiper
       class="swiper-box"
       :current="swiperCurrent"
@@ -33,7 +37,7 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <img2img ref="hotRef" />
+          <imageEdit ref="hotRef" />
         </scroll-view>
       </swiper-item>
       <swiper-item class="swiper-item">
@@ -51,11 +55,11 @@
 
 <script>
 import txt2img from './txt2img.vue';
-import img2img from './img2img.vue';
+import imageEdit from './imageEdit.vue';
 import txt2img2 from './txt2img/index.vue';
 import txt from './txt2img/txt.vue';
 export default {
-  components: { img2img, txt2img, txt },
+  components: { imageEdit, txt2img, txt },
   data() {
     return {
       list: [
@@ -63,11 +67,11 @@ export default {
           name: '文生图',
         },
         {
-          name: '图生图',
+          name: 'AI修图',
         },
-        {
-          name: '图片去背景',
-        },
+        // {
+        //   name: '图片去背景',
+        // },
       ],
       current: 0,
       swiperCurrent: 0,
@@ -100,12 +104,19 @@ export default {
   display: flex;
   flex-direction: column;
   height: calc(100vh - var(--window-top));
-  padding: 0 20rpx;
 }
 .swiper-box {
+  padding: 0 20rpx;
   flex: 1;
 }
 .swiper-item {
   height: 100%;
+}
+</style>
+
+<style lang="scss">
+// weixin
+page {
+  background: $color-linear2;
 }
 </style>

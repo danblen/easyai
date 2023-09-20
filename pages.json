@@ -3,10 +3,18 @@
     "^u-(.*)": "@/components/uview-ui/components/u-$1/u-$1.vue",
     "^z-(.*)": "@/components/z-$1/z-$1.vue"
   },
+  //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
   "pages": [
-    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
-      "path": "pages/fullpage/index",
+      "path": "pages/album/index",
+      "style": {
+        // "navigationBarBackgroundColor": "#C12928",
+        "disableScroll": false,
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/album/imageEdit",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
@@ -30,7 +38,7 @@
       }
     },
     {
-      "path": "pages/index/faceswap/index",
+      "path": "pages/fullpage/index",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
@@ -38,7 +46,7 @@
       }
     },
     {
-      "path": "pages/index/lazy",
+      "path": "pages/index/faceswap/index",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
@@ -53,22 +61,7 @@
         "navigationStyle": "custom"
       }
     },
-    {
-      "path": "pages/index/zsdGenPic",
-      "style": {
-        // "navigationBarBackgroundColor": "#C12928",
-        "disableScroll": false,
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/album/index",
-      "style": {
-        // "navigationBarBackgroundColor": "#C12928",
-        "disableScroll": false,
-        "navigationStyle": "custom"
-      }
-    },
+
     {
       "path": "pages/user/index",
       "style": {
@@ -84,44 +77,43 @@
     "scrollIndicator": "none", // 不显示滚动条
     "app-plus": {
       "scrollIndicator": "none" // 在APP平台都不显示滚动条
-    },
-    "backgroundColor": "#e41616"
+    }
+    // "backgroundColor": "#e41616"
   },
   "tabBar": {
-    "selectedColor": "#ee499b",
-    // "selectedColor": "#1aabcf",
+    "selectedColor": "#222",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
       {
         "pagePath": "pages/fullpage/index",
-        "iconPath": "./static/image/tabbar/home.png",
-        "selectedIconPath": "./static/image/tabbar/home1.png",
+        "iconPath": "./static/image/tabbar/home7.png",
+        "selectedIconPath": "./static/image/tabbar/home6.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/index/index",
-        "iconPath": "./static/image/tabbar/home.png",
-        "selectedIconPath": "./static/image/tabbar/home1.png",
+        "iconPath": "./static/image/tabbar/hot1.png",
+        "selectedIconPath": "./static/image/tabbar/hot.png",
         "text": "写真"
       },
       {
         "pagePath": "pages/gen/index",
-        "iconPath": "./static/image/tabbar/cube1.png",
-        "selectedIconPath": "./static/image/tabbar/cube.png",
+        "iconPath": "./static/image/tabbar/cube.png",
+        "selectedIconPath": "./static/image/tabbar/cube2.png",
         "text": "生成"
       },
       {
         "pagePath": "pages/album/index",
         "iconPath": "./static/image/tabbar/photo1.png",
-        "selectedIconPath": "./static/image/tabbar/photo2.png",
+        "selectedIconPath": "./static/image/tabbar/photo4.png",
         "needRefresh": true,
         "text": "作品"
       },
       {
         "pagePath": "pages/user/index",
-        "iconPath": "./static/image/tabbar/me.png",
-        "selectedIconPath": "./static/image/tabbar/me1.png",
+        "iconPath": "./static/image/tabbar/me1.png",
+        "selectedIconPath": "./static/image/tabbar/me2.png",
         "text": "我的"
       }
     ]

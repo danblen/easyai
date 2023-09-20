@@ -68,6 +68,12 @@ export function getSdLoRA(data) {
     data,
   );
 }
+// export function getSdLoRA(data) {
+//   return request.get(
+//     '/file=extensions/a1111-sd-webui-tagcomplete/tags/temp/lora.txt',
+//     data,
+//   );
+// }
 /**
  * 获取采样方法
  */

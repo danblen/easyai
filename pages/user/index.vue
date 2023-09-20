@@ -173,13 +173,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
-page {
-  background-color: #ededed;
-  background: linear-gradient(to right, #def1f8, #eaf8f8);
-  background: linear-gradient(to bottom, #def1f8, #f8fafa);
-}
+<style lang="scss" scoped>
 .user-box {
   background-color: #fff;
+}
+</style>
+<style lang="scss">
+// weixin
+page {
+  background: $color-linear2;
 }
 </style>

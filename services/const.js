@@ -1,3 +1,4 @@
+const lora1='<lora:edgMamaLuba_DollLikeness:1>'
 let txt2img = {
   denoising_strength: 0,
   prompt: 'puppy dogs', //提示词

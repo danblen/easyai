@@ -1,56 +1,77 @@
 <template>
-  <view
-    style="background: linear-gradient(to right, #f64f59, #c471ed, #12c2e9)"
-  >
-    <image mode="widthFix" style="width: 100%" src="./index.jpg"></image>
+  <view style="">
+    <u-swiper
+      height="1100"
+      :list="[
+        { image: 'https://danblen.github.io/static/index.jpg' },
+        { image: 'https://danblen.github.io/static/index.jpg' },
+        { image: 'https://danblen.github.io/static/index.jpg' },
+      ]"
+    ></u-swiper>
     <view style="display: flex; justify-content: center">
-      <!-- 优化样式 -->
-      <view>
-        <view
-          style="
-            overflow: hidden;
-            width: 150rpx;
-            height: 260rpx;
-            border: 2rpx solid #aaa;
-            border-radius: 75rpx;
-            background: #fff;
-            margin: 20rpx;
-          "
-        >
-          <image
-            style="height: 150rpx"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
-            mode="aspectFill"
-          />
-          <view style="height: 100rpx">选择艺术照</view>
-        </view>
-        <view
-          style="
-            width: 150rpx;
-            height: 100rpx;
-            border-radius: 20%;
-            -webkit-text-stroke: 1px black;
-            font-size: 40rpx;
-            font-weight: bold;
-            color: transparent;
-          "
-        >
-          STEP 1
-        </view>
-      </view>
+      <step text="1.选择写真集"></step>
+      <step text="2.上传照片"></step>
+      <step text="3.下载写真集"></step>
     </view>
+    <!-- <image
+      mode="widthFix"
+      style="width: 100%"
+      src="https://danblen.github.io/static/index.jpg"
+    ></image> -->
+
+    <!-- <image
+      mode="widthFix"
+      style="width: 100%; position: absolute; bottom: 20rpx"
+      src="./index.jpg"
+    ></image>
+    <image
+      mode="widthFix"
+      style="width: 100%; position: absolute; top: 60rpx"
+      src="./vmake2.jpg"
+    ></image> -->
+    <u-button
+      class="swap"
+      type="primary"
+      style="
+        position: fixed;
+        bottom: 50rpx;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        animation: swap 1s infinite;
+        opacity: 0.8;
+        font-weight: bold;
+      "
+      :custom-style="{
+        background: 'linear-gradient(to right, #00467f, #a5cc82)',
+        boxShadow: '0 0 10rpx #a5cc82',
+      }"
+      :ripple="true"
+      shape="circle"
+      @click="start"
+    >
+      开始制作
+    </u-button>
   </view>
 </template>
 
 <script>
-// import grid from './grid.vue';
+import step from './step.vue';
 export default {
-  // components: { grid },
+  components: { step },
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    start() {},
+  },
 };
 </script>
 
 <style lang="scss" scoped></style>
+<style lang="scss">
+// weixin
+page {
+  background: $color-linear2;
+}
+</style>

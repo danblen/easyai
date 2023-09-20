@@ -14,7 +14,12 @@
 @import './components/uview-ui/theme.scss';
 /* 颜色变量 */
 $color-main: #f099eb;
-
+$color-main: #a9e4e4;
+$color-main2: #68cdc4;
+$color-linear1: linear-gradient(to right, #ebf4f8, #f3e8f5);
+$color-linear2: linear-gradient(to bottom, #ebf4f8, #f8fafa);
+$color-linear3: linear-gradient(to right, #f64f59, #c471ed, #12c2e9);
+$color-linear4: linear-gradient(to right, #ebf4f8, #eaf8f8);
 /* 行为相关颜色 */
 $uni-color-primary: #007aff;
 $uni-color-success: #4cd964;

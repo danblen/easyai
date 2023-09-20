@@ -142,12 +142,15 @@ export default {
       }, _this.globalData.duration * 1000);
     }
   },
-  onHide: function () {
-  },
+  onHide: function () {},
 };
 </script>
 
 <style lang="scss">
+page,
+.uni-page {
+  margin-top: 0; /* 移除默认的页面上边距 */
+}
 @import './components/uview-ui/index.scss';
 /*每个页面公共css */
 @import 'ui/uni.css';

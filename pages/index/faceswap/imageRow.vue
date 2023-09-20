@@ -7,7 +7,7 @@
         style="
           width: 200rpx;
           height: 200rpx;
-          marginright: 10rpx;
+          margin-right: 10rpx;
           display: inline-block;
         "
       >
@@ -17,8 +17,8 @@
             width: 200rpx;
             height: 200rpx;
             display: inline-block;
-            textalign: center;
-            verticalalign: middle;
+            text-align: center;
+            vertical-align: middle;
             border: 1px solid #ccc;
           "
         >
@@ -43,8 +43,8 @@
             width: 200rpx;
             height: 200rpx;
             display: inline-block;
-            textalign: center;
-            verticalalign: middle;
+            text-align: center;
+            vertical-align: middle;
             border: 1px solid #ccc;
           "
           :src="image.path"

@@ -9,6 +9,8 @@ let imageUrl = [
   '/media/user_images/20230814012618_XjqaEX5.jpg',
   '/media/user_images/20230814013522.jpg',
   '/media/user_images/R_exdmdtL.jpg',
+];
+let imageUrl2 = [
   'https://gtd.alicdn.com/sns_logo/i1/TB124_3NXXXXXasXVXXSutbFXXX.jpg_240x240xz.jpg',
   'https://gtd.alicdn.com/sns_logo/i7/TB1IWtgQFXXXXcmXFXXSutbFXXX.jpg_240x240xz.jpg',
   'https://gtd.alicdn.com/sns_logo/i1/TB1_f_PLXXXXXbVXpXXSutbFXXX.jpg_240x240xz.jpg',
@@ -19,7 +21,11 @@ export const images = imageUrl.map((item, index) => ({
   src: URL_BACK + item,
   id: index,
 }));
-export const images2 = [
+export const images2 = imageUrl2.map((item, index) => ({
+  src: item,
+  id: index,
+}));
+export const images3 = [
   {
     src: 'https://gtd.alicdn.com/sns_logo/i1/TB124_3NXXXXXasXVXXSutbFXXX.jpg_240x240xz.jpg',
   },
