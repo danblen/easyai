@@ -8,6 +8,7 @@
       :style="{
         width: $u.addUnit(width),
         height: $u.addUnit(height),
+        borderRadius: shape === 'circle' ? '50%' : '10rpx',
       }"
     >
       <view
@@ -69,10 +70,11 @@
         :style="{
           width: $u.addUnit(width),
           height: $u.addUnit(height),
+          borderRadius: shape === 'circle' ? '50%' : '10rpx',
         }"
       >
         <u-icon name="plus" class="u-add-btn" size="40"></u-icon>
-        <view class="u-add-tips">{{ uploadText }}</view>
+        <view v-if="showUploadText" class="u-add-tips">{{ uploadText }}</view>
       </view>
     </view>
   </view>
@@ -224,6 +226,15 @@ export default {
       type: String,
       default: '选择图片',
     },
+    showUploadText: {
+      type: Boolean,
+      default: true,
+    },
+    shape: {
+      type: String,
+      default: 'rect',
+    },
+
     // 是否自动上传
     autoUpload: {
       type: Boolean,
