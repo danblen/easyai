@@ -6,15 +6,7 @@
   //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
   "pages": [
     {
-      "path": "pages/album/index",
-      "style": {
-        // "navigationBarBackgroundColor": "#C12928",
-        "disableScroll": false,
-        "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/album/imageEdit",
+      "path": "pages/fullpage/index",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
@@ -30,7 +22,7 @@
       }
     },
     {
-      "path": "pages/gen/index",
+      "path": "pages/album/index",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
@@ -38,13 +30,23 @@
       }
     },
     {
-      "path": "pages/fullpage/index",
+      "path": "pages/album/imageEdit",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
         "navigationStyle": "custom"
       }
     },
+
+    {
+      "path": "pages/gen/index",
+      "style": {
+        // "navigationBarBackgroundColor": "#C12928",
+        "disableScroll": false,
+        "navigationStyle": "custom"
+      }
+    },
+
     {
       "path": "pages/index/faceswap/index",
       "style": {
@@ -101,7 +103,7 @@
         "pagePath": "pages/gen/index",
         "iconPath": "./static/image/tabbar/cube.png",
         "selectedIconPath": "./static/image/tabbar/cube2.png",
-        "text": "生成"
+        "text": "修图"
       },
       {
         "pagePath": "pages/album/index",

@@ -10,7 +10,7 @@
       </view>
     </view>
 
-    <u-empty v-else mode="list" style="margin-top: 400rpx"></u-empty>
+    <u-empty v-else mode="list"></u-empty>
   </view>
 </template>
 

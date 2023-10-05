@@ -7,7 +7,7 @@
   >
     <u-navbar :border-bottom="false" title="AI写真"></u-navbar>
 
-    <!-- <view class="image-wrap"> -->
+    <view class="image-wrap">
       <u-image
         class="image"
         :src="src"
@@ -17,9 +17,7 @@
         }"
         mode="widthFix"
       />
-    <!-- </view> -->
-
-
+    </view>
     <view style="padding: 20rpx">
       <u-section
         color="#68cdc4"

@@ -1,5 +1,5 @@
 <template>
-  <scroll-view scroll-y="true" style="height: 100%; width: 100%">
+  <scroll-view scroll-y="true" style="height: 100%; width: 100%;padding-top:20rpx">
     <view class="label">绘画描述词</view>
     <u-input
       v-model="cueword"
@@ -268,7 +268,6 @@ import {
 import { URL_SD } from '@/services/app.js';
 export default {
   components: { imageRow },
-  name: 'pic-draw',
   props: {
     scrollHeight: {
       typeof: Number,

@@ -1,5 +1,5 @@
 <template>
-  <view class="wrap">
+  <view class="view">
     <u-navbar :is-back="false" :border-bottom="false" title="AI写真"></u-navbar>
     <u-tabs-swiper
       activeColor="#555"
@@ -8,7 +8,6 @@
       height="70"
       swiperWidth="750"
       ref="tabs"
-      class="aaa"
       style="background: transparent"
       :list="list"
       :current="current"
@@ -28,7 +27,7 @@
           style="height: 100%; width: 100%"
           @scrolltolower="reachBottom"
         >
-          <txt2img ref="Ref" />
+        <txt2img ref="Ref" />
         </scroll-view>
       </swiper-item>
       <swiper-item class="swiper-item">
@@ -64,7 +63,7 @@ export default {
     return {
       list: [
         {
-          name: '文生图',
+          name: 'AI生成',
         },
         {
           name: 'AI修图',
@@ -82,6 +81,21 @@ export default {
   onLoad() {},
   computed: {},
   methods: {
+    onPageScroll(e) {
+      const scrollTop = e.scrollTop;
+
+      // 根据页面滚动的位置来判断是否需要固定分类标签栏
+      if (scrollTop >= 100) {
+        // 100是一个阈值，根据实际需要调整
+        this.setData({
+          isFixed: true,
+        });
+      } else {
+        this.setData({
+          isFixed: false,
+        });
+      }
+    },
     reachBottom() {},
     // tab栏切换
     change(index) {
@@ -100,16 +114,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrap {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - var(--window-top));
+.view {
+  background: transparent;
+  // display: flex;
+  // flex-direction: column;
+  // height: calc(100vh - var(--window-top));
+  // height: 100%;
 }
 .swiper-box {
   padding: 0 20rpx;
+  height: 1200rpx;
   flex: 1;
+  background: transparent;
 }
 .swiper-item {
+  background: transparent;
   height: 100%;
 }
 </style>

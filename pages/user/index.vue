@@ -2,99 +2,104 @@
   <view>
     <u-navbar :is-back="false" :border-bottom="false"></u-navbar>
 
-    <view
-      v-if="userInfo.userId"
-      class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30"
-    >
-      <view class="u-m-r-10">
-        <u-avatar :src="userInfo.avatarUrl" size="140"></u-avatar>
-      </view>
+    <view style="background: transparent">
+      <view
+        v-if="userInfo.userId"
+        class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30"
+      >
+        <view class="u-m-r-10">
+          <u-avatar :src="userInfo.avatarUrl" size="140"></u-avatar>
+        </view>
 
-      <view class="u-flex-1">
-        <view class="u-font-18 u-p-b-20">微信用户</view>
-        <view class="u-font-14 u-tips-color">ID:{{ userInfo.userId }}</view>
+        <view class="u-flex-1">
+          <view class="u-font-18 u-p-b-20">微信用户</view>
+          <view class="u-font-14 u-tips-color">ID:{{ userInfo.userId }}</view>
+        </view>
+        <view class="u-m-l-10 u-p-10">
+          <u-icon name="arrow-right" color="#969799" size="28"></u-icon>
+        </view>
       </view>
-      <view class="u-m-l-10 u-p-10">
-        <u-icon name="arrow-right" color="#969799" size="28"></u-icon>
-      </view>
-    </view>
-    <view v-else class="user-box u-p-l-30 u-p-r-20 u-p-b-40">
-      <view class="u-m-r-10" :style="{ textAlign: 'center', fontSize: '20px' }">
-        欢迎来到AI写真
-      </view>
-      <view>
-        <button
+      <view v-else class="user-box u-p-l-30 u-p-r-20 u-p-b-40">
+        <view
+          class="u-m-r-10"
+          :style="{ textAlign: 'center', fontSize: '20px' }"
+        >
+          欢迎来到AI写真
+        </view>
+        <u-button
           type="primary"
-          size="medium"
-          :style="{ width: '50%' }"
-          class="u-d-b w-100 mb-30"
+          style="position: relative; width: 30%; animation: swap 1s infinite"
+          shape="circle"
+          :customStyle="{
+            width:'240rpx'
+          }"
+          class="swap"
+          :loading="loading"
           @click="login"
         >
           微信一键登陆
-        </button>
+        </u-button>
       </view>
     </view>
 
-    <view class="u-m-t-20">
-      <u-cell-group>
-        <u-cell-item
-          icon="photo"
-          title="剩余次数"
-          :value="userInfo.points"
-        ></u-cell-item>
-        <getPoint
-          :isCheck="userInfo.isCheck"
-          @getCheckUserInfo="getCheckUserInfo"
-        />
-        <u-cell-item
-          title="购买次卡"
-          icon="star"
-          @click="onBuyPoint"
-        ></u-cell-item>
-        <u-popup v-model="showBuyPointPopup" mode="bottom">
-          <buyPoint />
-        </u-popup>
-        <!-- <u-cell-item icon="coupon" title="卡券"></u-cell-item>
-        <u-cell-item icon="heart" title="关注"></u-cell-item> -->
-      </u-cell-group>
-    </view>
+    <view style="padding: 20rpx">
+      <view class="u-m-t-20" style="border-radius: 20rpx">
+        <u-cell-group>
+          <u-cell-item
+            icon="photo"
+            title="剩余次数"
+            :value="userInfo.points"
+          ></u-cell-item>
+          <getPoint
+            :isCheck="userInfo.isCheck"
+            @getCheckUserInfo="getCheckUserInfo"
+          />
+          <u-cell-item
+            title="购买次卡"
+            icon="star"
+            @click="onBuyPoint"
+          ></u-cell-item>
+          <u-popup v-model="showBuyPointPopup" mode="bottom">
+            <buyPoint />
+          </u-popup>
+        </u-cell-group>
+      </view>
 
-    <!-- <view class="u-m-t-20">
-      <u-cell-group>
-        <u-cell-item icon="setting" title="设置"></u-cell-item>
-      </u-cell-group>
-    </view> -->
-    <view class="u-m-t-20">
-      <u-cell-group>
-        <u-cell-item
-          icon="question-circle"
-          title="问题反馈"
-          @click="on"
-        ></u-cell-item>
-        <u-cell-item
-          icon="question-circle"
-          title="联系我们"
-          @click="onContact"
-        ></u-cell-item>
-        <u-cell-item
-          icon="question-circle"
-          title="退出登录"
-          @click="onLogout"
-        ></u-cell-item>
-      </u-cell-group>
-    </view>
-
-    <view
-      style="
-        text-align: center;
-        position: fixed;
-        bottom: 0;
-        margin-bottom: 120rpx;
-        width: 100%;
-        font-size: 18rpx;
-      "
-    >
-      <text class="version">版本号 v1.0.0</text>
+      <view class="u-m-t-20">
+        <u-cell-group>
+          <u-cell-item
+            icon="question-circle"
+            title="问题反馈"
+            @click="on"
+          ></u-cell-item>
+          <u-cell-item
+            icon="question-circle"
+            title="联系我们"
+            @click="onContact"
+          ></u-cell-item>
+        </u-cell-group>
+      </view>
+      <view class="u-m-t-20">
+        <u-cell-group>
+          <u-cell-item
+            icon="question-circle"
+            title="退出登录"
+            @click="onLogout"
+          ></u-cell-item>
+        </u-cell-group>
+      </view>
+      <view
+        style="
+          text-align: center;
+          position: fixed;
+          bottom: 0;
+          margin-bottom: 120rpx;
+          width: 100%;
+          font-size: 18rpx;
+        "
+      >
+        <text class="version">版本号 v1.0.0</text>
+      </view>
     </view>
   </view>
 </template>
@@ -113,6 +118,7 @@ export default {
     return {
       pic: 'https://uviewui.com/common/logo.png',
       showBuyPointPopup: false,
+      loading: false,
       userInfo: {
         points: 0,
         userId: '',

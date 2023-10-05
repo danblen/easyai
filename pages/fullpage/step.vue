@@ -18,10 +18,9 @@
         mode="aspectFill"
       />
     </view>
-    <view style="text-align: center; color: white; font-size: 24rpx">
-      {{ text }}
+    <view style="text-align: center; color; font-size: 24rpx">
+      {{ text }} 
     </view>
-   
     <!-- <view
       style="
         width: 150rpx;
