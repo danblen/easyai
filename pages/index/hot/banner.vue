@@ -15,6 +15,7 @@
           margin-right: 20rpx;
           border-radius: 15rpx;
         "
+        @click="go('/pages/index/faceswap/index', image.src)"
       ></image>
     </view>
   </scroll-view>
@@ -35,7 +36,13 @@ export default {
       images: images2,
     };
   },
-  methods: {},
+  methods: {
+    go(url, src) {
+      uni.navigateTo({
+        url: url + '?src=' + src,
+      });
+    },
+  },
 };
 </script>
 

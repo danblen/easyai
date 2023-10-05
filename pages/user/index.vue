@@ -20,10 +20,7 @@
         </view>
       </view>
       <view v-else class="user-box u-p-l-30 u-p-r-20 u-p-b-40">
-        <view
-          class="u-m-r-10"
-          :style="{ textAlign: 'center', fontSize: '20px' }"
-        >
+        <view :style="{ textAlign: 'center', fontSize: '20px' }">
           欢迎来到AI写真
         </view>
         <u-button
@@ -31,7 +28,7 @@
           style="position: relative; width: 30%; animation: swap 1s infinite"
           shape="circle"
           :customStyle="{
-            width:'240rpx'
+            width: '240rpx',
           }"
           class="swap"
           :loading="loading"

@@ -1,11 +1,11 @@
 <template>
   <view class="view">
-    <u-navbar
+    <!-- <u-navbar
       style="background-color: rgba(0, 0, 0, 0)"
       :is-back="false"
       :border-bottom="false"
       title="AI写真"
-    ></u-navbar>
+    ></u-navbar> -->
     <!-- <view class="u-tabs-box">
       <u-tabs-swiper
         activeColor="#f588cb"

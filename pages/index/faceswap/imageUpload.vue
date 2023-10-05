@@ -9,8 +9,11 @@
       :width="120"
       :height="120"
       :auto-upload="false"
+      :showUploadText="false"
+      shape="circle"
       @on-choose-complete="onChooseComplete"
       @select="select"
+      style="color: white"
     >
       <!-- <view
         slot="addBtn"

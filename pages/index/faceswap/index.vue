@@ -1,74 +1,95 @@
 <template>
-  <scroll-view
-    scroll-y
+  <view
     style="height: 100%; width: 100%"
     :show-scrollbar="false"
-    @scrolltolower="reachBottom"
+    @touchstart="onTouchStart"
+    @touchend="onTouchEnd"
   >
-    <u-navbar :border-bottom="false" title="AI写真"></u-navbar>
+    <!-- <u-navbar :border-bottom="false" title="AI写真"></u-navbar> -->
+    <!-- <page-meta> -->
+    <navigation-bar
+      :title-icon-radius="titleIconRadius"
+      :subtitle-text="subtitleText"
+      :subtitle-color="nbFrontColor"
+      :loading="nbLoading"
+      :color-animation-duration="2000"
+      color-animation-timing-func="easeIn"
+      style="background: transparent"
+    />
+    <!-- </page-meta> -->
 
-    <!-- <view class="image-wrap"> -->
-      <u-image
-        class="image"
-        :src="src"
-        :style="{
-          width: '100%',
-          height: '100%',
-        }"
-        mode="widthFix"
-      />
-    <!-- </view> -->
+    <view
+      class="image-wrap"
+      style="width: 100%; height: 100vh; display: flex; align-items: center"
+    >
+      <u-image class="image" :src="src" style="" mode="widthFix" />
+    </view>
 
+    <view
+      style="
+        position: fixed;
+        width: 60rpx;
+        height: 60rpx;
+        left: 50rpx;
+        top: 110rpx;
+        color: white;
+      "
+      @click="goBack"
+    >
+      <u-icon name="arrow-left" size="32"></u-icon>
+    </view>
+    <view
+      style="
+        position: fixed;
+        right: 0;
+        top: 300rpx;
+        opacity: 0.3;
+        padding-left: 8rpx;
+        font-size: 24rpx;
+        color: white;
+        background: black;
+        border-radius: 10rpx 0 0 10rpx;
+      "
+      @click="showModel = true"
+    >
+      左滑查看作品
+      <u-icon name="arrow-right" size="24"></u-icon>
+    </view>
 
-    <view style="padding: 20rpx">
-      <u-section
-        color="#68cdc4"
-        title="点击上传照片，可上传多张进行选择"
-        :right="false"
-      ></u-section>
+    <u-popup
+      v-model="showModel"
+      mode="right"
+      width="600"
+      style="background: black"
+    >
+    
+      <tasks ref="imageRowRef" class="image-row" />
+    </u-popup>
+
+    <view style="position: fixed; width: 100%; padding: 0 30rpx; bottom: 0rpx">
       <view
         style="
-          margin: 10rpx 0;
-          border-radius: 10rpx;
-          background: rgb(226, 223, 226);
+          margin-bottom: 40rpx;
+          border-radius: 20rpx;
+          background: grey;
+          opacity: 0.5;
+          color: white;
         "
       >
         <!-- 样式写在外面才生效 -->
         <imageUpload ref="uploadRef"></imageUpload>
       </view>
 
-      <u-section
-        title="已制作图集"
-        sub-title="作品集"
-        color="#68cdc4"
-        @click="goAlbum"
-      ></u-section>
-      <view
-        style="
-          margin: 10rpx 0;
-          border-radius: 10rpx;
-          background: rgb(226, 223, 226);
-        "
-      >
-        <!-- 样式写在外面才生效 -->
-        <imageRow ref="imageRowRef" class="image-row" />
-      </view>
-
       <u-button
         type="primary"
         style="
-          position: fixed;
-          bottom: 60rpx;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 70%;
+          width: 100%;
           animation: swap 1s infinite;
           opacity: 0.8;
           font-weight: bold;
         "
         :custom-style="{
           background: 'linear-gradient(to right, #00467f, #a5cc82)',
-          boxShadow: '0 0 10rpx #a5cc82',
         }"
         :ripple="true"
         shape="circle"
@@ -78,10 +99,10 @@
       >
         一键换脸
       </u-button>
-      <view style="height: 200rpx"></view>
+      <view style="height: 100rpx"></view>
       <login ref="loginRef"></login>
     </view>
-  </scroll-view>
+  </view>
 </template>
 
 <script>
@@ -95,15 +116,22 @@ import {
 } from '@/services/api.js';
 import { URL_SD, URL_BACK } from '@/services/app.js';
 import { upload } from '@/pages/common/upload.js';
-import imageRow from './imageRow.vue';
+import tasks from './tasks.vue';
 import imageUpload from './imageUpload.vue';
 import login from '@/pages/comps/login.vue';
 export default {
-  components: { login, imageUpload, imageRow },
+  components: { login, imageUpload, tasks },
   data() {
     return {
+      titleIcon: '/static/logo.png',
+      titleIconRadius: '20px',
+      subtitleText: 'subtitleText',
+      nbLoading: false,
+      nbFrontColor: '#000000',
+      nbBackgroundColor: '#ffffff',
       // title: '选择人脸照片替换原图中人脸',
       // 演示地址，请勿直接使用
+      showModel: false,
       fileList: [],
       fileList2: [],
       images: [],
@@ -116,6 +144,7 @@ export default {
       swapLoading: false,
       userId: '',
       saved_id: '',
+      startX: 0,
     };
   },
   onLoad(options) {
@@ -132,6 +161,25 @@ export default {
     });
   },
   methods: {
+    goBack() {
+      // 使用uni.navigateBack()方法返回上一级页面
+      uni.navigateBack({
+        delta: 1, // 返回的页面数，1表示返回上一级
+      });
+    },
+    onTouchStart(event) {
+      this.startX = event.touches[0].clientX; // 记录触摸起始点的X坐标
+    },
+    onTouchEnd(event) {
+      const endX = event.changedTouches[0].clientX; // 记录触摸结束点的X坐标
+      const deltaX = endX - this.startX; // 计算X轴位移距离
+
+      if (deltaX < -50) {
+        this.showModel = true;
+      } else if (deltaX > 50) {
+        this.showModel = false;
+      }
+    },
     goAlbum() {
       uni.reLaunch({
         url: '/pages/album/index',
@@ -218,7 +266,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .image-wrap {
   // height: 1000rpx;
   overflow: hidden;
@@ -240,7 +288,9 @@ export default {
 //   scrollbar-width: none;
 //   -webkit-scrollbar: none;
 // }
-
-.swap {
+</style>
+<style>
+page {
+  background-color: #000;
 }
 </style>
