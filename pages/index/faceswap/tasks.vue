@@ -1,74 +1,83 @@
 <template>
-  <scroll-view
-    scroll-y
+  <view
     style="
       background: black;
       height: 100%;
       width: 100%;
       padding: 200rpx 20rpx 20rpx 20rpx;
     "
-    class="xsms-scroll"
   >
-    <view v-if="images.length">
-      <view
-        v-for="(image, index) in images"
-        :key="index"
-        style="
-          width: 200rpx;
-          height: 200rpx;
-          margin-right: 10rpx;
-          display: inline-block;
-        "
-      >
+    <view @click="goAlbum">
+      作品集
+      <u-icon name="arrow-right" size="26"></u-icon>
+    </view>
+
+    <scroll-view class="xsms-scroll">
+      <view v-if="images.length">
         <view
-          v-if="image.status === 'pending'"
+          v-for="(image, index) in images"
+          :key="index"
           style="
             width: 200rpx;
             height: 200rpx;
+            margin-right: 10rpx;
             display: inline-block;
-            text-align: center;
-            vertical-align: middle;
-            border: 1px solid #ccc;
           "
         >
-          <u-loading
-            :style="{
-              position: 'relative',
-              top: '50rpx',
-            }"
-          ></u-loading>
           <view
-            :style="{
-              position: 'relative',
-              top: '55rpx',
-            }"
+            v-if="image.status === 'pending'"
+            style="
+              width: 200rpx;
+              height: 200rpx;
+              display: inline-block;
+              text-align: center;
+              vertical-align: middle;
+              border: 1px solid #ccc;
+            "
           >
-            制作中
+            <u-loading
+              :style="{
+                position: 'relative',
+                top: '50rpx',
+              }"
+            ></u-loading>
+            <view
+              :style="{
+                position: 'relative',
+                top: '55rpx',
+              }"
+            >
+              制作中
+            </view>
           </view>
+          <u-image
+            v-else
+            style="
+              width: 300rpx;
+              height: 300rpx;
+              display: inline-block;
+              text-align: center;
+              vertical-align: middle;
+            "
+            :src="image.path"
+            mode="widthFix"
+            @click="onPreviewImage(index)"
+          ></u-image>
         </view>
-        <u-image
-          v-else
-          style="
-            width: 200rpx;
-            height: 200rpx;
-            display: inline-block;
-            text-align: center;
-            vertical-align: middle;
-            border: 1px solid #ccc;
-          "
-          :src="image.path"
-          mode="widthFix"
-          @click="onPreviewImage(index)"
-        ></u-image>
       </view>
-    </view>
-    <view v-else>
-      <u-empty></u-empty>
-    </view>
-  </scroll-view>
+      <view v-else>
+        <u-empty></u-empty>
+      </view>
+    </scroll-view>
+  </view>
 </template>
 
 <script>
+import {
+  checkTaskStatusByTaskId,
+  get_completed_tasks_on_user,
+} from '@/services/api.js';
+import { URL_SD, URL_BACK } from '@/services/app.js';
 export default {
   data() {
     return {
@@ -86,6 +95,11 @@ export default {
     }
   },
   methods: {
+    goAlbum() {
+      uni.reLaunch({
+        url: '/pages/album/index',
+      });
+    },
     onPreviewImage(index) {
       uni.previewImage({
         current: index, // 当前显示图片的索引

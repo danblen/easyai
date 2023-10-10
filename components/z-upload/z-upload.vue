@@ -9,6 +9,8 @@
         width: $u.addUnit(width),
         height: $u.addUnit(height),
         borderRadius: shape === 'circle' ? '50%' : '10rpx',
+        border:
+          isTapSelect && selectedImage.url === item.url && '6rpx solid #f06666'||'',
       }"
     >
       <view
@@ -44,12 +46,6 @@
       <image
         @tap.stop="doPreviewImage(item.url || item.path, index)"
         class="u-preview-image"
-        :style="
-          isTapSelect &&
-          selectedImage.url === item.url && {
-            border: '6rpx solid #f06666',
-          }
-        "
         v-if="!item.isImage"
         :src="item.url || item.path"
         :mode="imageMode"

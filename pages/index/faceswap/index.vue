@@ -180,11 +180,7 @@ export default {
         this.showModel = false;
       }
     },
-    goAlbum() {
-      uni.reLaunch({
-        url: '/pages/album/index',
-      });
-    },
+    
     downloadImages(imageUrl) {
       let that = this;
       return new Promise((resolve, reject) => {
