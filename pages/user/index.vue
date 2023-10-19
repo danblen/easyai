@@ -97,6 +97,43 @@
       >
         <text class="version">版本号 v1.0.0</text>
       </view>
+      <u-modal
+        title="欢迎登录"
+        v-model="showModal"
+        :show-confirm-button="false"
+        :show-cancel-button="true"
+      >
+        <view class="slot-content">
+          <view style="margin-top: 40rpx"></view>
+          <u-button
+            type="primary"
+            style="position: relative; animation: swap 1s infinite"
+            :customStyle="{
+              width: '92%',
+            }"
+            shape="circle"
+            class="swap"
+            :loading="loading"
+            @click="onConfirmLogin"
+          >
+            微信授权登录
+          </u-button>
+          <view style="font-size: 24rpx; margin: 40rpx 0">
+            <u-checkbox
+              v-model="isCheckPolicy"
+              style="position: relative; left: 25rpx"
+            ></u-checkbox>
+            <text>我已阅读并同意</text>
+            <text style="color: blue" @click="onViewServicePolicy">
+              《服务协议》
+            </text>
+            和
+            <text style="color: blue" @click="onViewPrivacyPolicy">
+              《隐私协议》
+            </text>
+          </view>
+        </view>
+      </u-modal>
     </view>
   </view>
 </template>
@@ -116,6 +153,8 @@ export default {
       pic: 'https://uviewui.com/common/logo.png',
       showBuyPointPopup: false,
       loading: false,
+      showModal: false,
+      isCheckPolicy: false,
       userInfo: {
         points: 0,
         userId: '',
@@ -149,6 +188,17 @@ export default {
       }
     },
     async login() {
+      this.showModal = true;
+    },
+    async onConfirmLogin() {
+      if (!this.isCheckPolicy) {
+        uni.showToast({
+          title: '请勾选我已阅读并同意《服务协议》和《隐私协议》',
+          icon: 'none',
+          duration: 2000,
+        });
+        return;
+      }
       let res = await wechatLogin();
       if (res) {
         this.userInfo.points = res.user.points;
@@ -156,6 +206,11 @@ export default {
         this.userInfo.userId = res.user.user_id;
         uni.setStorageSync('userInfo', this.userInfo);
       }
+    },
+    onViewServicePolicy() {
+      uni.navigateTo({
+        url: '/pages/user/servicePolicy', // 用于显示用户协议和服务条款的页面路径
+      });
     },
     onLogout() {
       this.userInfo = {

@@ -43,6 +43,14 @@ export default {
   },
   methods: {
     async onGetPoint() {
+      if (!uni.getStorageSync('userInfo').userId) {
+        uni.showToast({
+          title: '请先登录',
+          icon: 'none',
+          duration: 2000,
+        });
+        return;
+      }
       if (this.isCheck) {
         uni.showToast({
           title: '今日已签到啦~',

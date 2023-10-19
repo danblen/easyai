@@ -1,5 +1,5 @@
 {
-    "name" : "AI作图家",
+    "name" : "AI写真",
     "appid" : "__UNI__1422B23",
     "description" : "AI写真",
     "versionName" : "1.0.0",
@@ -60,10 +60,11 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx119cd856b94e2022",
+        "appid" : "wx3e67e2268416075f",
         "cloudfunctionRoot" : "./functions/",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "minified" : true
         },
         "usingComponents" : true,
         "plugins" : {},

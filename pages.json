@@ -6,10 +6,25 @@
   //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
   "pages": [
     {
+      "path": "pages/user/index",
+      "style": {
+        "disableScroll": true,
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/servicePolicy",
+      "style": {
+        "disableScroll": true,
+        "navigationBarTitleText": "服务条款"
+        // "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/index/index",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
-        "disableScroll": false 
+        "disableScroll": false
         // "navigationStyle": "custom"
       }
     },
@@ -48,7 +63,7 @@
     },
 
     {
-      "path": "pages/index/faceswap/index" ,
+      "path": "pages/index/faceswap/index",
       "style": {
         "navigationStyle": "custom"
         // "navigationBarBackgroundColor": "#C12928",
@@ -62,14 +77,6 @@
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
-        "navigationStyle": "custom"
-      }
-    },
-
-    {
-      "path": "pages/user/index",
-      "style": {
-        "disableScroll": true,
         "navigationStyle": "custom"
       }
     }

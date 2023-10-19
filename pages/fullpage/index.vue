@@ -15,11 +15,11 @@
         <step text="3.下载写真集"></step>
       </view>
     </view>
-    <image
+    <!-- <image
       mode="widthFix"
       style="width: 100%"
       src="https://danblen.github.io/static/index.jpg"
-    ></image>
+    ></image> -->
 
     <!-- <image
       mode="widthFix"

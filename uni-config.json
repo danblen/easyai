@@ -1,0 +1,12 @@
+{
+  "subPackages": [
+    {
+      "root": "subPackages/package1",
+      "pages": ["page1", "page2"]
+    },
+    {
+      "root": "subPackages/package2",
+      "pages": ["page3", "page4"]
+    }
+  ]
+}
