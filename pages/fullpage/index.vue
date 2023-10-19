@@ -8,6 +8,11 @@
         { image: 'https://danblen.github.io/static/index.jpg' },
       ]"
     ></u-swiper>
+    <image
+      mode="widthFix"
+      style="width: 100%; position: absolute; bottom: 120rpx"
+      src="https://danblen.github.io/static/index.jpg"
+    ></image>
     <view style="position: relative; top: -50rpx;background:#fff">
       <view style="display: flex; justify-content: center">
         <step text="1.选择写真集"></step>
@@ -21,12 +26,8 @@
       src="https://danblen.github.io/static/index.jpg"
     ></image> -->
 
+    
     <!-- <image
-      mode="widthFix"
-      style="width: 100%; position: absolute; bottom: 20rpx"
-      src="./index.jpg"
-    ></image>
-    <image
       mode="widthFix"
       style="width: 100%; position: absolute; top: 60rpx"
       src="./vmake2.jpg"

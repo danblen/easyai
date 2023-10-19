@@ -1,6 +1,5 @@
 <template>
-  <view
-  >
+  <view>
     <view
       style="
         overflow: hidden;
@@ -19,7 +18,7 @@
       />
     </view>
     <view style="text-align: center; color; font-size: 24rpx">
-      {{ text }} 
+      {{ text }}
     </view>
     <!-- <view
       style="
