@@ -1,224 +1,208 @@
 <template>
-  <scroll-view class="container container-index" style="overflow-y: scroll">
-    <view v-if="SHOW_TIP">
-      <add-tips :statusBarHeight="statusBarHeight" />
+  <view style="">
+    <u-button
+      class="swap"
+      type="primary"
+      style="
+        position: fixed;
+        bottom: 40rpx;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        animation: swap 1s infinite;
+        opacity: 0.8;
+        font-weight: bold;
+      "
+      :custom-style="{
+        background: 'linear-gradient(to right, #00467f, #a5cc82)',
+        boxShadow: '0 0 10rpx #a5cc82',
+      }"
+      :ripple="true"
+      shape="circle"
+      @click="showPopup"
+    >
+      会员购买
+    </u-button>
+
+    <view v-if="popupVisible" class="popup-container">
+      <view class="popup-content" 
+        style="
+          text-align: center;
+          position: fixed;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          background: #1b1817;
+          border-radius: 20px;
+          padding: 0px;
+          box-shadow: 0 2px 4px #1b1817;
+          width: 100%;
+          height: 60%;
+        "
+      >
+        <!-- 弹窗内容 -->
+        <button @click="closePopup" class="close-button"></button>
+        <view 
+          class="title-logo" 
+          style="
+            position: absolute; 
+            top: 12px; 
+            left: 25px; 
+            width: 128px; 
+            height: 64px;
+          "
+        >
+          <text 
+            class="image-text" 
+            style="
+              position: absolute; 
+              top: 2px; 
+              left: 0px;
+              width: 24px;
+              height: 24px;
+            "
+          >
+          </text>
+
+          <text 
+            class="top-text"   
+            style="
+              position: absolute; 
+              top: 0px; 
+              left: 25px;
+              font-family: 'Georgia', sans-serif;
+              font-size: 16px;
+              color: #f5eef1;
+            "
+          >
+            粉钻VIP
+          </text>
+
+        </view>
+
+        <view 
+          class="title-text" 
+          style="
+            position: absolute; 
+            top: 60px; 
+            left: 25px; 
+            width: 128px; 
+            height: 128px;
+          "
+        >
+          <text 
+            class="middle-text" 
+            style="
+            position: absolute; 
+            top: 0px; 
+            left: 0px;
+            font-size: 24px;
+            color: #f5eef1;
+          "
+          >
+            每日仅需
+          </text>
+          <view style="position: absolute; top: -10px; left: 100px; font-size: 32px; color: #f5eef1;"> ¥0.3 </view>
+          <view class="gradient-text" style="position: absolute; top: 40px;">{{ customText }}</view>
+        </view>
+
+        <scroll-view 
+          scroll-x 
+          style="
+            white-space: nowrap; 
+            overflow: auto; 
+            width: 100%;
+            position: absolute; 
+            top: 40%;
+          "
+          >
+          <view
+            v-for="(item, index) in textList"
+            :key="index"
+            style="
+              display: inline-block; 
+              padding: 10px; 
+              border: 1px solid #1b1817cc; 
+              border-radius: 8px; 
+              background-color: #3833317c;
+              width: 123px;
+              height:150px;
+              margin-left: 10px;
+              margin-right: 10px; 
+            "
+            :style="{
+              borderColor: selectedIdx === index ? '#FFC0CB' : '#1b1817cc',
+            }"
+            @tap="handleTap(index)"
+          >
+            <text style="color: #ffffff;">{{ item }}</text>
+          </view>
+        </scroll-view> 
+
+      </view>
     </view>
-    <grid :style="{ 'margin-top': statusBarHeight + 80 + 'px' }"></grid>
-  </scroll-view>
+  </view>
 </template>
 
 <script>
-// 在页面中定义插屏广告
-let interstitialAd = null;
-
 export default {
-  components: {},
   data() {
+    
     return {
-      dataList: [
-        {
-          name: 'refresh',
-          size: 30,
-        },
-        {
-          name: 'search',
-          size: 30,
-        },
-        {
-          name: 'close-fill',
-          size: 30,
-        },
-        {
-          name: 'shut',
-          size: 30,
-        },
-      ],
-      windowHeight: 0,
-      statusBarHeight: 0,
-      SHOW_TIP: false,
-      rewardedVideoAdLoaded: false,
-    };
-  },
-  onLoad() {
-    uni.request({
-      url: 'http://43.139.23.56:7860',
-      method: 'GET',
-      timeout: 600000,
-      // header: header,
-      // data: data || {},
-      success: (res) => {
-        // // console.log("rk===>[requst-suc-url]",Url,res);
-        // let statusCode = res.statusCode;
-        // if(statusCode == 200){
-        // 	reslove(res.data);
-        // }else{
-        // 	let showErr = '请求失败'+statusCode;
-        // 	if (!noAlert) {
-        // 		utils.showToast(showErr);
-        // 	}
-        // 	reject(showErr);
-        // }
-      },
-    });
-    // 在页面onLoad回调事件中创建插屏广告实例
-    if (wx.createInterstitialAd) {
-      interstitialAd = wx.createInterstitialAd({
-        adUnitId: 'adunit-be801ba020f6edeb',
-      });
-      interstitialAd.onLoad(() => {});
-      interstitialAd.onError((err) => {
-        console.log(err);
-      });
-      interstitialAd.onClose(() => {});
-    }
-  },
-  onShow() {
-    this.statusBarHeight = getApp().globalData.statusBarHeight;
-    this.windowHeight = getApp().globalData.windowHeight;
-    this.SHOW_TIP = getApp().globalData.SHOW_TIP;
-    console.log(this.SHOW_TIP);
+      popupVisible: false,
 
-    if (interstitialAd) {
-      interstitialAd.show().catch((err) => {
-        console.error(err);
-      });
-    }
-  },
-  onShareAppMessage() {
-    return {
-      title: '我换上了口罩头像，防止疫情蔓延，30款口罩、护目镜任你选！',
-      desc: '防传染、戴口罩，从我做起！',
-      imageUrl: '/static/image/mask/avatar_mask.png',
-      path: '/pages/index/index',
-      success: function (res) {
-        console.log(res);
-      },
+      selectedIdx: -1,
+      customText: '未选择',
+      textList: ['连续包月', '连续包年', '连续包季', '1个月', '2个月']
     };
   },
   methods: {
-    realtimeInfo: function () {
-      wx.navigateToMiniProgram({
-        appId: 'wx1656b2e5df4e587c',
-        path: 'pages/index/index',
-        success(res) {
-          console.log(res);
-        },
-        fail(e) {
-          console.log(e);
-        },
-      });
+    showPopup() {
+      this.popupVisible = true;
     },
-    addMask: function () {
-      uni.switchTab({
-        url: '/pages/mask/add-mask',
-      });
-    },
-    nasa: function () {
-      wx.navigateToMiniProgram({
-        appId: 'wxd44e78294c5c5401',
-        path: 'pages/board/borad',
-        success(res) {
-          console.log(res);
-        },
-        fail(e) {
-          console.log(e);
-        },
-      });
-    },
-    addSlogan: function () {
-      uni.switchTab({
-        url: '/pages/slogan/add-slogan',
-      });
-    },
-    addText: function () {
-      uni.navigateTo({
-        url: '/pages/text/add-text',
-      });
-    },
-    chatBackground: function () {
-      uni.navigateTo({
-        url: '/page-chat-bg/pages/index/index',
-      });
+    closePopup() {
+      this.popupVisible = false;
     },
 
-    tucao: function () {
-      const Tucao = requirePlugin('tucao').default;
-      // 初始化并触发跳转，支持链式调用
-      this.wx = uni;
-      Tucao.init(this, {
-        productId: 120746,
-      }).go();
+    handleTap(index) {
+      // 更新选中的索引
+      this.selectedIdx = index;
+
+        this.customText = this.textList[index];
     },
-    handleContact: function (e) {
-      console.log(e.detail.path);
-      console.log(e.detail.query);
-    },
-  },
+  }
 };
 </script>
 
 <style scoped>
-.row {
-  /* margin: 10px; */
-  display: flex;
-  justify-content: space-around;
-  /* align-items: flex-start; */
-}
-.row-item {
-  border-radius: 10px;
-  height: 80%;
-  width: 160px;
-  background: #eebebe;
+
+.close-button {
+  position: absolute; /* 将按钮设置为绝对定位，相对于其最近的已定位祖先元素 */
+  top: 10px; /* 距离顶部的距离 */
+  left: 50%; /* 将按钮水平居中 */
+  transform: translateX(-50%); /* 通过transform实现水平居中 */
+  width: 40px; /* 设置关闭按钮宽度 */
+  height: 40px; /* 设置关闭按钮高度 */
+  background-color: transparent; /* 设置关闭按钮背景色 */
+  border: none; /* 移除按钮的默认边框 */
+  background-image: url('@/pages/vip/arrow-down.png'); /* 添加关闭图标 */
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
-.tui-grid-icon {
-  width: 64rpx;
-  height: 64rpx;
-  margin: 0 auto;
-  text-align: center;
-  vertical-align: middle;
+.image-text{
+  background-color: transparent;
+  border: none; 
+  background-image: url('@/pages/vip/pink-diamond.png');
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
-.tui-grid-label {
-  display: block;
-  text-align: center;
-  font-weight: 400;
-  color: #333;
-  font-size: 28rpx;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 10rpx;
-}
-
-.container-index {
-  height: 2000rpx;
-}
-
-.logo-area {
+.gradient-text{
   position: absolute;
-  left: 20px;
-}
-.ad-container {
-  width: 690rpx;
-}
-
-.about-actions {
-  width: 690rpx;
-}
-
-.card-menu {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.free-btn-bordernone {
-  background: none !important;
-  color: #000 !important;
-  display: inline-block !important;
-}
-
-.free-btn-bordernone::after {
-  border: none;
+  font-size: 16px;
+  background-image: linear-gradient(to right, #FFC0CB, #FF69B4);
+  -webkit-background-clip: text;
+  color: transparent; 
 }
 </style>

@@ -139,10 +139,10 @@
 </template>
 
 <script>
-import getPoint from './getPoint.vue';
-import buyPoint from './buyPoint.vue';
-import { wechatLogin } from '../common/user.js';
-import { get_user } from '@/services/api.js';
+import getPoint from "./getPoint.vue";
+import buyPoint from "./buyPoint.vue";
+import { wechatLogin } from "../common/user.js";
+import { get_user } from "@/services/api.js";
 export default {
   components: {
     getPoint,
@@ -150,21 +150,21 @@ export default {
   },
   data() {
     return {
-      pic: 'https://uviewui.com/common/logo.png',
+      pic: "https://uviewui.com/common/logo.png",
       showBuyPointPopup: false,
       loading: false,
       showModal: false,
       isCheckPolicy: false,
       userInfo: {
-        points: 0,
-        userId: '',
+        points: 10,
+        userId: "",
         isCheck: false,
-        avatarUrl: '',
+        avatarUrl: "",
       },
     };
   },
   async onShow() {
-    if (uni.getStorageSync('userInfo').userId) {
+    if (uni.getStorageSync("userInfo").userId) {
       this.getUser();
     } else {
     }
@@ -179,7 +179,7 @@ export default {
     },
     async getUser() {
       let res = await get_user({
-        user_id: uni.getStorageSync('userInfo').userId,
+        user_id: uni.getStorageSync("userInfo").userId,
       });
       if (res) {
         this.userInfo.userId = res.user.user_id;
@@ -193,8 +193,8 @@ export default {
     async onConfirmLogin() {
       if (!this.isCheckPolicy) {
         uni.showToast({
-          title: '请勾选我已阅读并同意《服务协议》和《隐私协议》',
-          icon: 'none',
+          title: "请勾选我已阅读并同意《服务协议》和《隐私协议》",
+          icon: "none",
           duration: 2000,
         });
         return;
@@ -204,27 +204,27 @@ export default {
         this.userInfo.points = res.user.points;
         this.userInfo.isCheck = res.user.is_check;
         this.userInfo.userId = res.user.user_id;
-        uni.setStorageSync('userInfo', this.userInfo);
+        uni.setStorageSync("userInfo", this.userInfo);
       }
     },
     onViewServicePolicy() {
       uni.navigateTo({
-        url: '/pages/user/servicePolicy', // 用于显示用户协议和服务条款的页面路径
+        url: "/pages/user/servicePolicy", // 用于显示用户协议和服务条款的页面路径
       });
     },
     onLogout() {
       this.userInfo = {
         points: 0,
-        userId: '',
+        userId: "",
         isCheck: false,
-        avatarUrl: '',
+        avatarUrl: "",
       };
-      uni.setStorageSync('userInfo', this.userInfo);
+      uni.setStorageSync("userInfo", this.userInfo);
     },
     onContact() {
       uni.showModal({
-        title: '联系我们',
-        content: '请联系邮箱:1920669740@qq.com',
+        title: "联系我们",
+        content: "请联系邮箱:1920669740@qq.com",
       });
     },
   },

@@ -3,8 +3,8 @@
     <view
       style="
         overflow: hidden;
-        width: 180rpx;
-        height: 180rpx;
+        width: 210rpx;
+        height: 210rpx;
         border: 2rpx solid #aaa;
         border-radius: 40rpx;
         background: #fff;
@@ -13,7 +13,7 @@
     >
       <image
         style="height: 200rpx"
-        src="https://img.yzcdn.cn/vant/cat.jpeg"
+        :src="imageSrc"
         mode="aspectFill"
       />
     </view>
@@ -43,6 +43,7 @@ export default {
       type: String,
       default: '',
     },
+    imageSrc: String,
   },
 };
 </script>
