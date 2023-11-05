@@ -46,6 +46,8 @@ export function txt2img(data) {
 export function img2img(data) {
   return request.post('/sdapi/v1/img2img', img2img1);
 }
+
+
 /**
  * 全局信息
  */
@@ -68,12 +70,6 @@ export function getSdLoRA(data) {
     data,
   );
 }
-// export function getSdLoRA(data) {
-//   return request.get(
-//     '/file=extensions/a1111-sd-webui-tagcomplete/tags/temp/lora.txt',
-//     data,
-//   );
-// }
 /**
  * 获取采样方法
  */
