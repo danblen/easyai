@@ -1,104 +1,87 @@
 <template>
-  <view>
-    <z-upload
-      ref="uploadRef"
-      :previewFullImage="false"
-      :isTapSelect="true"
-      :needConfirmDelete="false"
-      :width="750"
-      :height="750"
-      :auto-upload="false"
-      :max-count="1"
-      @on-choose-complete="onChooseComplete"
-      @onPreview="onPreview"
-    ></z-upload>
-    <view class="image-wrap">
-      <!-- <u-image
-        class="image"
-        :src="url"
-        :style="{
-          width: '100%',
-          height: '100%',
-        }"
-        mode="widthFix"
-      /> -->
-    </view>
-    <u-button
-      type="primary"
-      style="
-        position: fixed;
-        bottom: 120rpx;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 70%;
-        animation: swap 1s infinite;
-        opacity: 0.8;
-        font-weight: bold;
-      "
-      :custom-style="{
-        background: 'linear-gradient(to right, #00467f, #a5cc82)',
-        boxShadow: '0 0 10rpx #a5cc82',
-      }"
-      :ripple="true"
-      shape="circle"
-      class="swap"
-      :loading="loading"
-      @click="onEdit"
-    >
-      修图
-    </u-button>
-  </view>
+	<view>
+		<!-- 图片展示区域 -->
+		<z-upload
+			ref="uploadRef"
+			:previewFullImage="false"
+			:isTapSelect="true"
+			:needConfirmDelete="false"
+			:width="694"
+			:height="700"
+			:auto-upload="false"
+			:max-count="1"
+			@on-choose-complete="onChooseComplete"
+			@select="select"
+			style="margin-top:20rpx;color: blue;background: burlywood;"
+		>
+			<!-- <view
+        slot="addBtn"
+        class="slot-btn"
+        hover-class="slot-btn__hover"
+        style="border-radius: 50%"
+        hover-stay-time="150"
+      >
+        <u-icon name="photo" size="60" :color="$u.color['lightColor']"></u-icon>
+      </view> -->
+		</z-upload>
+
+		<u-tabs
+			:list="list"
+			:is-scroll="false"
+			:current="curTabIndex"
+      style="background: transparent;"
+			@change="change"
+		></u-tabs>
+
+		<view v-if="curTabIndex===0" style="display: flex; justify-content: space-around; padding: 10px">
+			<u-button
+				size="small"
+				style="flex: 1; margin: 0 5px"
+				@click="applyFilter('brightness')"
+				>抠图</u-button
+			>
+			<u-button
+				size="small"
+				style="flex: 1; margin: 0 5px"
+				@click="applyFilter('contrast')"
+				>去背景</u-button
+			>
+			<u-button
+				size="small"
+				style="flex: 1; margin: 0 5px"
+				@click="applyFilter('saturation')"
+				>清晰化</u-button
+			>
+		</view>
+	</view>
 </template>
 
 <script>
-import { img2img2 } from '../const/app.js';
-import {
-  getSdModels,
-  getSdLoRA,
-  getSdSamplers,
-  getTranslate,
-  postTxt2img,
-  img2img,
-} from '@/services/api.js';
 export default {
-  data() {
-    return {
-      url: '',
-      tempFilePath: '',
-      selectedImageUrl: '',
-    };
-  },
-  onLoad(options) {},
-  methods: {
-    async onEdit() {
-      await img2img(img2img2);
-    },
-
-    onChooseComplete(list, name) {
-      this.selectedImageUrl = list[0].url;
-      this.downloadImages(this.selectedImageUrl);
-    },
-    downloadImages(imageUrl) {
-      let that = this;
-      return new Promise((resolve, reject) => {
-        uni.downloadFile({
-          url: imageUrl,
-          success: (res) => {
-            if (res.statusCode === 200) {
-              that.tempFilePath = res.tempFilePath;
-              resolve();
-            } else {
-              reject();
-            }
-          },
-          fail: (error) => {
-            reject();
-          },
-        });
-      });
-    },
-  },
+	data() {
+		return {
+			imageSrc: 'path-to-your-image.jpg',
+			list: [
+				{
+					name: '换脸',
+				},
+				{
+					name: '去背景',
+				},
+				{
+					name: '清晰化',
+					count: '新',
+				},
+			],
+			curTabIndex: 0,
+		};
+	},
+	methods: {change(index) {
+				this.curTabIndex = index;
+			},
+		applyFilter(type) {
+			// TODO: Implement API call to apply filter
+		},
+	},
 };
 </script>
-
-<style lang="scss" scoped></style>
