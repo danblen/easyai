@@ -6,7 +6,7 @@
   //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
   "pages": [
     {
-      "path": "pages/fullpage/index",
+      "path": "pages/index2/index",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
@@ -116,7 +116,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/fullpage/index",
+        "pagePath": "pages/index2/index",
         "iconPath": "./static/image/tabbar/home7.png",
         "selectedIconPath": "./static/image/tabbar/home6.png",
         "text": "首页"
