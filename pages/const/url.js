@@ -1,14 +1,14 @@
 import { URL_BACK } from "@/services/app.js";
 
 let imageUrl_qingfeng = [
-  "/static/image/weibo_pic/清风明月/photo_1643@14-03-2023_09-09-46.jpg",
-  "/static/image/weibo_pic/清风明月/photo_1644@14-03-2023_09-09-47.jpg",
-  "/static/image/weibo_pic/清风明月/photo_1645@14-03-2023_09-09-47.jpg",
-  "/static/image/weibo_pic/清风明月/photo_1646@14-03-2023_09-09-47.jpg",
-  "/static/image/weibo_pic/清风明月/photo_1647@14-03-2023_09-09-47.jpg",
-  "/static/image/weibo_pic/清风明月/photo_1648@14-03-2023_09-09-47.jpg",
-  "/static/image/weibo_pic/清风明月/photo_1649@14-03-2023_09-09-47.jpg",
-  "/static/image/weibo_pic/清风明月/photo_1650@14-03-2023_09-09-47.jpg",
+  "/static/image/weibo_pic/aaaa/photo_1643@14-03-2023_09-09-46.jpg",
+  "/static/image/weibo_pic/aaaa/photo_1644@14-03-2023_09-09-47.jpg",
+  "/static/image/weibo_pic/aaaa/photo_1645@14-03-2023_09-09-47.jpg",
+  "/static/image/weibo_pic/aaaa/photo_1646@14-03-2023_09-09-47.jpg",
+  "/static/image/weibo_pic/aaaa/photo_1647@14-03-2023_09-09-47.jpg",
+  "/static/image/weibo_pic/aaaa/photo_1648@14-03-2023_09-09-47.jpg",
+  "/static/image/weibo_pic/aaaa/photo_1649@14-03-2023_09-09-47.jpg",
+  "/static/image/weibo_pic/aaaa/photo_1650@14-03-2023_09-09-47.jpg",
 ];
 let imageUrl_shan = [
   "/static/image/weibo_pic/伞/photo_517@03-12-2022_06-28-01.jpg",
@@ -55,7 +55,7 @@ export let imageUrl_rixi = [
   "/static/image/weibo_pic/日系/photo_516@02-12-2022_16-25-00.jpg",
 ];
 export let imageUrl_cover = [
-  "/static/image/weibo_pic/清风明月.png",
+  "/static/image/weibo_pic/aaaa.png",
   "/static/image/weibo_pic/伞.png",
   "/static/image/weibo_pic/芭蕾.png",
   "/static/image/weibo_pic/身材.png",

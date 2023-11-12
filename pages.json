@@ -72,7 +72,7 @@
     },
 
     {
-      "path": "pages/index/faceswap/index",
+      "path": "pages/faceswap/index",
       "style": {
         "navigationStyle": "custom"
         // "navigationBarBackgroundColor": "#C12928",

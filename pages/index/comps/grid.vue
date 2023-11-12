@@ -5,15 +5,15 @@
         <u-icon name="photo" :size="46"></u-icon>
         <view class=" ">专业模式</view>
       </view>
-      <view class="grid-item" @click="go('/pages/index/faceswap/index')">
+      <view class="grid-item" @click="go('/pages/faceswap/index')">
         <u-icon name="lock" :size="46"></u-icon>
         <view class=" ">AI换脸</view>
       </view>
-      <view class="grid-item"  @click="go('/pages/index/lazy')">
+      <view class="grid-item" @click="go('/pages/index/lazy')">
         <u-icon name="hourglass" :size="46"></u-icon>
         <view>制作数字分身</view>
       </view>
-      <view class="grid-item"  @click="go( )">
+      <view class="grid-item" @click="go()">
         <u-icon name="hourglass" :size="46"></u-icon>
         <view>制作数字分身</view>
       </view>
@@ -27,7 +27,6 @@ export default {
     go(url) {
       uni.navigateTo({
         url,
-        
       });
     },
   },

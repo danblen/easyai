@@ -39,9 +39,26 @@ export default {
   created() {},
   methods: {
     onChooseComplete(list, name) {
+      let that = this;
       if (list.length == 1) {
         this.$refs.uploadRef.selectImage(list[0].url, 0);
-        this.selectedImageUrl = list[0].url;
+        // this.selectedImageUrl = list[0].url;
+
+        const tempFilePath = list[0].url;
+        // 获取全局文件管理器
+        const fileSystemManager = uni.getFileSystemManager();
+        // 读取文件
+        fileSystemManager.readFile({
+          filePath: tempFilePath,
+          encoding: 'base64', // 编码格式
+          success: (result) => {
+            that.selectedImageUrl = result.data;
+            console.log(result.data); // base64数据
+          },
+          fail: (error) => {
+            console.error('读取失败', error);
+          },
+        });
       }
     },
     select(url) {

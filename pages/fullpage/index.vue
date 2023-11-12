@@ -134,8 +134,9 @@
               -webkit-box-orient: vertical;
               height: '50px';
             "
-            >{{ image.text }}</text
           >
+            {{ image.text }}
+          </text>
         </view>
       </scroll-view>
     </div>
@@ -250,7 +251,7 @@
       }"
       :ripple="true"
       shape="circle"
-      @click="start('/pages/index/faceswap/index', currentImageIndex)"
+      @click="start('/pages/faceswap/index', currentImageIndex)"
     >
       开始制作
     </u-button>
@@ -264,8 +265,8 @@ import {
   imageUrl_cover,
   imageUrl_rixi,
   typpe_pic_index,
-} from "@/pages/const/url.js";
-import step from "./step.vue";
+} from '@/pages/const/url.js';
+import step from './step.vue';
 export default {
   components: { step },
   data() {
@@ -279,37 +280,37 @@ export default {
       showPopup: false,
       listTabs: [
         {
-          cate_name: "清风明月",
+          cate_name: '清风明月',
           cate_count: 45,
         },
         {
-          cate_name: "伞",
+          cate_name: '伞',
           cate_count: 32,
         },
         {
-          cate_name: "芭蕾",
+          cate_name: '芭蕾',
           cate_count: 100,
         },
         {
-          cate_name: "身材",
+          cate_name: '身材',
           cate_count: 66,
         },
         {
-          cate_name: "民国风",
+          cate_name: '民国风',
           cate_count: 54,
         },
         {
-          cate_name: "地铁",
+          cate_name: '地铁',
           cate_count: 23,
         },
         {
-          cate_name: "日系",
+          cate_name: '日系',
           cate_count: 88,
         },
       ],
       current: 0,
-      max_backgroundColor: "#232824",
-      card_backgroundColor: "#85afa3",
+      max_backgroundColor: '#232824',
+      card_backgroundColor: '#85afa3',
     };
   },
   methods: {
@@ -328,7 +329,7 @@ export default {
     start(url, src) {
       const currentImage = imageUrl_cover[this.currentImageIndex];
       uni.navigateTo({
-        url: url + "?src=" + currentImage,
+        url: url + '?src=' + currentImage,
       });
     },
     onSwiperChange(currentIndex) {
@@ -338,10 +339,10 @@ export default {
     go_display_pic(image) {
       uni.navigateTo({
         url:
-          "/pages/index/display/index" +
-          "?src=" +
+          '/pages/index/display/index' +
+          '?src=' +
           image.indexSrc +
-          "&images111=" +
+          '&images111=' +
           image.srcs,
       });
     },

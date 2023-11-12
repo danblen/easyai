@@ -5,7 +5,7 @@
         class="item"
         v-for="(item, index) in list"
         :key="index"
-        @click="go('/pages/index/faceswap/index', item.src)"
+        @click="go('/pages/faceswap/index', item.src)"
       >
         <u-lazy-load
           threshold="-450"

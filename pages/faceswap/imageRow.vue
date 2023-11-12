@@ -63,6 +63,7 @@
 import {
   checkTaskStatusByTaskId,
   get_completed_tasks_on_user,
+  getSwapQueueResult
 } from '@/services/api.js';
 import { URL_SD, URL_BACK } from '@/services/app.js';
 // import grid from './grid.vue';
@@ -91,18 +92,18 @@ export default {
       });
     },
 
-    async getImage(taskId) {
+    async getImage(request_id) {
       this.images.push({
         path: '',
         status: 'pending',
-        taskId,
+        request_id,
       });
-      this.timers[taskId] = setInterval(async () => {
-        let res = await checkTaskStatusByTaskId(taskId).catch(() => {
-          clearInterval(this.timers[taskId]);
+      this.timers[request_id] = setInterval(async () => {
+        let res = await getSwapQueueResult({request_id}).catch(() => {
+          clearInterval(this.timers[request_id]);
         });
         if (res.status === 'SUCCESS') {
-          let image = this.images.find((image) => image.taskId === taskId);
+          let image = this.images.find((image) => image.request_id === request_id);
           if (image) {
             image.path = URL_BACK + res.processed_image_url;
             image.status = 'SUCCESS';
@@ -112,10 +113,35 @@ export default {
               status: 'SUCCESS',
             });
           }
-          clearInterval(this.timers[taskId]);
+          clearInterval(this.timers[request_id]);
         }
-      }, 4000);
+      }, 2000);
     },
+    // async getImage(taskId) {
+    //   this.images.push({
+    //     path: '',
+    //     status: 'pending',
+    //     taskId,
+    //   });
+    //   this.timers[taskId] = setInterval(async () => {
+    //     let res = await checkTaskStatusByTaskId(taskId).catch(() => {
+    //       clearInterval(this.timers[taskId]);
+    //     });
+    //     if (res.status === 'SUCCESS') {
+    //       let image = this.images.find((image) => image.taskId === taskId);
+    //       if (image) {
+    //         image.path = URL_BACK + res.processed_image_url;
+    //         image.status = 'SUCCESS';
+    //       } else {
+    //         this.images.push({
+    //           path: URL_BACK + res.processed_image_url,
+    //           status: 'SUCCESS',
+    //         });
+    //       }
+    //       clearInterval(this.timers[taskId]);
+    //     }
+    //   }, 4000);
+    // },
   },
 };
 </script>

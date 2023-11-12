@@ -1,7 +1,10 @@
 <template>
   <div>
-    <image style="width: 100vh; height: 30vh" :src="src" mode="aspectFill">
-    </image>
+    <image
+      style="width: 100vh; height: 30vh"
+      :src="src"
+      mode="aspectFill"
+    ></image>
     <view
       style="
         position: fixed;
@@ -58,7 +61,7 @@
       }"
       :ripple="true"
       shape="circle"
-      @click="start('/pages/index/faceswap/index', currentImageIndex)"
+      @click="start('/pages/faceswap/index', currentImageIndex)"
     >
       开始制作
     </u-button>
@@ -69,36 +72,36 @@
 export default {
   data() {
     return {
-      src: "",
+      src: '',
       images111: [],
       rows: [0, 1, 2, 3, 4],
       cols: [0, 1],
       images_clo: [
-        "/static/image/weibo_pic/清风明月.png",
-        "/static/image/weibo_pic/伞.png",
-        "/static/image/weibo_pic/水中芭蕾.png",
-        "/static/image/weibo_pic/身材.png",
-        "/static/image/weibo_pic/国民风2.png",
-        "/static/image/weibo_pic/地铁.png",
-        "/static/image/weibo_pic/日系.png",
-        "/static/image/weibo_pic/青涩初恋.png",
-        "/static/image/weibo_pic/轻氧少女.png",
-        "/static/image/weibo_pic/青苹果.png",
+        '/static/image/weibo_pic/aaaa.png',
+        '/static/image/weibo_pic/伞.png',
+        '/static/image/weibo_pic/水中芭蕾.png',
+        '/static/image/weibo_pic/身材.png',
+        '/static/image/weibo_pic/国民风2.png',
+        '/static/image/weibo_pic/地铁.png',
+        '/static/image/weibo_pic/日系.png',
+        '/static/image/weibo_pic/青涩初恋.png',
+        '/static/image/weibo_pic/轻氧少女.png',
+        '/static/image/weibo_pic/青苹果.png',
       ],
     };
   },
   onLoad(options) {
     this.src = options.src;
     const images111String = options.images111;
-    this.images111 = images111String.split(",");
-    console.log("src1111:", this.src);
-    console.log("pic1111:", this.images111);
+    this.images111 = images111String.split(',');
+    console.log('src1111:', this.src);
+    console.log('pic1111:', this.images111);
   },
   methods: {
     start(url, src) {
       const currentImage = this.src;
       uni.navigateTo({
-        url: url + "?src=" + currentImage,
+        url: url + '?src=' + currentImage,
       });
     },
     goBack() {
@@ -107,10 +110,10 @@ export default {
       });
     },
     go(url, src) {
-      console.log("url:----", url);
-      console.log("src:----", src);
+      console.log('url:----', url);
+      console.log('src:----', src);
       uni.navigateTo({
-        url: url + "?src=" + src,
+        url: url + '?src=' + src,
       });
     },
   },

@@ -15,16 +15,33 @@
       ]"
     ></u-swiper>
     <div class="steps-container">
-      <step text="1.上传照片" imageSrc="/static/image/weibo_pic/photo_2391@03-06-2023_17-55-35.jpg"></step>
-      <step text="2.选择写真集" imageSrc="/static/image/weibo_pic/photo_2379@02-06-2023_12-45-40.jpg"></step>
-      <step text="3.下载写真集" imageSrc="/static/image/weibo_pic/photo_2394@03-06-2023_17-55-35.jpg"></step>
+      <step
+        text="1.上传照片"
+        imageSrc="/static/image/weibo_pic/photo_2391@03-06-2023_17-55-35.jpg"
+      ></step>
+      <step
+        text="2.选择写真集"
+        imageSrc="/static/image/weibo_pic/photo_2379@02-06-2023_12-45-40.jpg"
+      ></step>
+      <step
+        text="3.下载写真集"
+        imageSrc="/static/image/weibo_pic/photo_2394@03-06-2023_17-55-35.jpg"
+      ></step>
     </div>
     <div v-for="(title, index) in titles" :key="index">
       <view class="icon-container">
-        <image class="icon" style="width: 20px; height: 20px;" src="/static/image/tabbar/hot1.png"></image>
+        <image
+          class="icon"
+          style="width: 20px; height: 20px"
+          src="/static/image/tabbar/hot1.png"
+        ></image>
         <text class="title">{{ title }}</text>
       </view>
-      <scroll-view scroll-x style="width: 100%; padding: 20rpx" class="xsms-scroll">
+      <scroll-view
+        scroll-x
+        style="width: 100%; padding: 20rpx"
+        class="xsms-scroll"
+      >
         <view
           v-for="(image, index) in getImagesByTitle(title)"
           :key="index"
@@ -40,12 +57,12 @@
               margin-right: 20rpx;
               border-radius: 15rpx;
             "
-            @click="go('/pages/index/faceswap/index', image.src)"
+            @click="go('/pages/faceswap/index', image.src)"
           ></image>
         </view>
       </scroll-view>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
@@ -54,7 +71,15 @@ import {
   get_completed_tasks_on_user,
 } from '@/services/api.js';
 import { URL_SD, URL_BACK } from '@/services/app.js';
-import { images0,images1,images2,images3,images4,images5,images6 } from '@/pages/const/url.js';
+import {
+  images0,
+  images1,
+  images2,
+  images3,
+  images4,
+  images5,
+  images6,
+} from '@/pages/const/url.js';
 import step from './step.vue';
 // import grid from './grid.vue';
 export default {
@@ -62,7 +87,15 @@ export default {
   // components: { grid },
   data() {
     return {
-      titles: ["近期热门", "国风", "清风明月", "青花瓷", "慵懒风", "运动少女", "夏日写真"],
+      titles: [
+        '近期热门',
+        '国风',
+        '清风明月',
+        '青花瓷',
+        '慵懒风',
+        '运动少女',
+        '夏日写真',
+      ],
     };
   },
   methods: {
@@ -76,19 +109,19 @@ export default {
     getImagesByTitle() {
       return (title) => {
         switch (title) {
-          case "近期热门":
+          case '近期热门':
             return images0;
-          case "国风":
+          case '国风':
             return images1;
-          case "清风明月":
+          case '清风明月':
             return images2;
-          case "青花瓷":
+          case '青花瓷':
             return images3;
-          case "慵懒风":
+          case '慵懒风':
             return images4;
-          case "运动少女":
+          case '运动少女':
             return images5;
-          case "夏日写真":
+          case '夏日写真':
             return images6;
           default:
             return []; // 默认为空数组
@@ -127,7 +160,7 @@ export default {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  background: #ffffff;/*  */
+  background: #ffffff; /*  */
 }
 </style>
 <style lang="scss" scoped>

@@ -6,7 +6,7 @@
           class="demo-warter"
           v-for="(item, index) in leftList"
           :key="index"
-          @click="go('/pages/index/faceswap/index', item.src)"
+          @click="go('/pages/faceswap/index', item.src)"
         >
           <!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
           <u-lazy-load
@@ -29,7 +29,7 @@
           class="demo-warter"
           v-for="(item, index) in rightList"
           :key="index"
-          @click="go('/pages/index/faceswap/index', item.src)"
+          @click="go('/pages/faceswap/index', item.src)"
         >
           <u-lazy-load
             threshold="-450"
