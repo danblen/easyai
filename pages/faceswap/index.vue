@@ -117,6 +117,7 @@ import {
 import { imageToBase64 } from '@/utils/base64.js';
 import { URL_SD, URL_BACK } from '@/services/app.js';
 import { upload } from '@/pages/common/upload.js';
+import { pathToBase64 } from '@/utils/image-tools.js';
 import tasks from './tasks.vue';
 import imageUpload from './imageUpload.vue';
 import login from '@/pages/comps/login.vue';
@@ -147,6 +148,8 @@ export default {
       saved_id: '',
       srcImage: '',
       targetImage: '',
+      srcBase64: '',
+      tarBase64: '',
       startX: 0,
     };
   },
@@ -198,7 +201,6 @@ export default {
             }
           },
           fail: (error) => {
-            console.log(1231311);
             reject();
           },
         });
@@ -206,7 +208,8 @@ export default {
     },
     async swap1() {
       const data = {
-        init_images: [this.$refs.uploadRef.selectedImageUrl], // Original image address
+        user_id: '123456',
+        init_images: [this.srcBase64], // Original image address
         denoising_strength: 0, // Range 0-1, smaller value closer to original image. Larger value more likely to let imagination fly
         prompt: '',
         negative_prompt: '',
@@ -228,11 +231,11 @@ export default {
             is_img2img: true,
             is_alwayson: true,
             args: [
-              this.srcTempFilePath, //0 File Input
+              this.tarBase64, //0 File Input
               true, //1 Enable Roop
               '0', //2 Comma separated face number(s)
-              '/home/vipuser/' +
-                'stable-diffusion-webui/models/roop/inswapper_128.onnx', //3 Model
+              '/home/vipuser/code/' +
+                'stable_diffusion_webui/models/roop/inswapper_128.onnx', //3 Model
               'CodeFormer', //4 Restore Face: None; CodeFormer; GFPGAN
               1, //5 Restore visibility value
               true, //6 Restore face -> Upscale
@@ -256,10 +259,12 @@ export default {
       let res1 = await swap(data);
     },
     async swap() {
-      // this.srcTempFilePath=this.imageToBase64(this.srcTempFilePath)
-      // this.$refs.uploadRef.selectedImageUrl=this.imageToBase64(this.$refs.uploadRef.selectedImageUrl)
+      this.srcBase64 = await pathToBase64(this.srcTempFilePath);
+      this.tarBase64 = await pathToBase64(
+        this.$refs.uploadRef.selectedImageUrl,
+      );
       this.swap1();
-      return
+      return;
       let that = this;
       const fileSystemManager = uni.getFileSystemManager();
       // 读取文件

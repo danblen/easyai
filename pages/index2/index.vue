@@ -32,6 +32,22 @@
         </div>
       </u-popup>
     </view>
+    <image
+      src="https://danblen.github.io/static/index.jpg"
+      style="
+        object-fit: cover;
+        width: 95%;
+        height: 300px;
+        margin-top: 32px;
+        border-radius: 14px;
+        object-fit: cover;
+        margin-bottom: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+      "
+      mode="aspectFill"
+      @click="go('/pages/faceswap/index', 'https://danblen.github.io/static/index.jpg')"
+    ></image>
     <view :style="{ marginTop: '12px', background: backgroundColor }">
       <swiper
         indicator-dots="true"
@@ -314,6 +330,11 @@ export default {
     };
   },
   methods: {
+    go(url, src) {
+      uni.navigateTo({
+        url: url + '?src=' + src,
+      });
+    },
     change(index) {
       this.current = index;
       if (this.current) {
