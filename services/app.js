@@ -1,5 +1,5 @@
-let http_api_sd = 'http://123.207.62.39:7860';
-let URL_BACK = 'http://175.178.153.125:8000';
+let http_api_sd = 'http://lyg.blockelite.cn:22164';
+let URL_BACK = 'http://lyg.blockelite.cn:22164';
 // let URL_BACK = 'http://192.168.1.5:7592'
 
 module.exports = {

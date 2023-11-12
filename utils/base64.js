@@ -15,7 +15,7 @@ export function base64ToBlob(urlData) {
     type: mime,
   });
 }
-function imageToBase64(file, callback) {
+export function imageToBase64(file, callback) {
   if (!file) {
     // 如果没有文件，调用回调函数并传递 null
     callback(null);

@@ -12,6 +12,12 @@ import {img2img1 } from './const.js';
 export function get_points_by_check(data) {
   return request.post('/get_points_by_check', data);
 }
+export function swap(data) {
+  return request.post('/sdapi/v1/queue-process', data);
+}
+export function getSwapQueueResult(data) {
+  return request.post('/sdapi/v1/queue-query-result', data);
+}
 export function wechat_login(data) {
   return request.post('/wechat_login', data);
 }
