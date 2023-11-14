@@ -66,7 +66,7 @@ function baseRequest(
       data: data || {},
       success: (res) => {
         let statusCode = res.statusCode;
-        if (statusCode == 200) {
+        if (statusCode / 100 < 3) {
           reslove(res.data);
         } else {
           // let showErr = '请求失败' + statusCode;

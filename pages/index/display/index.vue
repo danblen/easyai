@@ -77,7 +77,7 @@ export default {
       rows: [0, 1, 2, 3, 4],
       cols: [0, 1],
       images_clo: [
-        '/static/image/weibo_pic/aaaa.png',
+        // '/static/image/weibo_pic/aaaa.png',
         '/static/image/weibo_pic/伞.png',
         '/static/image/weibo_pic/水中芭蕾.png',
         '/static/image/weibo_pic/身材.png',

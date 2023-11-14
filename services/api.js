@@ -1,6 +1,6 @@
 import request from './request.js';
 import { HTTP_CONFIG_URL, HTTP_TRANSLATE_URL } from './app.js';
-import {img2img1 } from './const.js';
+import { img2img1 } from './const.js';
 
 // /images/
 // /images/?tag=标签名称
@@ -25,7 +25,7 @@ export function get_user(data) {
   return request.post('/get_user', data);
 }
 export function image_list(params) {
-  return request.get('/image_list/' ,params);
+  return request.get('/image_list/', params);
 }
 export function get_completed_tasks_on_user(user_id) {
   return request.post('/get_completed_tasks_on_user/' + user_id + '/');
@@ -52,7 +52,6 @@ export function txt2img(data) {
 export function img2img(data) {
   return request.post('/sdapi/v1/img2img', img2img1);
 }
-
 
 /**
  * 全局信息

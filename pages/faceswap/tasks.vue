@@ -73,10 +73,7 @@
 </template>
 
 <script>
-import {
-  checkTaskStatusByTaskId,
-  get_completed_tasks_on_user,
-} from '@/services/api.js';
+import { getSwapQueueResult } from '@/services/api.js';
 import { URL_SD, URL_BACK } from '@/services/app.js';
 export default {
   data() {
@@ -107,28 +104,38 @@ export default {
       });
     },
 
-    async getImage(taskId) {
+    async getImage(request_id) {
       this.images.push({
         path: '',
         status: 'pending',
-        taskId,
+        request_id,
       });
-      this.timers[taskId] = setInterval(async () => {
-        let res = await checkTaskStatusByTaskId(taskId).catch(() => {
-          clearInterval(this.timers[taskId]);
+      this.timers[request_id] = setInterval(async () => {
+        const request_data = {
+          user_id: '',
+          request_id: request_id,
+          sql_query: {
+            request_status: '',
+            user_id: '',
+          },
+        };
+        let res = await getSwapQueueResult(request_data).catch(() => {
+          clearInterval(this.timers[request_id]);
         });
         if (res.status === 'SUCCESS') {
-          let image = this.images.find((image) => image.taskId === taskId);
+          let image = this.images.find(
+            (image) => image.request_id === request_id,
+          );
           if (image) {
-            image.path = URL_BACK + res.processed_image_url;
+            image.path = 'data:image/png;base64,' + res.result.images[0];
             image.status = 'SUCCESS';
           } else {
             this.images.push({
-              path: URL_BACK + res.processed_image_url,
+              path: 'data:image/png;base64,' + res.result.images[0],
               status: 'SUCCESS',
             });
           }
-          clearInterval(this.timers[taskId]);
+          clearInterval(this.timers[request_id]);
         }
       }, 4000);
     },
