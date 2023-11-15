@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { swap } from '@/services/api.js';
+import { faceSwap } from '@/services/api.js';
 import { upload } from '@/pages/common/upload.js';
 import { pathToBase64 } from '@/utils/image-tools.js';
 import tasks from './tasks.vue';
@@ -145,7 +145,6 @@ export default {
   },
   onLoad(options) {
     this.src = options.src;
-    console.log(12313, this.src);
     this.downloadImages(this.src);
     this.outputImages = [];
   },
@@ -205,9 +204,7 @@ export default {
       );
       data.init_images = [this.srcBase64];
       data.alwayson_scripts.roop.args[0] = this.tarBase64;
-      console.log(3324);
-      let res1 = await swap(data);
-      console.log(12313, res1);
+      let res1 = await faceSwap(data);
       if (res1.status === 'pending') {
         this.$refs.imageRowRef.getImage(res1.request_id);
       } else {

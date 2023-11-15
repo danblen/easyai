@@ -3,7 +3,7 @@
     <!-- <u-swiper :list="swipers"></u-swiper> -->
 
     <view style="background: linear-gradient(to bottom, #ebf4f8, #f8fafa)">
-      <banner />
+      <!-- <banner /> -->
       <u-sticky>
         <u-tabs
           activeColor="#555"
@@ -51,7 +51,6 @@ export default {
   methods: {
     change(index) {
       this.current = index;
-      console.log(tags[this.current]);
       this.getData();
     },
     getData() {

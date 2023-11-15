@@ -6,6 +6,14 @@
   //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
   "pages": [
     {
+      "path": "pages/index/index",
+      "style": {
+        // "navigationBarBackgroundColor": "#C12928",
+        "disableScroll": false
+        // "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/index2/index",
       "style": {
         // "navigationBarBackgroundColor": "#C12928",
@@ -19,14 +27,6 @@
         // "navigationBarBackgroundColor": "#C12928",
         "disableScroll": false,
         "navigationStyle": "custom"
-      }
-    },
-    {
-      "path": "pages/index/index",
-      "style": {
-        // "navigationBarBackgroundColor": "#C12928",
-        "disableScroll": false
-        // "navigationStyle": "custom"
       }
     },
     {
@@ -116,17 +116,17 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/index2/index",
+        "pagePath": "pages/index/index",
         "iconPath": "./static/image/tabbar/home7.png",
         "selectedIconPath": "./static/image/tabbar/home6.png",
         "text": "首页"
       },
-      {
-        "pagePath": "pages/vip/index",
-        "iconPath": "./static/image/tabbar/home7.png",
-        "selectedIconPath": "./static/image/tabbar/home6.png",
-        "text": "会员"
-      },
+      // {
+      //   "pagePath": "pages/vip/index",
+      //   "iconPath": "./static/image/tabbar/home7.png",
+      //   "selectedIconPath": "./static/image/tabbar/home6.png",
+      //   "text": "会员"
+      // },
       // {
       //   "pagePath": "pages/index/index",
       //   "iconPath": "./static/image/tabbar/hot1.png",
@@ -135,8 +135,8 @@
       // },
       {
         "pagePath": "pages/refine/index",
-        "iconPath": "./static/image/tabbar/home7.png",
-        "selectedIconPath": "./static/image/tabbar/home6.png",
+        "iconPath": "./static/image/tabbar/hot1.png",
+        "selectedIconPath": "./static/image/tabbar/hot.png",
         "text": "修图"
       },
       {
