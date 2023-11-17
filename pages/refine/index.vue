@@ -23,10 +23,10 @@
       <!-- 弹窗选择画质 -->
       <view class="custom-popup">
         <text class="popup-title">选择分辨率</text>
-        <view class="resolution-option" @click="selectResolution(1920, 1080)">
+        <view class="resolution-option" @click="sdWith2KParams">
           HD高清画质
         </view>
-        <view class="resolution-option" @click="selectResolution(1280, 720)">
+        <view class="resolution-option" @click="sdWith4KParams">
           HD+超清画质
         </view>
       </view>
@@ -41,12 +41,16 @@
       @change="change"
     ></u-tabs>
     <view v-if="current === 0">
-      <u-button style="width: 200rpx" @click="swap">换脸</u-button>
+      <u-button style="width: 200rpx" @click="sdWithSwapDetailParams"
+        >换脸</u-button
+      >
     </view>
     <view v-if="current === 1">
       <u-button style="width: 200rpx" @click="showResolutionPopup">
         选择分辨率
       </u-button>
+    </view>
+    <view v-if="current === 2">
       <div class="collapsible-content">
         清风明月
         <!-- 滑动条控制笔画大小 -->
@@ -87,19 +91,23 @@
         ></image>
       </div>
     </view>
-    <view v-if="current === 2">
+    <view v-if="current === 3">
       <u-button style="width: 200rpx" @click="toggleCollapse">xx</u-button>
     </view>
   </view>
 </template>
 
 <script>
-import * as constUrl from '@/pages/const/url.js';
-import { faceSwap, getSwapQueueResult } from '@/services/api.js';
-import { pathToBase64 } from '@/utils/image-tools.js';
-import { data } from './const';
-import UButton from '../../components/uview-ui/components/u-button/u-button.vue';
-import UActionSheet from '../../components/uview-ui/components/u-action-sheet/u-action-sheet.vue';
+import * as constUrl from "@/pages/const/url.js";
+import { faceSwap, getSwapQueueResult } from "@/services/api.js";
+import { pathToBase64 } from "@/utils/image-tools.js";
+import {
+  swap_face_data,
+  swap_face_and_add_detail_data,
+  scale_data,
+} from "./const";
+import UButton from "../../components/uview-ui/components/u-button/u-button.vue";
+import UActionSheet from "../../components/uview-ui/components/u-action-sheet/u-action-sheet.vue";
 
 export default {
   components: { UButton },
@@ -127,17 +135,20 @@ export default {
       roopTempFilePath: `/pages/refine/index.jpg`,
       // roopTempFilePath: `${constUrl.imageUrl_cover[1]}`,
       showModel: true,
-      genImagePath: '',
-      timer: '',
+      genImagePath: "",
+      timer: "",
       list: [
         {
-          name: '换脸',
+          name: "换脸",
         },
         {
-          name: '超分',
+          name: "超分",
         },
         {
-          name: '待评价',
+          name: "局部重绘",
+        },
+        {
+          name: "待评价",
         },
       ],
       current: 0,
@@ -155,47 +166,89 @@ export default {
     change(index) {
       this.current = index;
     },
-    async swap() {
+    async sdWithSwapParams() {
+      const data = swap_face_data;
+      data.alwayson_scripts.roop.args[0] = await pathToBase64(
+        "/static/image/index.jpg"
+      );
+      console.log("roop file path:", data.alwayson_scripts.roop);
+      this.requestSdTransform(data);
+    },
+    async sdWithSwapDetailParams() {
+      const data = swap_face_and_add_detail_data;
+      // 细节:Range[0~1]
+      data.alwayson_scripts.ADetailer.args[1].ad_denoising_strength = 0.4;
+      data.alwayson_scripts.roop.args[0] = await pathToBase64(
+        "/static/image/index.jpg"
+      );
+      console.log("roop file path:", data.alwayson_scripts.roop);
+      this.requestSdTransform(data);
+    },
+    async sdWith2KParams() {
+      const data = scale_data;
+      const scaleFactor = 1.5;
+      // ad_denoising_strength:Range[0-1],
+      data.denoising_strength = 0.4;
+      data.script_args[data.script_args.length - 1] = scaleFactor;
+      this.popupVisible = false;
+      uni.showToast({
+        title: "图像处理中...",
+        icon: "none",
+        duration: 1000,
+      });
+      this.requestSdTransform(data);
+    },
+    async sdWith4KParams() {
+      const data = scale_data;
+      const scaleFactor = 2;
+      // denoising_strength:Range[0-1],
+      data.denoising_strength = 0.4;
+      data.script_args[data.script_args.length - 1] = scaleFactor;
+      this.popupVisible = false;
+      uni.showToast({
+        title: "图像处理中...",
+        icon: "none",
+        duration: 1000, // ms
+      });
+      this.requestSdTransform(data);
+    },
+    async requestSdTransform(data) {
       try {
-        // 打印路径信息，用于调试
-
-        console.log('srcTempFilePath:', this.srcTempFilePath);
-        console.log('roopTempFilePath:', this.roopTempFilePath);
-
-        // 尝试读取并转换为 base64
-        this.srcBase64 = await pathToBase64('/static/image/index.jpg');
-        this.tarBase64 = await pathToBase64('/static/image/index.jpg');
-        // this.srcBase64 = await pathToBase64(this.srcTempFilePath);
-        // this.tarBase64 = await pathToBase64(this.roopTempFilePath);
-
+        console.log("srcTempFilePath:", this.srcTempFilePath);
+        this.srcBase64 = await pathToBase64("/static/image/index.jpg");
         data.init_images = [this.srcBase64];
-        data.alwayson_scripts.roop.args[0] = this.tarBase64;
-        console.log(3324);
-        let res1 = await faceSwap(data);
-        console.log(12313, res1);
-
-        this.timers[res1.request_id] = setInterval(async () => {
+        // data.user_id = "唯一的用户ID";
+        console.log("start convert");
+        const startTime = performance.now();
+        let result = await faceSwap(data);
+        console.log("complete convert", performance.now() - startTime, "ms");
+        this.timers[result.request_id] = setInterval(async () => {
           const request_data = {
-            user_id: '',
-            request_id: res1.request_id,
+            user_id: "",
+            request_id: result.request_id,
             sql_query: {
-              request_status: '',
-              user_id: '',
+              request_status: "",
+              user_id: "",
             },
           };
           let res = await getSwapQueueResult(request_data).catch(() => {
             clearInterval(this.timers[request_id]);
           });
-          if (res.status === 'finishing') {
-            this.genImagePath = 'data:image/png;base64,' + res.result.images[0];
-            console.log('genImagePath:', this.genImagePath);
+          if (res.status === "finishing") {
+            console.log(
+              "complete convert",
+              performance.now() - startTime,
+              "ms"
+            );
+            this.genImagePath = "data:image/png;base64," + res.result.images[0];
+            // console.log("genImagePath:", this.genImagePath);
             this.curImage = this.genImagePath;
-            clearInterval(this.timers[res1.request_id]);
+            clearInterval(this.timers[result.request_id]);
           }
         }, 4000);
       } catch (error) {
         // 错误处理：在控制台打印错误信息
-        console.error('Error in swap method:', error);
+        console.error("Error in swap method:", error);
       }
     },
     //局部重绘：可以涂抹图片、显示擦除按键、显示画笔大小滑动条
@@ -204,26 +257,26 @@ export default {
       this.canUseCompare = false;
       if (this.isExpanded) {
         uni.showToast({
-          title: '涂抹你想重绘的区域~',
-          icon: 'none', // 可以根据需要选择不同的图标
+          title: "涂抹你想重绘的区域~",
+          icon: "none", // 可以根据需要选择不同的图标
           duration: 2000, // 错误消息显示时间（以毫秒为单位）
         });
 
-        this.context = uni.createCanvasContext('myCanvas', this);
-        this.context.setFillStyle('transparent');
+        this.context = uni.createCanvasContext("myCanvas", this);
+        this.context.setFillStyle("transparent");
 
         uni
           .createSelectorQuery()
-          .select('.background-image')
+          .select(".background-image")
           .fields({ size: true }, (res) => {
             if (res.width && res.height) {
-              console.log('res. w/h:', res.width, res.height);
+              console.log("res. w/h:", res.width, res.height);
               this.canvasWidth = res.width;
               this.canvasHeight = res.height;
             }
           })
           .exec();
-        console.log('w/h:', this.canvasWidth, this.canvasHeight);
+        console.log("w/h:", this.canvasWidth, this.canvasHeight);
         this.context.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
         this.context.draw(true);
       } else {
@@ -241,8 +294,8 @@ export default {
       if (this.isExpanded) {
         if (this.drawing) {
           uni.showToast({
-            title: '图像重绘中...',
-            icon: 'none', // 可以根据需要选择不同的图标
+            title: "图像重绘中...",
+            icon: "none", // 可以根据需要选择不同的图标
             duration: 1000, // 错误消息显示时间（以毫秒为单位）
           });
           //这里调用SD局部重绘功能:
@@ -250,7 +303,7 @@ export default {
 
           // debug功能：可以预览蒙版图像
           uni.canvasToTempFilePath({
-            canvasId: 'myCanvas',
+            canvasId: "myCanvas",
             success: (res) => {
               const tempFilePath = res.tempFilePath;
               uni.previewImage({
@@ -263,8 +316,8 @@ export default {
           });
 
           uni.showToast({
-            title: '图像重绘完成',
-            icon: 'none', // 可以根据需要选择不同的图标
+            title: "图像重绘完成",
+            icon: "none", // 可以根据需要选择不同的图标
             duration: 1000, // 错误消息显示时间（以毫秒为单位）
           });
 
@@ -276,23 +329,12 @@ export default {
           this.canUseCompare = true;
         } else {
           uni.showToast({
-            title: '涂抹你想重绘的区域~',
-            icon: 'none', // 可以根据需要选择不同的图标
+            title: "涂抹你想重绘的区域~",
+            icon: "none", // 可以根据需要选择不同的图标
             duration: 1000, // 错误消息显示时间（以毫秒为单位）
           });
         }
       }
-    },
-    selectResolution(width, height) {
-      this.selectedResolution = { width, height };
-      this.popupVisible = false;
-      console.log('select w/h:', width, height);
-      uni.showToast({
-        title: '图像处理中...',
-        icon: 'none', // 可以根据需要选择不同的图标
-        duration: 2000, // 错误消息显示时间（以毫秒为单位）
-      });
-      // 可以在这里执行其他操作，如后端更新分辨率等
     },
     touchStart(e) {
       if (e.touches.length === 2) {
@@ -302,7 +344,7 @@ export default {
         const x2 = e.touches[1].x;
         const y2 = e.touches[1].y;
         this.initialDistance = Math.sqrt(
-          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2),
+          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
         );
       }
       if (
@@ -313,7 +355,7 @@ export default {
         this.context.setLineWidth(this.sliderValue);
         this.context.beginPath();
         this.context.arc(x, y, this.sliderValue / 2, 0, 2 * Math.PI);
-        this.context.setFillStyle('white');
+        this.context.setFillStyle("black");
         this.context.fill();
         this.context.draw(true);
         this.lastX = x;
@@ -329,7 +371,7 @@ export default {
         const x2 = e.touches[1].x;
         const y2 = e.touches[1].y;
         this.currentDistance = Math.sqrt(
-          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2),
+          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
         );
 
         // 计算缩放比例
@@ -345,14 +387,14 @@ export default {
       ) {
         const { x, y } = e.touches[0];
         this.context.setLineWidth(this.sliderValue);
-        this.context.setStrokeStyle('white');
+        this.context.setStrokeStyle("white");
         this.context.beginPath();
         this.context.moveTo(this.lastX, this.lastY);
         this.context.quadraticCurveTo(
           (this.lastX + x) / 2,
           (this.lastY + y) / 2,
           x,
-          y,
+          y
         );
         this.context.stroke();
         this.context.draw(true);
@@ -393,12 +435,12 @@ export default {
 </script>
 
 <style scoped>
-/* .custom-popup {
-  background-color: #ffffff; 
-  border-radius: 10px;  
-  padding: 20px;  
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);  
-  text-align: center;  
+.custom-popup {
+  background-color: #b32d2d;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -406,14 +448,14 @@ export default {
   min-height: 150px;
 }
 .popup-title {
-  font-size: 20px;  
-  font-weight: bold;  
+  font-size: 20px;
+  font-weight: bold;
 }
 .resolution-option {
   font-size: 15px;
   text-align: center;
-  margin-top: 30px; 
-  cursor: pointer; 
+  margin-top: 30px;
+  cursor: pointer;
 }
 .collapsible {
   margin: 10px;
@@ -469,9 +511,9 @@ export default {
   top: 675px;
 }
 .gray-icon {
-  filter: grayscale(100%); 
+  filter: grayscale(100%);
 }
 .colored-icon {
-  filter: none;  
-} */
+  filter: none;
+}
 </style>
