@@ -122,7 +122,7 @@ export default {
         let res = await getSwapQueueResult(request_data).catch(() => {
           clearInterval(this.timers[request_id]);
         });
-        if (res.status === 'SUCCESS') {
+        if (res.status === 'finishing') {
           let image = this.images.find(
             (image) => image.request_id === request_id,
           );
