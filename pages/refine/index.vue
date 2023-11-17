@@ -23,6 +23,15 @@
             @click="clearCanvas"
           ></image>
 
+          <u-popup
+            v-model="showModel"
+            mode="right"
+            width="600"
+            style="background: black"
+          >
+            <tasks ref="imageRowRef" class="image-row" />
+          </u-popup>
+
           <!-- 图像比较按键 -->
           <image
             :class="{
@@ -76,6 +85,11 @@
       <image
         class="icon"
         src="@/static/image/mall/pay/icon_pay_weixin.png"
+        @click="swap"
+      ></image>
+      <image
+        class="icon"
+        src="@/static/image/mall/pay/icon_pay_weixin.png"
         @click="showResolutionPopup"
       ></image>
       <image
@@ -89,15 +103,20 @@
 
 <script>
 import * as constUrl from "@/pages/const/url.js";
+import { swap } from "@/services/api.js";
+import { pathToBase64 } from "@/utils/image-tools.js";
+import { data } from "./const";
+import tasks from "./tasks.vue";
 
 export default {
+  components: { tasks },
   data() {
     return {
       popupVisible: false,
       popupPosition: "bottom",
       context: null,
       //改成当前需要修图的图片
-      curImage: `../..${constUrl.imageUrl_cover[0]}`,
+      curImage: `${constUrl.imageUrl_cover[1]}`,
       canvasWidth: 0,
       canvasHeight: 0,
       drawing: false,
@@ -110,9 +129,42 @@ export default {
       currentDistance: 0, // 当前两个手指的距离
       scale: 1, // 图片的缩放比例
       canUseCompare: false,
+      srcTempFilePath: `${constUrl.imageUrl_cover[1]}`,
+      roopTempFilePath: `${constUrl.imageUrl_cover[1]}`,
+      showModel: true,
     };
   },
   methods: {
+    async swap() {
+      try {
+        // 打印路径信息，用于调试
+
+        console.log("srcTempFilePath:", this.srcTempFilePath);
+        console.log("roopTempFilePath:", this.roopTempFilePath);
+
+        // 尝试读取并转换为 base64
+        this.srcBase64 = await pathToBase64(this.srcTempFilePath);
+        this.tarBase64 = await pathToBase64(this.roopTempFilePath);
+
+        data.init_images = [this.srcBase64];
+        // data.alwayson_scripts.roop.args[0] = this.tarBase64;
+        console.log(3324);
+        let res1 = await swap(data);
+        console.log(12313, res1);
+        if (res1.status === "pending") {
+          this.$refs.imageRowRef.getImage(res1.request_id);
+        } else {
+          uni.showToast({
+            title: res1.error_message,
+            icon: "none",
+          });
+        }
+        return;
+      } catch (error) {
+        // 错误处理：在控制台打印错误信息
+        console.error("Error in swap method:", error);
+      }
+    },
     //局部重绘：可以涂抹图片、显示擦除按键、显示画笔大小滑动条
     toggleCollapse() {
       this.isExpanded = !this.isExpanded; // 切换折叠状态
