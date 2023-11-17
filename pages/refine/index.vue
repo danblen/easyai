@@ -70,23 +70,31 @@
       <!-- 弹窗选择画质 -->
       <view class="custom-popup">
         <text class="popup-title">选择分辨率</text>
-        <view class="resolution-option" @click="selectResolution(1920, 1080)"
-          >HD高清画质</view
-        >
-        <view class="resolution-option" @click="selectResolution(1280, 720)"
-          >HD+超清画质</view
-        >
+        <view class="resolution-option" @click="selectResolution(1920, 1080)">
+          HD高清画质
+        </view>
+        <view class="resolution-option" @click="selectResolution(1280, 720)">
+          HD+超清画质
+        </view>
       </view>
     </u-popup>
     <!-- 功能按键：1、显示可选分辨率(调用SD接口) 
       2、局部重绘（涂抹图片区域重绘） 
       3、显示/隐藏笔画工具（笔画大小/清屏） -->
+    <u-tabs
+      :list="list"
+      :is-scroll="false"
+      :current="current"
+      @change="change"
+    ></u-tabs>
     <view class="icon-container">
-      <image
+      <u-button
         class="icon"
         src="@/static/image/mall/pay/icon_pay_weixin.png"
         @click="swap"
-      ></image>
+      >
+        换脸
+      </u-button>
       <image
         class="icon"
         src="@/static/image/mall/pay/icon_pay_weixin.png"
@@ -102,18 +110,18 @@
 </template>
 
 <script>
-import * as constUrl from "@/pages/const/url.js";
-import { swap } from "@/services/api.js";
-import { pathToBase64 } from "@/utils/image-tools.js";
-import { data } from "./const";
-import tasks from "./tasks.vue";
+import * as constUrl from '@/pages/const/url.js';
+import { faceSwap, getSwapQueueResult } from '@/services/api.js';
+import { pathToBase64 } from '@/utils/image-tools.js';
+import { data } from './const';
+import tasks from './tasks.vue';
 
 export default {
   components: { tasks },
   data() {
     return {
       popupVisible: false,
-      popupPosition: "bottom",
+      popupPosition: 'bottom',
       context: null,
       //改成当前需要修图的图片
       curImage: `${constUrl.imageUrl_cover[1]}`,
@@ -129,40 +137,77 @@ export default {
       currentDistance: 0, // 当前两个手指的距离
       scale: 1, // 图片的缩放比例
       canUseCompare: false,
-      srcTempFilePath: `${constUrl.imageUrl_cover[1]}`,
-      roopTempFilePath: `${constUrl.imageUrl_cover[1]}`,
+      srcTempFilePath: `/pages/refine/index.jpg`,
+      // srcTempFilePath: `${constUrl.imageUrl_cover[1]}`,
+      roopTempFilePath: `/pages/refine/index.jpg`,
+      // roopTempFilePath: `${constUrl.imageUrl_cover[1]}`,
       showModel: true,
+      genImagePath: '',
+      timer: '',
+      list: [
+        {
+          name: '换脸',
+        },
+        {
+          name: '超分',
+        },
+        {
+          name: '待评价',
+        },
+      ],
+      current: 0,
     };
+  },
+  unMounted() {
+    clearInterval(this.timer);
+  },
+  onUnload() {
+    Object.values(this.timers).forEach((timer) => {
+      clearInterval(timer);
+    });
   },
   methods: {
     async swap() {
       try {
         // 打印路径信息，用于调试
 
-        console.log("srcTempFilePath:", this.srcTempFilePath);
-        console.log("roopTempFilePath:", this.roopTempFilePath);
+        console.log('srcTempFilePath:', this.srcTempFilePath);
+        console.log('roopTempFilePath:', this.roopTempFilePath);
 
         // 尝试读取并转换为 base64
-        this.srcBase64 = await pathToBase64(this.srcTempFilePath);
-        this.tarBase64 = await pathToBase64(this.roopTempFilePath);
+        this.srcBase64 = await pathToBase64('/static/image/index.jpg');
+        this.tarBase64 = await pathToBase64('/static/image/index.jpg');
+        // this.srcBase64 = await pathToBase64(this.srcTempFilePath);
+        // this.tarBase64 = await pathToBase64(this.roopTempFilePath);
 
         data.init_images = [this.srcBase64];
-        // data.alwayson_scripts.roop.args[0] = this.tarBase64;
+        data.alwayson_scripts.roop.args[0] = this.tarBase64;
         console.log(3324);
-        let res1 = await swap(data);
+        let res1 = await faceSwap(data);
         console.log(12313, res1);
-        if (res1.status === "pending") {
-          this.$refs.imageRowRef.getImage(res1.request_id);
-        } else {
-          uni.showToast({
-            title: res1.error_message,
-            icon: "none",
+
+        this.timers[res1.request_id] = setInterval(async () => {
+          const request_data = {
+            user_id: '',
+            request_id: res1.request_id,
+            sql_query: {
+              request_status: '',
+              user_id: '',
+            },
+          };
+          let res = await getSwapQueueResult(request_data).catch(() => {
+            clearInterval(this.timers[request_id]);
           });
-        }
-        return;
+          if (res.status === 'finishing') {
+            this.genImagePath = 'data:image/png;base64,' + res.result.images[0];
+            console.log('genImagePath:', this.genImagePath);
+            this.curImage = this.genImagePath;
+            clearInterval(this.timers[res1.request_id]);
+          }
+        }, 4000);
       } catch (error) {
         // 错误处理：在控制台打印错误信息
-        console.error("Error in swap method:", error);
+        console.error('Error in swap method:', error);
       }
     },
     //局部重绘：可以涂抹图片、显示擦除按键、显示画笔大小滑动条
@@ -171,26 +216,26 @@ export default {
       this.canUseCompare = false;
       if (this.isExpanded) {
         uni.showToast({
-          title: "涂抹你想重绘的区域~",
-          icon: "none", // 可以根据需要选择不同的图标
+          title: '涂抹你想重绘的区域~',
+          icon: 'none', // 可以根据需要选择不同的图标
           duration: 2000, // 错误消息显示时间（以毫秒为单位）
         });
 
-        this.context = uni.createCanvasContext("myCanvas", this);
-        this.context.setFillStyle("transparent");
+        this.context = uni.createCanvasContext('myCanvas', this);
+        this.context.setFillStyle('transparent');
 
         uni
           .createSelectorQuery()
-          .select(".background-image")
+          .select('.background-image')
           .fields({ size: true }, (res) => {
             if (res.width && res.height) {
-              console.log("res. w/h:", res.width, res.height);
+              console.log('res. w/h:', res.width, res.height);
               this.canvasWidth = res.width;
               this.canvasHeight = res.height;
             }
           })
           .exec();
-        console.log("w/h:", this.canvasWidth, this.canvasHeight);
+        console.log('w/h:', this.canvasWidth, this.canvasHeight);
         this.context.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
         this.context.draw(true);
       } else {
@@ -208,8 +253,8 @@ export default {
       if (this.isExpanded) {
         if (this.drawing) {
           uni.showToast({
-            title: "图像重绘中...",
-            icon: "none", // 可以根据需要选择不同的图标
+            title: '图像重绘中...',
+            icon: 'none', // 可以根据需要选择不同的图标
             duration: 1000, // 错误消息显示时间（以毫秒为单位）
           });
           //这里调用SD局部重绘功能:
@@ -217,7 +262,7 @@ export default {
 
           // debug功能：可以预览蒙版图像
           uni.canvasToTempFilePath({
-            canvasId: "myCanvas",
+            canvasId: 'myCanvas',
             success: (res) => {
               const tempFilePath = res.tempFilePath;
               uni.previewImage({
@@ -230,8 +275,8 @@ export default {
           });
 
           uni.showToast({
-            title: "图像重绘完成",
-            icon: "none", // 可以根据需要选择不同的图标
+            title: '图像重绘完成',
+            icon: 'none', // 可以根据需要选择不同的图标
             duration: 1000, // 错误消息显示时间（以毫秒为单位）
           });
 
@@ -243,8 +288,8 @@ export default {
           this.canUseCompare = true;
         } else {
           uni.showToast({
-            title: "涂抹你想重绘的区域~",
-            icon: "none", // 可以根据需要选择不同的图标
+            title: '涂抹你想重绘的区域~',
+            icon: 'none', // 可以根据需要选择不同的图标
             duration: 1000, // 错误消息显示时间（以毫秒为单位）
           });
         }
@@ -253,10 +298,10 @@ export default {
     selectResolution(width, height) {
       this.selectedResolution = { width, height };
       this.popupVisible = false;
-      console.log("select w/h:", width, height);
+      console.log('select w/h:', width, height);
       uni.showToast({
-        title: "图像处理中...",
-        icon: "none", // 可以根据需要选择不同的图标
+        title: '图像处理中...',
+        icon: 'none', // 可以根据需要选择不同的图标
         duration: 2000, // 错误消息显示时间（以毫秒为单位）
       });
       // 可以在这里执行其他操作，如后端更新分辨率等
@@ -269,7 +314,7 @@ export default {
         const x2 = e.touches[1].x;
         const y2 = e.touches[1].y;
         this.initialDistance = Math.sqrt(
-          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
+          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2),
         );
       }
       if (
@@ -280,7 +325,7 @@ export default {
         this.context.setLineWidth(this.sliderValue);
         this.context.beginPath();
         this.context.arc(x, y, this.sliderValue / 2, 0, 2 * Math.PI);
-        this.context.setFillStyle("white");
+        this.context.setFillStyle('white');
         this.context.fill();
         this.context.draw(true);
         this.lastX = x;
@@ -296,7 +341,7 @@ export default {
         const x2 = e.touches[1].x;
         const y2 = e.touches[1].y;
         this.currentDistance = Math.sqrt(
-          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
+          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2),
         );
 
         // 计算缩放比例
@@ -312,14 +357,14 @@ export default {
       ) {
         const { x, y } = e.touches[0];
         this.context.setLineWidth(this.sliderValue);
-        this.context.setStrokeStyle("white");
+        this.context.setStrokeStyle('white');
         this.context.beginPath();
         this.context.moveTo(this.lastX, this.lastY);
         this.context.quadraticCurveTo(
           (this.lastX + x) / 2,
           (this.lastY + y) / 2,
           x,
-          y
+          y,
         );
         this.context.stroke();
         this.context.draw(true);
@@ -384,8 +429,8 @@ export default {
 }
 .collapsible {
   margin: 10px;
-  overflow: hidden;
-  z-index: 9999;
+  /* overflow: hidden; */
+  /* z-index: 9999; */
 }
 .collapsible .collapsible-header {
   background-color: #db5151;
