@@ -55,6 +55,9 @@ export default {
       //console.log(img);
     },
     async getData(params) {
+      this.list = [
+        { src: '/static/image/index.jpg' },
+      ];
       let res = await image_list(params);
       this.list = res.image_urls.map((url) => {
         return {

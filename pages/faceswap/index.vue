@@ -145,7 +145,7 @@ export default {
   },
   onLoad(options) {
     this.src = options.src;
-    this.downloadImages(this.src);
+    // this.downloadImages(this.src);
     this.outputImages = [];
   },
   unMounted() {
@@ -198,7 +198,7 @@ export default {
     },
 
     async swap() {
-      this.srcBase64 = await pathToBase64(this.srcTempFilePath);
+      this.srcBase64 = await pathToBase64(this.src);
       this.tarBase64 = await pathToBase64(
         this.$refs.uploadRef.selectedImageUrl,
       );

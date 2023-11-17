@@ -1,5 +1,5 @@
-let http_api_sd = 'http://lyg.blockelite.cn:22164';
-let URL_BACK = 'http://lyg.blockelite.cn:22164';
+let http_api_sd = 'https://facei.top';
+let URL_BACK = 'https://facei.top';
 // let URL_BACK = 'http://192.168.1.5:7592'
 
 module.exports = {
