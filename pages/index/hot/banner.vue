@@ -15,7 +15,7 @@
       ]"
     ></u-swiper>
     <div class="steps-container">
-      <step
+      <!-- <step
         text="1.上传照片"
         imageSrc="/static/image/weibo_pic/photo_2391@03-06-2023_17-55-35.jpg"
       ></step>
@@ -26,7 +26,7 @@
       <step
         text="3.下载写真集"
         imageSrc="/static/image/weibo_pic/photo_2394@03-06-2023_17-55-35.jpg"
-      ></step>
+      ></step> -->
     </div>
     <div v-for="(title, index) in titles" :key="index">
       <view class="icon-container">
