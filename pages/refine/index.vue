@@ -1,66 +1,19 @@
 <template>
   <view>
-    <div class="container">
-      <div class="collapsible" :class="{ open: isExpanded }">
-        <div class="collapsible-content">
-          清风明月
-          <!-- 滑动条控制笔画大小 -->
-          <u-slider
-            v-model="sliderValue"
-            :min="2"
-            :max="20"
-            :step="1"
-            :block-width="20"
-            :height="20"
-            inactive-color="#c0c4cc"
-            block-color="#ffffff"
-          ></u-slider>
+    <!-- 需要修的图 -->
+    <u-image
+      style="width: 100%; vertical-align: middle"
+      :src="curImage"
+      mode="widthFix"
+    />
 
-          <!-- 清屏按键 -->
-          <image
-            style="width: 40px; height: 40px"
-            src="@/static/image/mall/pay/icon_pay_weixin.png"
-            @click="clearCanvas"
-          ></image>
+    <canvas
+      :style="'width: ' + canvasWidth + 'px; height: ' + canvasHeight + 'px'"
+      canvas-id="myCanvas"
+      @touchstart="touchStart"
+      @touchmove="touchMove"
+    ></canvas>
 
-          <u-popup
-            v-model="showModel"
-            mode="right"
-            width="600"
-            style="background: black"
-          >
-            <tasks ref="imageRowRef" class="image-row" />
-          </u-popup>
-
-          <!-- 图像比较按键 -->
-          <image
-            :class="{
-              'gray-icon': !canUseCompare,
-              'colored-icon': canUseCompare,
-            }"
-            style="width: 40px; height: 40px"
-            src="@/static/image/mall/pay/icon_pay_weixin.png"
-            @click="comparePictrue"
-          ></image>
-
-          <!-- 开始重绘按键 -->
-          <image
-            style="width: 40px; height: 40px"
-            src="@/static/image/mall/pay/icon_pay_weixin.png"
-            @click="inpaitUseSD"
-          ></image>
-        </div>
-      </div>
-      <!-- 需要修的图 -->
-      <image class="background-image" :src="curImage"></image>
-
-      <canvas
-        :style="'width: ' + canvasWidth + 'px; height: ' + canvasHeight + 'px'"
-        canvas-id="myCanvas"
-        @touchstart="touchStart"
-        @touchmove="touchMove"
-      ></canvas>
-    </div>
     <u-popup
       v-model="popupVisible"
       :position="popupPosition"
@@ -87,24 +40,55 @@
       :current="current"
       @change="change"
     ></u-tabs>
-    <view class="icon-container">
-      <u-button
-        class="icon"
-        src="@/static/image/mall/pay/icon_pay_weixin.png"
-        @click="swap"
-      >
-        换脸
+    <view v-if="current === 0">
+      <u-button style="width: 200rpx" @click="swap">换脸</u-button>
+    </view>
+    <view v-if="current === 1">
+      <u-button style="width: 200rpx" @click="showResolutionPopup">
+        选择分辨率
       </u-button>
-      <image
-        class="icon"
-        src="@/static/image/mall/pay/icon_pay_weixin.png"
-        @click="showResolutionPopup"
-      ></image>
-      <image
-        class="icon"
-        src="@/static/image/mall/pay/icon_pay_weixin.png"
-        @click="toggleCollapse"
-      ></image>
+      <div class="collapsible-content">
+        清风明月
+        <!-- 滑动条控制笔画大小 -->
+        <u-slider
+          v-model="sliderValue"
+          :min="2"
+          :max="20"
+          :step="1"
+          :block-width="20"
+          :height="20"
+          inactive-color="#c0c4cc"
+          block-color="#ffffff"
+        ></u-slider>
+
+        <!-- 清屏按键 -->
+        <image
+          style="width: 40px; height: 40px"
+          src="@/static/image/mall/pay/icon_pay_weixin.png"
+          @click="clearCanvas"
+        ></image>
+
+        <!-- 图像比较按键 -->
+        <image
+          :class="{
+            'gray-icon': !canUseCompare,
+            'colored-icon': canUseCompare,
+          }"
+          style="width: 40px; height: 40px"
+          src="@/static/image/mall/pay/icon_pay_weixin.png"
+          @click="comparePictrue"
+        ></image>
+
+        <!-- 开始重绘按键 -->
+        <image
+          style="width: 40px; height: 40px"
+          src="@/static/image/mall/pay/icon_pay_weixin.png"
+          @click="inpaitUseSD"
+        ></image>
+      </div>
+    </view>
+    <view v-if="current === 2">
+      <u-button style="width: 200rpx" @click="toggleCollapse">xx</u-button>
     </view>
   </view>
 </template>
@@ -114,14 +98,15 @@ import * as constUrl from '@/pages/const/url.js';
 import { faceSwap, getSwapQueueResult } from '@/services/api.js';
 import { pathToBase64 } from '@/utils/image-tools.js';
 import { data } from './const';
-import tasks from './tasks.vue';
+import UButton from '../../components/uview-ui/components/u-button/u-button.vue';
+import UActionSheet from '../../components/uview-ui/components/u-action-sheet/u-action-sheet.vue';
 
 export default {
-  components: { tasks },
+  components: { UButton },
   data() {
     return {
       popupVisible: false,
-      popupPosition: 'bottom',
+      // popupPosition: 'bottom',
       context: null,
       //改成当前需要修图的图片
       curImage: `${constUrl.imageUrl_cover[1]}`,
@@ -167,6 +152,9 @@ export default {
     });
   },
   methods: {
+    change(index) {
+      this.current = index;
+    },
     async swap() {
       try {
         // 打印路径信息，用于调试
@@ -405,12 +393,12 @@ export default {
 </script>
 
 <style scoped>
-.custom-popup {
-  background-color: #ffffff; /* 设置弹窗背景颜色 */
-  border-radius: 10px; /* 设置弹窗圆角 */
-  padding: 20px; /* 设置内边距 */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
-  text-align: center; /* 设置文本水平居中 */
+/* .custom-popup {
+  background-color: #ffffff; 
+  border-radius: 10px;  
+  padding: 20px;  
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);  
+  text-align: center;  
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -418,19 +406,19 @@ export default {
   min-height: 150px;
 }
 .popup-title {
-  font-size: 20px; /* 设置标题字体大小 */
-  font-weight: bold; /* 设置标题文字加粗 */
+  font-size: 20px;  
+  font-weight: bold;  
 }
 .resolution-option {
   font-size: 15px;
   text-align: center;
-  margin-top: 30px; /* 设置分辨率选项之间的上边距 */
-  cursor: pointer; /* 鼠标悬停时显示指针样式 */
+  margin-top: 30px; 
+  cursor: pointer; 
 }
 .collapsible {
   margin: 10px;
-  /* overflow: hidden; */
-  /* z-index: 9999; */
+  overflow: hidden;
+  z-index: 9999;
 }
 .collapsible .collapsible-header {
   background-color: #db5151;
@@ -469,13 +457,11 @@ export default {
   justify-content: center;
   background-color: #9bc078;
 }
-/* 图标容器样式 */
 .icon-container {
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
-/* 图标样式 */
 .icon {
   width: 40px;
   height: 40px;
@@ -483,9 +469,9 @@ export default {
   top: 675px;
 }
 .gray-icon {
-  filter: grayscale(100%); /* 使用CSS的grayscale滤镜将图标置为灰色 */
+  filter: grayscale(100%); 
 }
 .colored-icon {
-  filter: none; /* 使用CSS的grayscale滤镜将图标置为灰色 */
-}
+  filter: none;  
+} */
 </style>
