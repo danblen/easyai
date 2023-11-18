@@ -65,11 +65,17 @@
           block-color="#ffffff"
         ></u-slider>
 
+        <!-- 启用画板 -->
+        <image
+          style="width: 40px; height: 40px"
+          src="@/static/image/mall/pay/icon_pay_weixin.png"
+          @click="toggleCollapse"
+        ></image>
+
         <!-- 清屏按键 -->
-        <button
-          style="width: 140rpx; height: 40px"
-          @click="clearCanvas"
-        >清屏按键</button>
+        <button style="width: 140rpx; height: 40px" @click="clearCanvas">
+          清屏按键
+        </button>
 
         <!-- 图像比较按键 -->
         <button
@@ -79,17 +85,19 @@
           }"
           style="width: 140rpx; height: 40px"
           @click="comparePictrue"
-        >图像比较按键</button>
+        >
+          图像比较按键
+        </button>
 
         <!-- 开始重绘按键 -->
-        <button
-          style="width: 140rpx; height: 40px"
-          @click="inpaitUseSD"
-        >开始重绘按键</button>
+        <button style="width: 140rpx; height: 40px" @click="inpaitUseSD">
+          开始重绘按键
+        </button>
       </div>
     </view>
-      <u-button style="width: 200rpx" @click="toggleCollapse">collapse</u-button>
+    <u-button style="width: 200rpx" @click="toggleCollapse">collapse</u-button>
     <view v-if="current === 3">
+      <u-button style="width: 200rpx" @click="Comments">xx</u-button>
     </view>
   </view>
 </template>
@@ -114,7 +122,7 @@ export default {
       // popupPosition: 'bottom',
       context: null,
       //改成当前需要修图的图片
-      curImage: '/static/image/index.jpg',
+      curImage: "/static/image/index.jpg",
       // curImage: `${constUrl.imageUrl_cover[1]}`,
       canvasWidth: 0,
       canvasHeight: 0,
@@ -251,6 +259,7 @@ export default {
     },
     //局部重绘：可以涂抹图片、显示擦除按键、显示画笔大小滑动条
     toggleCollapse() {
+      console.log("toggleCollapse");
       this.isExpanded = !this.isExpanded; // 切换折叠状态
       this.canUseCompare = false;
       if (this.isExpanded) {
@@ -289,8 +298,8 @@ export default {
       this.popupVisible = true;
     },
     inpaitUseSD() {
-      if (this.isExpanded||true) {
-        if (this.drawing||true) {
+      if (this.isExpanded || true) {
+        if (this.drawing || true) {
           uni.showToast({
             title: "图像重绘中...",
             icon: "none", // 可以根据需要选择不同的图标
@@ -318,7 +327,6 @@ export default {
             },
           });
 
-
           this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight); // 清除整个Canvas
           this.context.draw(true);
           this.drawing = false;
@@ -335,6 +343,7 @@ export default {
       }
     },
     touchStart(e) {
+      console.log("touchStart:", e.touches[0].x, e.touches[0].y);
       if (e.touches.length === 2) {
         // 计算两个手指的初始距离
         const x1 = e.touches[0].x;
@@ -419,8 +428,14 @@ export default {
         this.isDispalyeInpaitPic = !this.isDispalyeInpaitPic;
       }
     },
+    Comments() {
+      uni.showToast({
+        title: "哥哥给个好评~",
+        icon: "none", // 可以根据需要选择不同的图标
+        duration: 1000, // 错误消息显示时间（以毫秒为单位）
+      });
+    },
   },
-  mounted() {},
   onUnload() {
     // 在页面卸载时清理资源
     if (this.context) {
@@ -455,6 +470,7 @@ export default {
   margin-top: 30px;
   cursor: pointer;
 }
+/*
 .collapsible {
   margin: 10px;
   overflow: hidden;
@@ -485,7 +501,6 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
   height: 100%;
 }
 .container {
@@ -507,7 +522,7 @@ export default {
   height: 40px;
   cursor: pointer;
   top: 675px;
-}
+}*/
 .gray-icon {
   filter: grayscale(100%);
 }

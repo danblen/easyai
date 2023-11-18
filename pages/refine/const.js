@@ -169,6 +169,14 @@ export const mask_data = {
   denoising_strength: 0, // Range 0-1, smaller value closer to original image. Larger value more likely to let imagination fly
   prompt: "",
   negative_prompt: "",
+  mask: "", //base64蒙版图片，宽高必须和init_images一致
+  mask_blur: 4,
+  mask_blur_x: 4,
+  mask_blur_y: 4,
+  inpainting_mask_invert: 0,
+  inpaint_full_res: 1, //["Whole picture", "Only masked"]
+  inpainting_fill: 1, //['fill', 'original', 'latent noise', 'latent nothing']
+  inpaint_full_res_padding: 32,
   seed: -1, // Initial seed
   batch_size: 1, // How many images generated each time
   n_iter: 1, // number of iterations
@@ -179,13 +187,5 @@ export const mask_data = {
   sampler_index: "DPM++ 2M Karras", // or "DPM++ 2M Karras"
   override_settings: {
     sd_model_checkpoint: "majicmixRealistic_v6.safetensors",
-  },
-  alwayson_scripts: {
-    // ADetailer: {
-    //   args: adtail_args,
-    // },
-    // controlnet: {
-    //   args: controlnet_args,
-    // },
   },
 };
