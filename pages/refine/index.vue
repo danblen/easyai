@@ -66,33 +66,30 @@
         ></u-slider>
 
         <!-- 清屏按键 -->
-        <image
-          style="width: 40px; height: 40px"
-          src="@/static/image/mall/pay/icon_pay_weixin.png"
+        <button
+          style="width: 140rpx; height: 40px"
           @click="clearCanvas"
-        ></image>
+        >清屏按键</button>
 
         <!-- 图像比较按键 -->
-        <image
+        <button
           :class="{
             'gray-icon': !canUseCompare,
             'colored-icon': canUseCompare,
           }"
-          style="width: 40px; height: 40px"
-          src="@/static/image/mall/pay/icon_pay_weixin.png"
+          style="width: 140rpx; height: 40px"
           @click="comparePictrue"
-        ></image>
+        >图像比较按键</button>
 
         <!-- 开始重绘按键 -->
-        <image
-          style="width: 40px; height: 40px"
-          src="@/static/image/mall/pay/icon_pay_weixin.png"
+        <button
+          style="width: 140rpx; height: 40px"
           @click="inpaitUseSD"
-        ></image>
+        >开始重绘按键</button>
       </div>
     </view>
+      <u-button style="width: 200rpx" @click="toggleCollapse">collapse</u-button>
     <view v-if="current === 3">
-      <u-button style="width: 200rpx" @click="toggleCollapse">xx</u-button>
     </view>
   </view>
 </template>
@@ -117,7 +114,8 @@ export default {
       // popupPosition: 'bottom',
       context: null,
       //改成当前需要修图的图片
-      curImage: `${constUrl.imageUrl_cover[1]}`,
+      curImage: '/static/image/index.jpg',
+      // curImage: `${constUrl.imageUrl_cover[1]}`,
       canvasWidth: 0,
       canvasHeight: 0,
       drawing: false,
@@ -291,8 +289,8 @@ export default {
       this.popupVisible = true;
     },
     inpaitUseSD() {
-      if (this.isExpanded) {
-        if (this.drawing) {
+      if (this.isExpanded||true) {
+        if (this.drawing||true) {
           uni.showToast({
             title: "图像重绘中...",
             icon: "none", // 可以根据需要选择不同的图标
@@ -309,17 +307,17 @@ export default {
               uni.previewImage({
                 urls: [tempFilePath],
               });
+              uni.showToast({
+                title: "图像重绘完成",
+                icon: "none", // 可以根据需要选择不同的图标
+                duration: 1000, // 错误消息显示时间（以毫秒为单位）
+              });
             },
             fail: (error) => {
               console.error(error);
             },
           });
 
-          uni.showToast({
-            title: "图像重绘完成",
-            icon: "none", // 可以根据需要选择不同的图标
-            duration: 1000, // 错误消息显示时间（以毫秒为单位）
-          });
 
           this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight); // 清除整个Canvas
           this.context.draw(true);
