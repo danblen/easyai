@@ -261,7 +261,6 @@ export default {
     },
     //局部重绘：可以涂抹图片、显示擦除按键、显示画笔大小滑动条
     toggleCollapse() {
-      console.log('toggleCollapse');
       this.isExpanded = !this.isExpanded; // 切换折叠状态
       this.canUseCompare = false;
       if (this.isExpanded) {
@@ -313,11 +312,16 @@ export default {
           // debug功能：可以预览蒙版图像
           uni.canvasToTempFilePath({
             canvasId: 'myCanvas',
-            success: (res) => {
+            success: async (res) => {
               const tempFilePath = res.tempFilePath;
-              debugger;
-              mask_data.init_images = [];
-              faceSwap(mask_data);
+              mask_data.init_images = [
+                (await pathToBase64('/static/image/index.jpg')) + '=',
+              ];
+              // mask_data.init_images[0] += '=';
+              mask_data.mask =
+                (await pathToBase64('/static/image/index.jpg')) + '=';
+              await faceSwap(mask_data);
+           
               uni.previewImage({
                 urls: [tempFilePath],
               });
