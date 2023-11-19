@@ -253,7 +253,7 @@ export default {
               "ms"
             );
             this.genImagePath = "data:image/png;base64," + res.result.images[0];
-            // console.log("genImagePath:", this.genImagePath);
+            console.log("genImagePath:", this.genImagePath);
             this.curImage = this.genImagePath;
             clearInterval(this.timers[result.request_id]);
           }
@@ -304,7 +304,34 @@ export default {
     showResolutionPopup() {
       this.popupVisible = true;
     },
-    inpaitUseSD() {
+    async getImageInfo(src) {
+      return new Promise((resolve, reject) => {
+        uni.getImageInfo({
+          src: src,
+          success: (res) => resolve(res),
+          fail: (err) => reject(err),
+        });
+      });
+    },
+    async canvasToTempFilePath(options) {
+      return new Promise((resolve, reject) => {
+        uni.canvasToTempFilePath({
+          ...options,
+          success: resolve,
+          fail: reject,
+        });
+      });
+    },
+    async saveFile(options) {
+      return new Promise((resolve, reject) => {
+        uni.saveFile({
+          ...options,
+          success: (res) => resolve(res),
+          fail: (err) => reject(err),
+        });
+      });
+    },
+    async inpaitUseSD() {
       if (this.isExpanded) {
         if (this.drawing) {
           uni.showToast({
@@ -312,33 +339,41 @@ export default {
             icon: "none", // 可以根据需要选择不同的图标
             duration: 1000, // 错误消息显示时间（以毫秒为单位）
           });
-          //这里调用SD局部重绘功能:
-          //SD输入：当前图片和蒙版图片
-
-          // debug功能：可以预览蒙版图像
-          uni.canvasToTempFilePath({
+          const originalImageInfo = await this.getImageInfo(
+            "/static/image/index1.jpg"
+          );
+          console.log("Original Image width: ", originalImageInfo.width);
+          console.log("Original Image height: ", originalImageInfo.height);
+          const canvasRes = await this.canvasToTempFilePath({
             canvasId: "myCanvas",
-            success: async (res) => {
-              const tempFilePath = res.tempFilePath;
-              mask_data.init_images = [
-                (await pathToBase64("/static/image/index.jpg")) + "=",
-              ];
-              mask_data.mask =
-                (await pathToBase64("/static/image/index.jpg")) + "=";
-              // await faceSwap(mask_data);
+            destWidth: originalImageInfo.width,
+            destHeight: originalImageInfo.height,
+          });
 
-              // uni.previewImage({
-              //   urls: [tempFilePath],
-              // });
-              uni.showToast({
-                title: "图像重绘完成",
-                icon: "none", // 可以根据需要选择不同的图标
-                duration: 1000, // 错误消息显示时间（以毫秒为单位）
-              });
-            },
-            fail: (error) => {
-              console.error(error);
-            },
+          const maskImageInfo = await this.getImageInfo(canvasRes.tempFilePath);
+          console.log("Redrawn Image width: ", maskImageInfo.width);
+          console.log("Redrawn Image height: ", maskImageInfo.height);
+
+          mask_data.init_images = [await pathToBase64(this.curImage)];
+          mask_data.mask = await pathToBase64(canvasRes.tempFilePath);
+          while (mask_data.mask.length % 4 !== 0) {
+            mask_data.mask += "=";
+          }
+          const saveResult = await this.saveFile({
+            tempFilePath: canvasRes.tempFilePath,
+          });
+          console.log("文件保存成功", saveResult.savedFilePath);
+          // console.log("mask_data.mask: ", mask_data.mask);
+          // await faceSwap(mask_data);
+          await this.requestSdTransform(mask_data);
+
+          // uni.previewImage({
+          //   urls: [canvasResTempFilePath],
+          // });
+          uni.showToast({
+            title: "图像重绘完成",
+            icon: "none", // 可以根据需要选择不同的图标
+            duration: 1000, // 错误消息显示时间（以毫秒为单位）
           });
 
           this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight); // 清除整个Canvas
