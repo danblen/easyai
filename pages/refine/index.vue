@@ -65,9 +65,9 @@
         <u-slider
           v-model="sliderValue"
           :min="2"
-          :max="20"
-          :step="1"
-          :block-width="20"
+          :max="50"
+          :step="5"
+          :block-width="30"
           :height="20"
           inactive-color="#c0c4cc"
           block-color="#ffffff"
@@ -123,7 +123,7 @@ export default {
       // popupPosition: 'bottom',
       context: null,
       //改成当前需要修图的图片
-      displayImage: "/static/image/index.jpg",
+      firstDisplayImage: "/static/image/index.jpg",
       inpaintImage: "",
       curImage: "/static/image/index.jpg",
       // curImage: `${constUrl.imageUrl_cover[1]}`,
@@ -135,7 +135,7 @@ export default {
       lastY: 0,
       isExpanded: false,
       isDispalyeInpaitPic: false,
-      sliderValue: 5,
+      sliderValue: 20,
       initialDistance: 0, // 两个手指的初始距离
       currentDistance: 0, // 当前两个手指的距离
       scale: 1, // 图片的缩放比例
@@ -184,7 +184,14 @@ export default {
         "/static/image/index.jpg"
       );
       console.log("roop file path:", data.alwayson_scripts.roop);
-      this.requestSdTransform(data);
+      try {
+        const imagePath = await this.requestSdTransform(mask_data);
+        console.log("Image processed, path:", imagePath);
+        // 处理 imagePath
+      } catch (error) {
+        console.error("Error processing image:", error);
+        // 错误处理
+      }
     },
     async sdWithSwapDetailParams() {
       const data = swap_face_and_add_detail_data;
@@ -194,7 +201,14 @@ export default {
         "/static/image/index.jpg"
       );
       console.log("roop file path:", data.alwayson_scripts.roop);
-      this.requestSdTransform(data);
+      try {
+        const imagePath = await this.requestSdTransform(mask_data);
+        console.log("Image processed, path:", imagePath);
+        // 处理 imagePath
+      } catch (error) {
+        console.error("Error processing image:", error);
+        // 错误处理
+      }
     },
     async sdWith2KParams() {
       const data = scale_data;
@@ -208,7 +222,14 @@ export default {
         icon: "none",
         duration: 1000,
       });
-      this.requestSdTransform(data);
+      try {
+        const imagePath = await this.requestSdTransform(mask_data);
+        console.log("Image processed, path:", imagePath);
+        // 处理 imagePath
+      } catch (error) {
+        console.error("Error processing image:", error);
+        // 错误处理
+      }
     },
     async sdWith4KParams() {
       const data = scale_data;
@@ -222,46 +243,63 @@ export default {
         icon: "none",
         duration: 1000, // ms
       });
-      this.requestSdTransform(data);
-    },
-    async requestSdTransform(data) {
       try {
-        console.log("srcTempFilePath:", this.srcTempFilePath);
-        this.srcBase64 = await pathToBase64("/static/image/index.jpg");
-        data.init_images = [this.srcBase64];
-        // data.user_id = "唯一的用户ID";
-        console.log("start convert");
-        const startTime = performance.now();
-        let result = await faceSwap(data);
-        console.log("complete convert", performance.now() - startTime, "ms");
-        this.timers[result.request_id] = setInterval(async () => {
-          const request_data = {
-            user_id: "",
-            request_id: result.request_id,
-            sql_query: {
-              request_status: "",
-              user_id: "",
-            },
-          };
-          let res = await getSwapQueueResult(request_data).catch(() => {
-            clearInterval(this.timers[request_id]);
-          });
-          if (res.status === "finishing") {
-            console.log(
-              "complete convert",
-              performance.now() - startTime,
-              "ms"
-            );
-            this.genImagePath = "data:image/png;base64," + res.result.images[0];
-            console.log("genImagePath:", this.genImagePath);
-            this.curImage = this.genImagePath;
-            clearInterval(this.timers[result.request_id]);
-          }
-        }, 4000);
+        const imagePath = await this.requestSdTransform(mask_data);
+        console.log("Image processed, path:", imagePath);
+        // 处理 imagePath
       } catch (error) {
-        // 错误处理：在控制台打印错误信息
-        console.error("Error in swap method:", error);
+        console.error("Error processing image:", error);
+        // 错误处理
       }
+    },
+    requestSdTransform(data) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          console.log("srcTempFilePath:", this.srcTempFilePath);
+          this.srcBase64 = await pathToBase64("/static/image/index.jpg");
+          data.init_images = [this.srcBase64];
+          // data.user_id = "唯一的用户ID";
+          console.log("start convert");
+          const startTime = performance.now();
+          let result = await faceSwap(data);
+          const requestId = result.request_id;
+          console.log(
+            "first faceSwap return time",
+            performance.now() - startTime,
+            "ms"
+          );
+
+          const timerId = setInterval(async () => {
+            const request_data = {
+              user_id: "",
+              request_id: requestId,
+              sql_query: {
+                request_status: "",
+                user_id: "",
+              },
+            };
+            let res = await getSwapQueueResult(request_data).catch(() => {
+              clearInterval(timerId);
+              reject(new Error("Error in getting swap queue result"));
+            });
+            if (res.status === "finishing") {
+              console.log(
+                "complete convert",
+                performance.now() - startTime,
+                "ms"
+              );
+              this.genImagePath =
+                "data:image/png;base64," + res.result.images[0];
+              // console.log("genImagePath:", this.genImagePath);
+              clearInterval(timerId);
+              resolve(this.genImagePath); // 解析 Promise 并返回图像路径
+            }
+          }, 2000);
+        } catch (error) {
+          console.error("Error in swap method:", error);
+          reject(error); // 拒绝 Promise 并返回错误
+        }
+      });
     },
     //局部重绘：可以涂抹图片、显示擦除按键、显示画笔大小滑动条
     toggleCollapse() {
@@ -359,27 +397,23 @@ export default {
           while (mask_data.mask.length % 4 !== 0) {
             mask_data.mask += "=";
           }
-          const saveResult = await this.saveFile({
-            tempFilePath: canvasRes.tempFilePath,
-          });
-          console.log("文件保存成功", saveResult.savedFilePath);
-          // console.log("mask_data.mask: ", mask_data.mask);
-          // await faceSwap(mask_data);
-          await this.requestSdTransform(mask_data);
-
+          /******************* debug: *******************/
+          // const saveResult = await this.saveFile({
+          //   tempFilePath: canvasRes.tempFilePath,
+          // });
+          // console.log("文件保存成功", saveResult.savedFilePath);
           // uni.previewImage({
           //   urls: [canvasResTempFilePath],
           // });
-          uni.showToast({
-            title: "图像重绘完成",
-            icon: "none", // 可以根据需要选择不同的图标
-            duration: 1000, // 错误消息显示时间（以毫秒为单位）
-          });
-
+          /**************************************/
+          try {
+            this.inpaintImage = await this.requestSdTransform(mask_data);
+          } catch (error) {
+            console.error("Error processing image:", error);
+          }
           this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight); // 清除整个Canvas
           this.context.draw(true);
           this.drawing = false;
-          this.inpaintImage = "/static/image/index1.jpg";
           this.curImage = this.inpaintImage;
           this.isDispalyeInpaitPic = true;
           this.canUseCompare = true;
@@ -404,7 +438,7 @@ export default {
           Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
         );
       }
-      if (this.isExpanded && this.curImage == this.displayImage) {
+      if (this.isExpanded && this.curImage == this.firstDisplayImage) {
         console.log("setLineWidth:");
         const { x, y } = e.touches[0];
         this.context.setLineWidth(this.sliderValue);
@@ -436,7 +470,7 @@ export default {
       //   this.context.scale(this.scale, this.scale);
       //   this.context.draw(true);
       // }
-      if (this.isExpanded && this.curImage == this.displayImage) {
+      if (this.isExpanded && this.curImage == this.firstDisplayImage) {
         const { x, y } = e.touches[0];
         this.context.setLineWidth(this.sliderValue);
         this.context.setStrokeStyle(this.inpaintColor);
@@ -462,15 +496,16 @@ export default {
     comparePictrue() {
       if (this.canUseCompare) {
         if (this.isDispalyeInpaitPic) {
-          this.curImage = this.inpaintImage;
+          this.curImage = this.firstDisplayImage;
+          this.isDispalyeInpaitPic = false;
         } else {
-          //切换显示重绘后的图像
+          //切换显示重绘后的图像同时清除笔画
           this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight); // 清除整个Canvas
           this.context.draw(true);
           this.drawing = false;
-          this.curImage = this.displayImage;
+          this.curImage = this.inpaintImage;
+          this.isDispalyeInpaitPic = true;
         }
-        this.isDispalyeInpaitPic = !this.isDispalyeInpaitPic;
       }
     },
     Comments() {
