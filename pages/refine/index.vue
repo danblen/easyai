@@ -109,7 +109,6 @@
 </template>
 
 <script>
-import * as constUrl from "@/pages/const/url.js";
 import { faceSwap, getSwapQueueResult } from "@/services/api.js";
 import { pathToBase64 } from "@/utils/image-tools.js";
 import {
@@ -119,20 +118,16 @@ import {
   mask_data,
 } from "./const";
 import UButton from "../../components/uview-ui/components/u-button/u-button.vue";
-import UActionSheet from "../../components/uview-ui/components/u-action-sheet/u-action-sheet.vue";
 
 export default {
   components: { UButton },
   data() {
     return {
       popupVisible: false,
-      // popupPosition: 'bottom',
       context: null,
-      //改成当前需要修图的图片
       firstDisplayImage: "/static/image/index.jpg",
       inpaintImage: "",
       curImage: "/static/image/index.jpg",
-      // curImage: `${constUrl.imageUrl_cover[1]}`,
       canvasWidth: 0,
       canvasHeight: 0,
       drawing: false,
@@ -148,11 +143,8 @@ export default {
       scale: 1, // 图片的缩放比例
       canUseCompare: false,
       srcTempFilePath: `/pages/refine/index.jpg`,
-      // srcTempFilePath: `${constUrl.imageUrl_cover[1]}`,
       roopTempFilePath: `/pages/refine/index.jpg`,
-      // roopTempFilePath: `${constUrl.imageUrl_cover[1]}`,
       showModel: true,
-      genImagePath: "",
       timer: "",
       list: [
         {
@@ -193,11 +185,9 @@ export default {
       console.log("roop file path:", data.alwayson_scripts.roop);
       try {
         const imagePath = await this.requestSdTransform(mask_data);
-        console.log("Image processed, path:", imagePath);
-        // 处理 imagePath
+        this.curImage = imagePath;
       } catch (error) {
         console.error("Error processing image:", error);
-        // 错误处理
       }
     },
     async sdWithSwapDetailParams() {
@@ -209,12 +199,10 @@ export default {
       );
       console.log("roop file path:", data.alwayson_scripts.roop);
       try {
-        const imagePath = await this.requestSdTransform(mask_data);
-        console.log("Image processed, path:", imagePath);
-        // 处理 imagePath
+        const imagePath = await this.requestSdTransform(data);
+        this.curImage = imagePath;
       } catch (error) {
         console.error("Error processing image:", error);
-        // 错误处理
       }
     },
     async sdWith2KParams() {
@@ -230,12 +218,10 @@ export default {
         duration: 1000,
       });
       try {
-        const imagePath = await this.requestSdTransform(mask_data);
-        console.log("Image processed, path:", imagePath);
-        // 处理 imagePath
+        const imagePath = await this.requestSdTransform(data);
+        this.curImage = imagePath;
       } catch (error) {
         console.error("Error processing image:", error);
-        // 错误处理
       }
     },
     async sdWith4KParams() {
@@ -251,12 +237,11 @@ export default {
         duration: 1000, // ms
       });
       try {
-        const imagePath = await this.requestSdTransform(mask_data);
+        const imagePath = await this.requestSdTransform(data);
         console.log("Image processed, path:", imagePath);
-        // 处理 imagePath
+        this.curImage = imagePath;
       } catch (error) {
         console.error("Error processing image:", error);
-        // 错误处理
       }
     },
     requestSdTransform(data) {
@@ -295,11 +280,10 @@ export default {
                 performance.now() - startTime,
                 "ms"
               );
-              this.genImagePath =
+              res.result.images[0] =
                 "data:image/png;base64," + res.result.images[0];
-              // console.log("genImagePath:", this.genImagePath);
               clearInterval(timerId);
-              resolve(this.genImagePath); // 解析 Promise 并返回图像路径
+              resolve(res.result.images[0]); // 解析 Promise 并返回图像路径
             }
           }, 2000);
         } catch (error) {

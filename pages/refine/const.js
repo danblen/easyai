@@ -166,7 +166,7 @@ export const scale_data = {
 export const mask_data = {
   user_id: "123456",
   init_images: [], // Original image address
-  denoising_strength: 0.5, // Range 0-1, smaller value closer to original image. Larger value more likely to let imagination fly
+  denoising_strength: 0.4, // Range 0-1, smaller value closer to original image. Larger value more likely to let imagination fly
   prompt: "",
   negative_prompt: "",
   mask: "", //base64蒙版图片，宽高必须和init_images一致
