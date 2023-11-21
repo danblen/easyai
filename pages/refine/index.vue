@@ -20,6 +20,7 @@
         canvas-id="myCanvas"
         @touchstart="touchStart"
         @touchmove="touchMove"
+        @touchend="touchend"
       ></canvas>
     </view>
 
@@ -78,6 +79,11 @@
           清屏按键
         </button>
 
+        <!-- 橡皮擦 -->
+        <button style="width: 240rpx; height: 40px" @click="eraseCanvas">
+          橡皮擦
+        </button>
+
         <!-- 图像比较按键 -->
         <button
           :class="{
@@ -130,12 +136,13 @@ export default {
       canvasWidth: 0,
       canvasHeight: 0,
       drawing: false,
+      eraseing: false,
       inpaintColor: "red",
       lastX: 0,
       lastY: 0,
       isExpanded: false,
       isDispalyeInpaitPic: false,
-      sliderValue: 20,
+      sliderValue: 15,
       initialDistance: 0, // 两个手指的初始距离
       currentDistance: 0, // 当前两个手指的距离
       scale: 1, // 图片的缩放比例
@@ -426,72 +433,54 @@ export default {
         }
       }
     },
-    touchStart(e) {
-      console.log("touchStart:", e.touches[0].x, e.touches[0].y);
-      if (e.touches.length === 2) {
-        // 计算两个手指的初始距离
-        const x1 = e.touches[0].x;
-        const y1 = e.touches[0].y;
-        const x2 = e.touches[1].x;
-        const y2 = e.touches[1].y;
-        this.initialDistance = Math.sqrt(
-          Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
-        );
-      }
-      if (this.isExpanded && this.curImage == this.firstDisplayImage) {
-        console.log("setLineWidth:");
-        const { x, y } = e.touches[0];
-        this.context.setLineWidth(this.sliderValue);
-        this.context.beginPath();
-        this.context.arc(x, y, this.sliderValue / 2, 0, 2 * Math.PI);
-        this.context.setFillStyle(this.inpaintColor);
-        this.context.fill();
-        this.context.draw(true);
-        this.lastX = x;
-        this.lastY = y;
-        this.drawing = true;
+    setupDrawingContext() {
+      this.context.lineCap = "round";
+      this.context.lineJoin = "round";
+      this.context.lineWidth = this.sliderValue;
+
+      if (this.eraseing) {
+        this.context.globalCompositeOperation = "destination-out"; // 设置为擦除模式
+      } else {
+        this.context.globalCompositeOperation = "source-over"; // 设置为正常绘画模式
+        this.context.strokeStyle = this.inpaintColor;
       }
     },
+    touchStart(e) {
+      if (this.isExpanded && this.curImage == this.firstDisplayImage) {
+        this.setupDrawingContext();
+        this.drawing = true;
+        const { x, y } = e.touches[0];
+        this.lastX = x;
+        this.lastY = y;
+        this.context.moveTo(x, y);
+      }
+    },
+
     touchMove(e) {
-      // if (e.touches.length === 2) {
-      //   // 计算当前两个手指的距离
-      //   const x1 = e.touches[0].x;
-      //   const y1 = e.touches[0].y;
-      //   const x2 = e.touches[1].x;
-      //   const y2 = e.touches[1].y;
-      //   this.currentDistance = Math.sqrt(
-      //     Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
-      //   );
-
-      //   // 计算缩放比例
-      //   this.scale = this.currentDistance / this.initialDistance;
-
-      //   // 更新画布和图像的缩放
-      //   this.context.scale(this.scale, this.scale);
-      //   this.context.draw(true);
-      // }
       if (this.isExpanded && this.curImage == this.firstDisplayImage) {
         const { x, y } = e.touches[0];
-        this.context.setLineWidth(this.sliderValue);
-        this.context.setStrokeStyle(this.inpaintColor);
         this.context.beginPath();
         this.context.moveTo(this.lastX, this.lastY);
-        this.context.quadraticCurveTo(
-          (this.lastX + x) / 2,
-          (this.lastY + y) / 2,
-          x,
-          y
-        );
+        this.context.lineTo(x, y);
         this.context.stroke();
         this.context.draw(true);
         this.lastX = x;
         this.lastY = y;
       }
     },
+    touchend(e) {
+      if (this.isExpanded && this.curImage == this.firstDisplayImage) {
+        this.context.closePath();
+        this.context.draw(true);
+      }
+    },
     clearCanvas() {
       this.drawing = false;
       this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight); // 清除整个Canvas
       this.context.draw(true); // 将变更应用到Canvas
+    },
+    eraseCanvas() {
+      this.eraseing = !this.eraseing;
     },
     comparePictrue() {
       if (this.canUseCompare) {
@@ -517,6 +506,14 @@ export default {
     },
   },
   onUnload() {
+    // 在页面卸载时清理资源
+    if (this.context) {
+      this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+      this.context.draw(true);
+      this.context = null; // 将Canvas上下文对象置为null，让它被垃圾回收
+    }
+  },
+  unMounted() {
     // 在页面卸载时清理资源
     if (this.context) {
       this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
