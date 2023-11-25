@@ -32,8 +32,8 @@
         </div>
       </u-popup>
     </view>
-    <image
-      src="https://danblen.github.io/static/index.jpg"
+    <!-- <image
+      src="https://facei.top/static/images/chulian/photo_131@05-11-2022_05-27-05.jpg"
       style="
         object-fit: cover;
         width: 95%;
@@ -46,8 +46,13 @@
         margin-right: 10px;
       "
       mode="aspectFill"
-      @click="go('/pages/faceswap/index', 'https://danblen.github.io/static/index.jpg')"
-    ></image>
+      @click="
+        go(
+          '/pages/faceswap/index',
+          'https://facei.top/static/images/chulian/photo_131@05-11-2022_05-27-05.jpg'
+        )
+      "
+    ></image> -->
     <view :style="{ marginTop: '12px', background: backgroundColor }">
       <swiper
         indicator-dots="true"
@@ -56,9 +61,12 @@
         circular="true"
         style="height: 330px"
       >
-        <block :wx:for="images_swiper" wx:key="index">
+        <!-- 遍历storedData中的图片路径 -->
+        <block v-for="(images, subDir) in storedData" :key="subDir">
           <swiper-item style="width: 98%">
             <image
+              v-for="(item, index) in images || []"
+              :key="index"
               :src="item"
               style="
                 object-fit: cover;
@@ -77,6 +85,7 @@
         </block>
       </swiper>
     </view>
+
     <!-- 顶部swiper -->
     <!-- <view style="display: flex">
       <u-swiper
@@ -275,14 +284,16 @@
 </template>
 
 <script>
+import { getPhotoPath } from "@/services/api.js";
+import { URL_BACK } from "@/services/app.js";
 import {
   type_pic,
   type_pic1,
   imageUrl_cover,
   imageUrl_rixi,
   typpe_pic_index,
-} from '@/pages/const/url.js';
-import step from './step.vue';
+} from "@/pages/const/url.js";
+import step from "./step.vue";
 export default {
   components: { step },
   data() {
@@ -294,45 +305,88 @@ export default {
       currentImageIndex: 0,
       typpe_pic_index1: typpe_pic_index,
       showPopup: false,
+      storedData: {},
       listTabs: [
         {
-          cate_name: '清风明月',
+          cate_name: "清风明月",
           cate_count: 45,
         },
         {
-          cate_name: '伞',
+          cate_name: "伞",
           cate_count: 32,
         },
         {
-          cate_name: '芭蕾',
+          cate_name: "芭蕾",
           cate_count: 100,
         },
         {
-          cate_name: '身材',
+          cate_name: "身材",
           cate_count: 66,
         },
         {
-          cate_name: '民国风',
+          cate_name: "民国风",
           cate_count: 54,
         },
         {
-          cate_name: '地铁',
+          cate_name: "地铁",
           cate_count: 23,
         },
         {
-          cate_name: '日系',
+          cate_name: "日系",
           cate_count: 88,
         },
       ],
       current: 0,
-      max_backgroundColor: '#232824',
-      card_backgroundColor: '#85afa3',
+      max_backgroundColor: "#232824",
+      card_backgroundColor: "#85afa3",
     };
   },
   methods: {
+    requestServicePhoto() {
+      const timerId = setInterval(async () => {
+        const startTime = performance.now();
+
+        // 1. 获取静态目录下的各个子目录
+        const staticDir = "images/"; // 静态目录路径
+        let subDirs = await getPhotoPath(staticDir).catch(() => {
+          clearInterval(timerId);
+          reject(new Error("Error in getting subdirectories"));
+        });
+
+        if (subDirs != null) {
+          // 2. 遍历各个子目录，获取文件并保存
+          for (const subDir of subDirs) {
+            const getDir = `${staticDir}${subDir}/`;
+            let res = await getPhotoPath(getDir).catch(() => {
+              reject(new Error("Error in getting files"));
+            });
+
+            console.log("Path11111:", res, subDir);
+            this.storedData[subDir] = [];
+            if (res != null) {
+              console.log(
+                "success get photo",
+                performance.now() - startTime,
+                "ms"
+              );
+              res.forEach((item) => {
+                item = URL_BACK + "/" + "static/" + getDir + item;
+                this.storedData[subDir].push(item);
+              });
+              // console.log(
+              //   "this.storedData[subDir]:",
+              //   subDir,
+              //   this.storedData[subDir]
+              // );
+            }
+          }
+          clearInterval(timerId);
+        }
+      }, 2000);
+    },
     go(url, src) {
       uni.navigateTo({
-        url: url + '?src=' + src,
+        url: url + "?src=" + src,
       });
     },
     change(index) {
@@ -350,7 +404,7 @@ export default {
     start(url, src) {
       const currentImage = imageUrl_cover[this.currentImageIndex];
       uni.navigateTo({
-        url: url + '?src=' + currentImage,
+        url: url + "?src=" + currentImage,
       });
     },
     onSwiperChange(currentIndex) {
@@ -360,13 +414,17 @@ export default {
     go_display_pic(image) {
       uni.navigateTo({
         url:
-          '/pages/index/display/index' +
-          '?src=' +
+          "/pages/index/display/index" +
+          "?src=" +
           image.indexSrc +
-          '&images111=' +
+          "&images111=" +
           image.srcs,
       });
     },
+  },
+  async mounted() {
+    // 页面加载时调用获取图片数据的方法
+    await this.requestServicePhoto();
   },
 };
 </script>

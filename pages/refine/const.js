@@ -180,7 +180,7 @@ export const mask_data = {
   seed: -1, // Initial seed
   batch_size: 1, // How many images generated each time
   n_iter: 1, // number of iterations
-  steps: 50, // Number of runs, this value can be fine tuned, converging when too high, max 150 in webui, maybe can go higher here?
+  steps: 10, // Number of runs, this value can be fine tuned, converging when too high, max 150 in webui, maybe can go higher here?
   cfg_scale: 7, // Influence of prompt text on image, usually 5-15, max 30 in webui, can fine tune
   restore_faces: false, // Whether to correct faces, for 3D, test later if open or not. Suggest false for now
   sampler_name: "DPM++ 2M Karras",
