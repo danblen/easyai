@@ -62,11 +62,14 @@
         style="height: 330px"
       >
         <!-- 遍历storedData中的图片路径 -->
-        <block v-for="(images, subDir) in storedData" :key="subDir">
+        <block
+          wx:for="{{ storedData['日系'] }}"
+          wx:key="index"
+          wx:for-item="item"
+          wx:for-index="index"
+        >
           <swiper-item style="width: 98%">
             <image
-              v-for="(item, index) in images || []"
-              :key="index"
               :src="item"
               style="
                 object-fit: cover;
@@ -139,18 +142,18 @@
             overflow: hidden;
             display: inline-block;
           "
-          v-for="(image, index) in images_slide"
+          v-for="(image, index) in storedData['titlePhoto']"
           :key="index"
           @click="go_display_pic(image)"
         >
           <u-lazy-load
             :border-radius="10"
-            :image="image.indexSrc"
+            :image="image"
             :index="index"
             @statusChange="statusChange"
             @clickImg="clickImg"
           ></u-lazy-load>
-          <text
+          <!-- <text
             style="
               text-overflow: ellipsis;
               overflow: hidden;
@@ -161,7 +164,7 @@
             "
           >
             {{ image.text }}
-          </text>
+          </text> -->
         </view>
       </scroll-view>
     </div>
@@ -187,7 +190,7 @@
           :list="listTabs"
           :is-scroll="true"
           :current="current"
-          @change="change"
+          @change="tabsChange"
           active-color="#000000"
           inactive-color="#000000"
           font-size="30"
@@ -214,7 +217,7 @@
         >
           <u-lazy-load
             border-radius="10"
-            :image="image.indexSrc"
+            :image="image"
             :index="index"
             @statusChange="statusChange"
             @clickImg="clickImg"
@@ -307,34 +310,15 @@ export default {
       showPopup: false,
       storedData: {},
       listTabs: [
-        {
-          cate_name: "清风明月",
-          cate_count: 45,
-        },
-        {
-          cate_name: "伞",
-          cate_count: 32,
-        },
-        {
-          cate_name: "芭蕾",
-          cate_count: 100,
-        },
-        {
-          cate_name: "身材",
-          cate_count: 66,
-        },
-        {
-          cate_name: "民国风",
-          cate_count: 54,
-        },
-        {
-          cate_name: "地铁",
-          cate_count: 23,
-        },
-        {
-          cate_name: "日系",
-          cate_count: 88,
-        },
+        { cate_name: "", cate_count: 0 },
+        { cate_name: "", cate_count: 0 },
+        { cate_name: "", cate_count: 0 },
+        { cate_name: "", cate_count: 0 },
+        { cate_name: "", cate_count: 0 },
+        { cate_name: "", cate_count: 0 },
+        { cate_name: "", cate_count: 0 },
+        { cate_name: "", cate_count: 0 },
+        { cate_name: "", cate_count: 0 },
       ],
       current: 0,
       max_backgroundColor: "#232824",
@@ -342,58 +326,54 @@ export default {
     };
   },
   methods: {
-    requestServicePhoto() {
-      const timerId = setInterval(async () => {
-        const startTime = performance.now();
+    async requestServicePhoto() {
+      // 1. 获取静态目录下的各个子目录
+      let first_roop = 1;
+      const imagesDir = "images/"; // 静态目录路径
+      let subImageDirs = await getPhotoPath(imagesDir).catch(() => {
+        console.log("Error in getting subdirectories");
+      });
+      // console.log("subImageDirs:", subImageDirs);
 
-        // 1. 获取静态目录下的各个子目录
-        const staticDir = "images/"; // 静态目录路径
-        let subDirs = await getPhotoPath(staticDir).catch(() => {
-          clearInterval(timerId);
-          reject(new Error("Error in getting subdirectories"));
-        });
-
-        if (subDirs != null) {
-          // 2. 遍历各个子目录，获取文件并保存
-          for (const subDir of subDirs) {
-            const getDir = `${staticDir}${subDir}/`;
-            let res = await getPhotoPath(getDir).catch(() => {
-              reject(new Error("Error in getting files"));
-            });
-
-            console.log("Path11111:", res, subDir);
-            this.storedData[subDir] = [];
-            if (res != null) {
-              console.log(
-                "success get photo",
-                performance.now() - startTime,
-                "ms"
-              );
-              res.forEach((item) => {
-                item = URL_BACK + "/" + "static/" + getDir + item;
-                this.storedData[subDir].push(item);
-              });
-              // console.log(
-              //   "this.storedData[subDir]:",
-              //   subDir,
-              //   this.storedData[subDir]
-              // );
-            }
+      if (subImageDirs != null) {
+        let index = 0;
+        for (const classi of subImageDirs) {
+          if (index < this.listTabs.length && classi != "titlePhoto") {
+            this.listTabs[index].cate_name = classi;
+            index++;
           }
-          clearInterval(timerId);
+          this.storedData[classi] = {};
+          const classiDir = `${imagesDir}${classi}/`;
+          // console.log("classiDir:", classiDir);
+          let subClassiDirs = await getPhotoPath(classiDir).catch(() => {
+            console.log("Error in getting subClassiDirs");
+          });
+
+          // console.log("Path subClassiDirs:", subClassiDirs);
+          if (subClassiDirs != null) {
+            this.storedData[classi] = [];
+            subClassiDirs.forEach((images) => {
+              images = URL_BACK + "/" + "static/" + classiDir + images;
+              this.storedData[classi].push(images);
+            });
+          }
+          if (first_roop) {
+            this.images_slide = this.storedData[classi];
+            first_roop = 0;
+          }
         }
-      }, 2000);
+      }
+      console.log("this.storedData:", this.storedData);
     },
     go(url, src) {
       uni.navigateTo({
         url: url + "?src=" + src,
       });
     },
-    change(index) {
+    tabsChange(index) {
       this.current = index;
-      if (this.current) {
-        this.images_slide = type_pic1;
-      }
+      this.images_slide = this.storedData[this.listTabs[index].cate_name];
+      console.log("this.images_slide", this.images_slide);
     },
     openPopup() {
       this.showPopup = true;
